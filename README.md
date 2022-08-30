@@ -1,3 +1,3 @@
 # Grupo 26
 
-# María Dolores Pondarré - 17235/8
+* María Dolores Pondarré - 17235/8
