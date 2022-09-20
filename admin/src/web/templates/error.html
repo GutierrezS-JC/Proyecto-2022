@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <title>Error!</title>
+    {% endblock %}
+</head>
+<body>
+  <h1>{{ error_name }}</h1>
+  <p><b>Error!</b> {{ error_description }}</p>
+  <a href="{{ url_for('home.home_index') }}"> Volver al Inicio </a>
+</body>
+</html>
