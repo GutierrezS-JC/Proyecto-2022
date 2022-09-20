@@ -1,0 +1,23 @@
+.circle {
+    width: 38px;
+    height: 38px;
+    background: #FD6A00;
+}
+
+.letter{
+    color: white;
+    font-weight:bold;
+    font-size: .95em;
+}
+
+.dropdown-toggle::after{
+    margin-left: 10px;
+}
+
+.caret-off::before {
+    display: none !important;
+}
+
+.caret-off::after {
+    display: none !important;
+}
