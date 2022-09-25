@@ -6,8 +6,8 @@ from .controllers.login import login_blueprint
 from .controllers.issues import issue_blueprint
 
 from src.web.helpers import handlers
-from ..core import database
-from ..core import seeds
+from src.core import database
+from src.core import seeds
 
 
 def create_app(env="development", static_folder="static"):
