@@ -1,5 +1,5 @@
-from ..board import issue
+from ..board.issue import Issue
 
 
 def list_issues():
-    return issue.get_all()
+    return Issue.query.all()
