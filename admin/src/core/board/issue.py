@@ -1,26 +1,26 @@
-def get_all():
-    issues = [
-        {
-            "id": 1,
-            "user": "Pepe",
-            "title": "No puedo dar de alta a un socio",
-            "description": "Siempre que le doy a aceptar me sale un cartel que dice 'NULL'",
-            "status": "New"
-        },
-        {
-            "id": 2,
-            "user": "Carlos",
-            "title": "Mi computadora exploto",
-            "description": "Cuando hice click en Iniciar Sesion",
-            "status": "Done"
-        },
-        {
-            "id": 3,
-            "user": "Cosme",
-            "title": "Las disciplinas no existen y no se pueden crear",
-            "description": "Eso.",
-            "status": "In Progress"
-        }
-    ]
+from datetime import datetime
 
-    return issues
+from src.core.database import db
+
+issue_labels = db.Table(
+    "issue_labels",
+    db.Column("issue_id", db.Integer, db.ForeignKey("issues.id"), primary_key=True),
+    db.Column("label_id", db.Integer, db.ForeignKey("labels.id"), primary_key=True),
+)
+
+
+class Issue(db.Model):
+
+    __tablename__ = "issues"
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    email = db.Column(db.String(50))
+    title = db.Column(db.String(100))
+    description = db.Column(db.String(255))
+    status = db.Column(db.String(50))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    user = db.relationship("User", back_populates="issues")
+    labels = db.relationship("Label", secondary=issue_labels)
+    updated_at = db.Column(
+        db.DateTime, default=datetime.now(), onupdate=datetime.now
+    )
+    inserted_at = db.Column(db.DateTime, default=datetime.now())
