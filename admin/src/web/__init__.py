@@ -7,6 +7,7 @@ from .controllers.issues import issue_blueprint
 
 from src.web.helpers import handlers
 from ..core import database
+from ..core import seeds
 
 
 def create_app(env="development", static_folder="static"):
@@ -26,5 +27,9 @@ def create_app(env="development", static_folder="static"):
     @app.cli.command(name="resetdb")
     def resetdb():
         database.reset_db()
-    return app
 
+    @app.cli.command(name="seeds")
+    def seedsdb():
+        seeds.run()
+
+    return app
