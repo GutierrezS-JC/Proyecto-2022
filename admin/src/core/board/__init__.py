@@ -3,6 +3,7 @@ from src.core.board.issue import Issue
 from src.core.board.label import Label
 from src.core.board.permiso import Permiso
 from src.core.board.rol import Rol
+from src.core.board.config import Config
 
 
 def list_issues():

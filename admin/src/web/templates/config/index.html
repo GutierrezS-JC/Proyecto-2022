@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block title %}Configuracion{% endblock %}
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='config.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 configContainer">
+    <h1 class="display-3">Modulo de configuracion</h1>
+    <hr>
+
+    <h2 class="my-3">Configuracion del sistema</h2>
+    <form class="formStyle">
+        <div class="form-group mb-3 reducedSize">
+            <label class="mb-2" for="cantElementos">Cantidad de elementos por pagina</label>
+            <input aria-required="true" required name="cantElementos" type="text" class="form-control" id="cantElementos" aria-describedby="Cantidad de elementos">
+            <small id="ayudaElementos" class="form-text text-muted">Todos los listados deberán toman este valor para el paginado</small>
+        </div>
+
+        <div class="form-group mb-3 reducedSize">
+            <label class="mb-2" for="valorCuotaBase">Cuota base</label>
+            <input aria-required="true" required name="valorCuotaBase" type="text" class="form-control" id="valorCuotaBase" aria-describedby="Valor cuota base">
+        </div>
+
+        <div class="form-group mb-3 reducedSize">
+            <label class="mb-2" for="valorRecargo">Porcentaje de recargo</label>
+            <input aria-required="true" required name="valorRecargo" type="text" class="form-control" id="valorRecargo" aria-describedby="Valor de recargo">
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="mb-2" for="encabezado">Encabezado</label>
+            <input aria-required="true" required name="encabezado" type="text" class="form-control" id="encabezado" aria-describedby="Texto encabezado recibo de pago">
+            <small id="ayudaEncabezado" class="form-text text-muted">Texto para mostrar en el encabezado del <strong>recibo de pago</strong></small>
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="mb-2" for="infoContacto">Informacion de contacto</label>
+            <textarea aria-required="true" required name="infoContacto" class="form-control" id="infoContacto" rows="3"></textarea>
+        </div>
+
+        <div class="form-check form-switch mt-5">
+            <input class="form-check-input" type="checkbox" role="switch" id="switchTablaPagos">
+            <label class="form-check-label" for="switchTablaPagos">Habilitar/deshabilitar tabla de pagos</label><br/>
+            <small id="ayudaSwitchTabla" class="form-text text-muted">En la vista publica</small>
+        </div>
+
+
+        <button type="submit" class="btn btn-dark btn-padding my-5">Guardar cambios</button>
+    </form>
+</div>
+{% endblock %}
