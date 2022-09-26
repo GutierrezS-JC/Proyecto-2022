@@ -8,3 +8,8 @@ user_blueprint = Blueprint("users", __name__, url_prefix="/users")
 @user_blueprint.get("/")
 def user_index():
     return render_template("users/index.html")
+
+
+@user_blueprint.get("/listado")
+def user_list_all():
+    return render_template("users/listado.html")
