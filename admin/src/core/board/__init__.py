@@ -1,6 +1,8 @@
 from src.core.database import db
 from src.core.board.issue import Issue
 from src.core.board.label import Label
+from src.core.board.permiso import Permiso
+from src.core.board.rol import Rol
 
 
 def list_issues():
