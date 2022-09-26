@@ -1,0 +1,19 @@
+.userContainer{
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+@media (min-width: 992px) {
+    .formStyle{
+        width: 45%;
+    }
+
+    .userContainer{
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .selectActivo{
+        width: 40%;
+    }
+}

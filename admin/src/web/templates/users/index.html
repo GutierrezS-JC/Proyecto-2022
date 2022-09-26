@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='users.css') }}" >
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 userContainer">
+  <h1 class="display-3">Gestion de usuarios</h1>
+  <div class="row">
+    <div class="col">
+      <button type="submit" class="btn btn-dark btn-padding mt-2">Ver listado de usuarios</button>
+    </div>
+  </div>
+  <hr>
+  <h2 class="display-6">Nuevo usuario</h2>
+  <form class="formStyle">
+    <div class="form-group mb-3">
+      <label for="nombre">Nombre</label>
+      <input aria-required="true" required name="nombre" type="text" class="form-control" id="nombre" aria-describedby="Nombre">
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="apellido">Apellido</label>
+      <input aria-required="true" required name="apellido" type="text" class="form-control" id="apellido" aria-describedby="Apellido">
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="email">Email</label>
+      <input aria-required="true" required name="email" type="email" class="form-control" id="email" aria-describedby="Email">
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="username">Nombre de Usuario</label>
+      <input aria-required="true" required name="username" type="text" class="form-control" id="username" aria-describedby="Nombre de usuario">
+      <small id="ayudaUsername" class="form-text text-muted">El nombre de usuario solo debe contener <strong>caracteres alfanumericos</strong></small>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="password">Contraseña</label>
+      <input aria-required="true" required name="password" type="password" class="form-control" id="password" aria-describedby="Contraseña">
+      <small id="ayudaPassword" class="form-text text-muted">La contraseña debe tener por lo menos una <strong>letra en minuscula, una letra en mayuscula y un numero o caracter especial (@!?&+^)</strong></small>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="statusActivo" class="form-label">Estado</label>
+      <select class="form-select selectActivo" id=statusActivo aria-label="Seleccion estado activo">
+        <option value="1">Activo</option>
+        <option value="2">Inactivo</option>
+      </select>
+    </div>
+
+    <hr class="mt-4">
+    <div class="form-group mb-3">
+      <div>
+        <label for="statusActivo" class="form-label">Rol</label><br/>
+        <input type="checkbox" class="btn-check" id="administrador" autocomplete="off">
+        <label class="btn btn-outline-success" for="administrador">Admin</label>
+
+        <input type="checkbox" class="btn-check" id="operador" autocomplete="off">
+        <label class="btn btn-outline-success" for="operador">Operador</label>
+
+        <input type="checkbox" class="btn-check" id="socio" autocomplete="off">
+        <label class="btn btn-outline-success" for="socio">Socio</label>
+      </div>
+
+      <small class="form-text text-muted">Un usuario puede tener <strong>más de un rol al mismo tiempo</strong></small>
+    </div>
+
+    <button type="submit" class="btn btn-dark btn-padding mb-3">Crear usuario</button>
+  </form>
+</div>
+{% endblock %}
