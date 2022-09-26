@@ -1,22 +1,31 @@
 {% extends "layout.html" %}
 {% block title %} Home {% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}" >
+{% endblock %}
+
 {% block content %}
 <div class="container mt-3">
     <h1 class="display-3">Bienvenido Manaos</h1>
     <hr>
     <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+
         <div class="col">
-            <div class="card" style="width: 18rem; height: 15em">
-                <div class="card-body">
-                    <h5 class="card-title">Gestion de usuarios</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <div class="card" id="gestionUsuarios" onmouseover="imHovered(this)" onmouseout="imNotHovered(this)" style="width: 18rem; height: 15em">
+                  <a href="{{url_for('users.user_index') }}" class="linkNone">
+                    <div class="card-body">
+                        <h5 class="card-title">Gestion de usuarios</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                  </a>
                 </div>
-            </div>
+            </a>
         </div>
 
         <div class="col">
-            <div class="card" style="width: 18rem; height: 15em">
+            <div class="card" id="gestionAsociados" onmouseover="imHovered(this)" onmouseout="imNotHovered(this)" style="width: 18rem; height: 15em">
                 <div class="card-body">
                     <h5 class="card-title">Gestion de asociados</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
@@ -26,7 +35,7 @@
         </div>
 
         <div class="col">
-            <div class="card" style="width: 18rem; height: 15em">
+            <div class="card" id="gestionDisciplinas" onmouseover="imHovered(this)" onmouseout="imNotHovered(this)" style="width: 18rem; height: 15em">
                 <div class="card-body">
                     <h5 class="card-title">Gestion de disciplinas</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
@@ -36,7 +45,7 @@
         </div>
 
         <div class="col">
-            <div class="card" style="width: 18rem; height: 15em">
+            <div class="card" id="gestionPagos" onmouseover="imHovered(this)" onmouseout="imNotHovered(this)" style="width: 18rem; height: 15em">
                 <div class="card-body">
                     <h5 class="card-title">Gestion de pagos</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
@@ -46,7 +55,7 @@
         </div>
 
         <div class="col">
-            <div class="card" style="width: 18rem; height: 15em">
+            <div class="card" id="configuracion" onmouseover="imHovered(this)" onmouseout="imNotHovered(this)" style="width: 18rem; height: 15em">
                 <div class="card-body">
                     <h5 class="card-title">Configuracion del sistema</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
@@ -56,4 +65,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    function imHovered(e){
+        document.getElementById(e.id).className = "card text-bg-light"
+    }
+
+    function imNotHovered(e){
+        document.getElementById(e.id).className = "card"
+    }
+</script>
 {% endblock %}

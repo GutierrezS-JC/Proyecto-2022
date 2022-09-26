@@ -7,7 +7,5 @@ home_blueprint = Blueprint("home", __name__, url_prefix="/")
 
 @home_blueprint.get("/")
 def home_index():
-    if session:
-        return render_template("home.html")
-    else:
-        return redirect(url_for("login.login_index"))
+    return render_template("home.html")
+

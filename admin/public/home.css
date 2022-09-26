@@ -1,0 +1,13 @@
+.card:hover{
+    cursor:pointer;
+}
+
+.linkNone, linkNone:hover {
+    color: unset; /* blue colors for links too */
+    text-decoration: unset; /* no underline */
+}
+
+a:hover{
+    color: unset; /* blue colors for links too */
+    text-decoration: unset; /* no underline */
+}
