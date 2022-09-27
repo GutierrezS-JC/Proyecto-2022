@@ -3,7 +3,6 @@ from flask import Flask
 from .config import config
 from .controllers.home import home_blueprint
 from .controllers.login import login_blueprint
-from .controllers.issues import issue_blueprint
 from src.web.controllers.users import user_blueprint
 from src.web.controllers.config import config_blueprint
 
@@ -11,17 +10,22 @@ from src.web.helpers import handlers
 from src.core import database
 from src.core import seeds
 
+from src.web.helpers.authenticate import authenticate
+
+from flask_session import Session
+
 
 def create_app(env="development", static_folder="static"):
     app = Flask(__name__, static_folder=static_folder)
 
     app.config.from_object(config[env])
+    app.config['SESSION_TYPE'] = 'filesystem'
+    Session(app)
 
     database.init_app(app)
 
     app.register_blueprint(home_blueprint)
     app.register_blueprint(login_blueprint)
-    app.register_blueprint(issue_blueprint)
 
     app.register_blueprint(user_blueprint)
     app.register_blueprint(config_blueprint)
