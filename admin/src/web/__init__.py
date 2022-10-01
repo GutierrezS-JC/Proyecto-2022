@@ -7,6 +7,8 @@ from src.web.controllers.users import user_blueprint
 from src.web.controllers.config import config_blueprint
 
 from src.web.helpers import handlers
+from src.web.helpers import auth
+
 from src.core import database
 from src.core import seeds
 
@@ -17,12 +19,16 @@ from flask_session import Session
 def create_app(env="development", static_folder="static"):
     app = Flask(__name__, static_folder=static_folder)
 
+    # Load config
     app.config.from_object(config[env])
-    app.config['SESSION_TYPE'] = 'filesystem'
+
+    # Config session backend
     Session(app)
 
+    # Init database
     database.init_app(app)
 
+    # Register blueprints and handlers
     app.register_blueprint(home_blueprint)
     app.register_blueprint(login_blueprint)
 
@@ -31,6 +37,9 @@ def create_app(env="development", static_folder="static"):
 
     app.register_error_handler(404, handlers.not_found_error)
     app.register_error_handler(500, handlers.internal_server_error)
+
+    # Global Jinja
+    app.jinja_env.globals.update(is_authenticated=auth.is_authenticated)
 
     @app.cli.command(name="resetdb")
     def resetdb():

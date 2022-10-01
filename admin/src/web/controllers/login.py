@@ -21,7 +21,7 @@ def authenticate():
             flash("Usuario o clave incorrecto", "danger")
             return redirect(url_for("login.login_index"))
 
-        if user.activo == 0:
+        if not user.activo:
             flash("Su cuenta se encuentra deshabilitada okk", "danger")
             return redirect(url_for("login.login_index"))
 
@@ -42,6 +42,7 @@ def authenticate():
 @login_blueprint.get("/logout")
 def logout():
     del session["user"]
+    del session["username"]
     session.clear()
     flash("La sesion se cerro correctamente", "success")
 
