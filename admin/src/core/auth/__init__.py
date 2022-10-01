@@ -12,3 +12,12 @@ def create_user(**kwargs):
     db.session.commit()
 
     return user
+
+
+def find_user_by_email_and_pass(email, password):
+    return User.query.filter_by(email=email, password=password).first()
+
+
+def get_initials(email):
+    user = User.query.filter_by(email=email).all()
+    return user.first_name[0] + user.last_name[0]

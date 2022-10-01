@@ -14,16 +14,16 @@
                      class="img-fluid" alt="Login Img">
             </div>
             <div class="col-sm-8 col-md-8 col-lg-5 col-xl-4 mt-4 mt-lg-0">
-                <form>
+                <form action="{{ url_for('login.authenticate') }}" method="POST">
                     <h1 class="display-6">Iniciar Sesion</h1>
                     <div class="mb-4">
                         <label class="form-label" for="formLoginEmail">Celular / Email</label>
-                        <input type="email" id="formLoginEmail" class="form-control" placeholder="Ingresa su celular o correo electronico" />
+                        <input type="email" name="email" id="formLoginEmail" class="form-control" placeholder="Ingresa su celular o correo electronico" />
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label" for="formLoginPassword">Contraseña</label>
-                        <input type="password" id="formLoginPassword" class="form-control" placeholder="Ingresa tu contraseña" />
+                        <input type="password" name="password" id="formLoginPassword" class="form-control" placeholder="Ingresa tu contraseña" />
                     </div>
 
                     <a href="#" class="form-text">¿Te olvidaste la contraseña?</a>
