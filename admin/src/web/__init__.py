@@ -10,7 +10,6 @@ from src.web.helpers import handlers
 from src.core import database
 from src.core import seeds
 
-from src.web.helpers.authenticate import authenticate
 
 from flask_session import Session
 
