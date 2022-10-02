@@ -1,10 +1,12 @@
 from flask import Flask
 
 from .config import config
+
 from .controllers.home import home_blueprint
 from .controllers.login import login_blueprint
 from src.web.controllers.users import user_blueprint
 from src.web.controllers.config import config_blueprint
+from src.web.controllers.asociados import asociado_blueprint
 
 from src.web.helpers import handlers
 from src.web.helpers import auth
@@ -34,6 +36,8 @@ def create_app(env="development", static_folder="static"):
 
     app.register_blueprint(user_blueprint)
     app.register_blueprint(config_blueprint)
+
+    app.register_blueprint(asociado_blueprint)
 
     app.register_error_handler(401, handlers.unauthorized_error)
     app.register_error_handler(404, handlers.not_found_error)
