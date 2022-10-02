@@ -2,12 +2,16 @@ from flask import Blueprint, redirect, url_for, request, flash, session, flash, 
 from src.core import auth
 from src.core.auth.user import User
 
+
 login_blueprint = Blueprint("login", __name__, url_prefix="/")
 
 
 @login_blueprint.get("/")
 def login_index():
-    return render_template("login/index.html")
+    if not session.get("user"):
+        return render_template("login/index.html")
+    else:
+        return redirect(url_for("home.home_index"))
 
 
 @login_blueprint.post("/auth/authenticate")
