@@ -2,7 +2,7 @@ from flask import Blueprint, redirect, url_for, request, flash, session, flash, 
 from src.core import auth
 from src.core.auth.user import User
 
-login_blueprint = Blueprint("login", __name__, url_prefix="/login")
+login_blueprint = Blueprint("login", __name__, url_prefix="/")
 
 
 @login_blueprint.get("/")
@@ -10,7 +10,7 @@ def login_index():
     return render_template("login/index.html")
 
 
-@login_blueprint.post("/authenticate")
+@login_blueprint.post("/auth/authenticate")
 def authenticate():
     # print(request)
     if request.method == "POST":
@@ -39,7 +39,7 @@ def authenticate():
     return render_template("login.login_index")
 
 
-@login_blueprint.get("/logout")
+@login_blueprint.get("/auth/logout")
 def logout():
     del session["user"]
     del session["username"]

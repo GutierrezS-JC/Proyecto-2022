@@ -6,7 +6,7 @@ from src.web.helpers import auth
 from src.web.helpers.auth import login_required
 
 
-home_blueprint = Blueprint("home", __name__, url_prefix="/")
+home_blueprint = Blueprint("home", __name__, url_prefix="/home")
 
 
 @home_blueprint.get("/")
