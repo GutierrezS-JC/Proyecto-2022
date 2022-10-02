@@ -2,12 +2,14 @@ from flask import Blueprint, redirect, url_for
 from flask import render_template
 from flask import session
 
-home_blueprint = Blueprint("home", __name__, url_prefix="/")
+from src.web.helpers import auth
+from src.web.helpers.auth import login_required
+
+
+home_blueprint = Blueprint("home", __name__, url_prefix="/home")
 
 
 @home_blueprint.get("/")
+@login_required
 def home_index():
-    if session:
-        return render_template("home.html")
-    else:
-        return redirect(url_for("login.login_index"))
+    return render_template("home.html")

@@ -1,8 +1,8 @@
 <div id="navbar">
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Futbox</a>
-
+      <a class="navbar-brand" href="{{ url_for('home.home_index') }}">Futbox</a>
+      {% if is_authenticated(session) %}
       <!-- MOBILE -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -12,15 +12,15 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+            <a class="nav-link active" aria-current="page" href="{{ url_for('home.home_index') }}">Inicio</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="#">Usuarios</a>
+            <a class="nav-link" href="{{ url_for('users.user_index') }}">Usuarios</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="#">Asociados</a>
+            <a class="nav-link" href="{{ url_for('asociados.asociado_index') }}">Asociados</a>
           </li>
 
           <li class="nav-item">
@@ -32,7 +32,7 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="#">Configuracion</a>
+            <a class="nav-link" href="{{ url_for('config.config_index') }}">Configuracion</a>
           </li>
 
           <div class="section-mobile d-block d-lg-none">
@@ -47,15 +47,15 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="#">Cerrar Sesion</a>
+              <a class="nav-link" href="{{ url_for('login.logout') }}">Cerrar Sesion</a>
             </li>
           </div>
         </ul>
 
         <ul class="navbar-nav d-none d-lg-block" style="margin-right: 10px;">
           <li class="nav-item dropdown">
-            <a class="letter circle caret rounded-circle nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              MS
+            <a class="letter circle caret rounded-circle nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding-left: 13px">
+              {{ session["username"][0] }}
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="#">Perfil</a></li>
@@ -63,11 +63,12 @@
               <li>
                 <hr class="dropdown-divider">
               </li>
-              <li><a class="dropdown-item" href="#">Cerrar Sesion</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('login.logout') }}">Cerrar Sesion</a></li>
             </ul>
           </li>
         </ul>
       </div>
+      {% endif %}
     </div>
   </nav>
 </div>

@@ -1,0 +1,19 @@
+.configContainer{
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+@media (min-width: 992px) {
+    .formStyle{
+        width: 45%;
+    }
+
+    .configContainer{
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .reducedSize{
+        width: 40%;
+    }
+}
