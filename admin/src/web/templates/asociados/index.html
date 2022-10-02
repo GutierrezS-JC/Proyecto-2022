@@ -1,0 +1,193 @@
+{% extends "layout.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='users.css') }}" >
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 userContainer">
+  <h1 class="display-3">Gestion de asociados</h1>
+  <div class="row">
+    <div class="col">
+      <button class="btn btn-dark btn-padding mt-2" data-bs-toggle="modal" data-bs-target="#cargarSocioModal" type="button">Cargar un nuevo socio</button>
+    </div>
+  </div>
+
+  <div class="modal fade" id="cargarSocioModal" tabindex="-1" aria-labelledby="cargarSocioModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title" id="cargarSocioLabel">Nuevo socio</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <div class="modal-body">
+            <form class="row g-3">
+
+              <div class="col-md-6">
+                <label for="inputNombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="inputNombre">
+              </div>
+
+              <div class="col-md-6">
+                <label for="inputApellido" class="form-label">Apellido</label>
+                <input type="text" class="form-control" id="inputApellido">
+              </div>
+
+              <div class="col-md-5">
+                <label for="inputTipoDocumento" class="form-label">Tipo de documento</label>
+                <select id="inputTipoDocumento" class="form-select">
+                  <option selected>DNI</option>
+                  <option>LE</option>
+                  <option>LC</option>
+                </select>
+              </div>
+
+               <div class="col-md-7">
+                <label for="inputNroDocumento" class="form-label">Nro de documento</label>
+                <input type="text" class="form-control" id="inputNroDocumento">
+              </div>
+
+              <div class="col-md-12">
+                <label for="inputGenero" class="form-label">Genero</label>
+                <select id="inputGenero" class="form-select">
+                  <option selected>...</option>
+                  <option value="1">M</option>
+                  <option value="2">F</option>
+                  <option value="3">Otro</option>
+                </select>
+              </div>
+
+              <div class="col-md-5">
+                <label for="inputNroDocumento" class="form-label">Nro de Socio</label>
+                <input type="text" class="form-control" id="inputNroSocio" value="3" disabled>
+              </div>
+
+              <div class="col-12">
+                <label for="inputDireccion" class="form-label">Direccion</label>
+                <input type="text" class="form-control" id="inputDireccion" placeholder="Calle, numero, piso...">
+              </div>
+
+              <div class="col-md-12">
+                <label for="inputEstado" class="form-label">Estado</label>
+                <select id="inputEstado" class="form-select">
+                  <option selected>...</option>
+                  <option value="1">Activo</option>
+                  <option value="2">No-Activo</option>
+                </select>
+              </div>
+
+<!--              <hr class="mx-auto" style="width: 95%; margin-top: 2em;">-->
+
+              <div class="col-12 mt-4">
+                <label for="inputTelefono" class="form-label">Telefono (Opcional)</label>
+                <input type="text" class="form-control" id="inputTelefono">
+              </div>
+
+              <div class="col-12">
+                <label for="inputEmail" class="form-label">Email (Opcional)</label>
+                <input type="text" class="form-control" id="inputEmail">
+              </div>
+
+
+              <div class="col-md-5">
+                <label for="inputFechaAlta" class="form-label">Fecha de alta</label>
+                <input type="text" class="form-control" id="inputFechaAlta" value="02/10/22" disabled>
+              </div>
+
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-success">Cargar socio</button>
+          </div>
+
+        </div>
+    </div>
+  </div>
+
+
+  <hr>
+
+  <h2 class="h3">Busqueda</h2>
+  <form id="formBusquedda" name="formularioBusqueda" role="form">
+    <div class="row mb-4">
+      <div class="col-lg-3 d-flex">
+        <input type="text" id="apellidoBusqueda" class="form-control rounded text-black" placeholder="Ingrese un apellido . . ." />
+      </div>
+
+      <div class="col-lg-2 text-start">
+        <select id="criterioBusqueda" class="form-select">
+          <option value="0" selected>Todos</option>
+          <option value="1">Activo</option>
+          <option value="2">Bloqueado</option>
+        </select>
+      </div>
+
+      <div class="col-lg-1">
+        <button type="submit" id="btnBusqueda" class="btn btn-outline-dark">Buscar</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="mt-5">
+    <div class="row mb-4">
+      <div class="col-12">
+        <h1 class="h3">Listado de asociados</h1>
+      </div>
+
+      <div class="col-12">
+        <button type="submit" id="btnCsv" class="btn btn-sm btn-outline-secondary">Exportar CSV</button>
+        <button type="submit" id="btnPdf" class="btn btn-sm btn-outline-secondary ms-2">Exportar PDF</button>
+      </div>
+    </div>
+
+    <div class="table-responsive-lg">
+      <table class="table table-bordered align-middle">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nombre completo</th>
+          <th scope="col">Documento</th>
+          <th scope="col">Nro de socio</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Fecha de alta</th>
+          <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row"> 1 </th>
+            <td>Manaos Light</td>
+            <td>935115115</td>
+            <td>115</td>
+            <td>Bloqueado</td>
+            <td>02/10/22</td>
+            <td class="text-center">
+              <button type="button" class="btn btn-secondary btn-sm">Editar</button>
+              <button type="button" class="btn btn-danger btn-sm mt-2 mt-lg-0">Eliminar</button>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"> 2 </th>
+            <td>Manaos Life</td>
+            <td>935115115</td>
+            <td>116</td>
+            <td>Actvo</td>
+            <td>02/10/22</td>
+            <td class="text-center">
+              <button type="button" class="btn btn-secondary btn-sm">Editar</button>
+              <button type="button" class="btn btn-danger btn-sm mt-2 mt-lg-0">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>
+{% endblock %}
