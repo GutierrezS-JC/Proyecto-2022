@@ -1,6 +1,15 @@
 from flask import render_template
 
 
+def unauthorized_error(e):
+    kwargs = {
+        "error_name": "401 Unauthorized ",
+        "error_description": "La peticion no pudo ser ejecutada porque no tenes las credenciales "
+                             "validas de autenticacion para el recurso solicitado",
+    }
+    return render_template("error.html", **kwargs), 401
+
+
 def not_found_error(e):
     kwargs = {
         "error_name": "404 Not Found Error",
