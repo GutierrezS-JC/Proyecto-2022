@@ -25,7 +25,7 @@ def authenticate():
             flash("Usuario o clave incorrecto", "danger")
             return redirect(url_for("login.login_index"))
 
-        if not user.activo:
+        if not user.status:
             flash("Su cuenta se encuentra deshabilitada okk", "danger")
             return redirect(url_for("login.login_index"))
 
