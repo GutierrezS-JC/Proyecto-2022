@@ -31,11 +31,12 @@ def user_create():
 
     if form.validate_on_submit():
         roles = []
-        for rol in form.roles:
-            print(rol)
+        # for rol in form.roles:
+        #     print(rol)
 
         for item in form:
             print(item)
+            print(item.data)
 
     else:
         print("WTF happened")

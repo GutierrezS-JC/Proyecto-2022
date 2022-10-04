@@ -15,8 +15,7 @@ class RegisterUserForm(FlaskForm):
     first_name = StringField('Nombre', validators=[InputRequired(), Length(max=50)])
     last_name = StringField('Apellido', validators=[InputRequired(), Length(max=50)])
     password = PasswordField('Contraseña', validators=[InputRequired(), Length(min=8)])
-    estado = SelectField('Estado', choices=[('Activo', '1'), ('Inactivo', '2')],
-                         validators=[InputRequired()])
+    status = SelectField('Estado', choices=[('1', 'Activo'), ('2', 'Inactivo')], default="1")
     roles = MultiCheckboxField('Roles', choices=[('1', 'Admin'), ('2', 'Operador')])
 
     submit = SubmitField("Crear Usuario")

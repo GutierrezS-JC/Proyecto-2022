@@ -18,52 +18,48 @@
   <form class="formStyle" method="POST" action="{{ url_for('users.user_create') }}">
     {{ form.csrf_token }}
     <div class="form-group mb-3">
-<!--      <label for="nombre">{{form.first_name.label()}}</label>-->
-<!--      <input aria-required="true" required name="nombre" type="text" class="form-control" id="nombre" aria-describedby="Nombre">-->
       {{ form.first_name.label }}
       {{ form.first_name(class="form-control") }}
     </div>
 
     <div class="form-group mb-3">
-      <label for="apellido">{{form.last_name.label()}}</label>
-      <input aria-required="true" required name="apellido" type="text" class="form-control" id="apellido" aria-describedby="Apellido">
+      {{ form.last_name.label }}
+      {{ form.last_name(class="form-control") }}
     </div>
 
     <div class="form-group mb-3">
-      <label for="email">{{form.email.label()}}</label>
-      <input aria-required="true" required name="email" type="email" class="form-control" id="email" aria-describedby="Email">
+      {{ form.email.label }}
+      {{ form.email(class="form-control") }}
     </div>
 
     <div class="form-group mb-3">
-      <label for="username">{{form.username.label()}}</label>
-      <input aria-required="true" required name="username" type="text" class="form-control" id="username" aria-describedby="Nombre de usuario">
+      {{ form.username.label }}
+      {{ form.username(class="form-control") }}
       <small id="ayudaUsername" class="form-text text-muted">El nombre de usuario solo debe contener <strong>caracteres alfanumericos</strong></small>
     </div>
 
     <div class="form-group mb-3">
-      <label for="password">{{form.password.label()}}</label>
-      <input aria-required="true" required name="password" type="password" class="form-control" id="password" aria-describedby="Contraseña">
+      {{ form.password.label }}
+      {{ form.password(class="form-control") }}
       <small id="ayudaPassword" class="form-text text-muted">La contraseña debe tener por lo menos una <strong>letra en minuscula, una letra en mayuscula y un numero o caracter especial (@!?&+^)</strong></small>
     </div>
 
     <div class="form-group mb-3">
-      <label for="statusActivo" class="form-label">{{form.estado.label()}}</label>
+<!--      <label for="statusActivo" class="form-label">{{form.status.label()}}</label>-->
+<!--      <select class="form-select selectActivo" id=statusActivo aria-label="Seleccion estado activo">-->
+<!--        <option value="1">Activo</option>-->
+<!--        <option value="2">Inactivo</option>-->
+<!--      </select>-->
+      {{ form.status.label }}
       <select class="form-select selectActivo" id=statusActivo aria-label="Seleccion estado activo">
-        <option value="1">Activo</option>
-        <option value="2">Inactivo</option>
+        {% for status in form.status %}
+          {{ status }}
+        {% endfor %}
       </select>
     </div>
 
     <hr class="mt-4">
     <div class="form-group mb-3">
-<!--      <div>-->
-<!--        <label class="form-label">{{form.roles.label()}}</label><br/>-->
-<!--        <input type="checkbox" class="btn-check" name="roles" id="administrador" autocomplete="off">-->
-<!--        <label class="btn btn-outline-success" for="administrador">Admin</label>-->
-
-<!--        <input type="checkbox" class="btn-check" name="roles" id="operador" autocomplete="off">-->
-<!--        <label class="btn btn-outline-success" for="operador">Operador</label>-->
-<!--      </div>-->
       <div>
         <label class="form-label">{{form.roles.label()}}</label><br/>
           {% for rol in form.roles %}
@@ -74,7 +70,7 @@
       <small class="form-text text-muted">Un usuario puede tener <strong>más de un rol al mismo tiempo</strong></small>
     </div>
 
-    <button type="submit" class="btn btn-dark btn-padding mb-3" href>Crear usuario</button>
+    {{ form.submit(class="btn btn-dark btn-padding mb-3") }}
 
   </form>
 </div>
