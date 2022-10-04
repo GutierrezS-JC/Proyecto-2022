@@ -17,7 +17,7 @@ class User(db.Model):
     first_name = db.Column(db.String(255))
     last_name = db.Column(db.String(255))
     password = db.Column(db.String(100))
-    activo = db.Column(db.Boolean)
+    status = db.Column(db.Boolean)
     roles = db.relationship("Rol", secondary=usuario_roles)
     updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now)
     inserted_at = db.Column(db.DateTime, default=datetime.now())
