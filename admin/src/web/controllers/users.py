@@ -22,7 +22,15 @@ def user_index():
 @login_required
 def user_list_all():
     users = auth.list_users()
-    return render_template("users/listado.html", users=users)
+    return render_template("users/listado.html", users=users, user_is_admin=auth.user_is_admin)
+
+
+@user_blueprint.get("/cambiar_rol")
+@login_required
+def user_change_status(username):
+    users = auth.list_users()
+    auth.user_set_status(username)
+    return render_template("users/listado.html", users=users, user_is_admin=auth.user_is_admin)
 
 
 @user_blueprint.post("/cargar")

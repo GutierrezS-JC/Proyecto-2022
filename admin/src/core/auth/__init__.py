@@ -32,3 +32,20 @@ def get_user_by_username(username):
 
 def get_user_by_email(email):
     return User.query.filter_by(email=email).first()
+
+
+def user_is_admin(username):
+    response = False
+    user = get_user_by_username(username)
+    for rol in user.roles:
+        if rol.nombre == "Admin":
+            response = True
+    return response
+
+
+def user_set_status(username):
+    user = get_user_by_username(username)
+    user.status = not user.status
+    db.session.commit()
+
+    return True
