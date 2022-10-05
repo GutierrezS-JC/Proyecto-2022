@@ -3,6 +3,7 @@ from flask import render_template
 from flask import session
 
 from core import auth
+from core import board
 
 from src.web.helpers.forms import RegisterUserForm
 from src.web.helpers.auth import login_required
@@ -31,15 +32,17 @@ def user_create():
     if form.validate_on_submit():
         roles = []
 
-        print(form["status"].data)
-        print(form["roles"].data)
+        for rol in form["roles"].data:
+            rol_buscado = board.get_rol_by_id(rol)
+            roles.append(rol_buscado)
+
         auth.create_user(
             email=form["email"].data,
             username=form["username"].data,
             first_name=form["first_name"].data,
             last_name=form["last_name"].data,
             password=form["password"].data,
-            status=True if form["status"].data == 1 else False,
+            status=True if (form["status"].data == "1") else False,
             roles=roles
         )
     else:

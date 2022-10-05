@@ -1,3 +1,5 @@
+import json
+
 from src.core.database import db
 from src.core.auth.user import User
 
@@ -8,6 +10,7 @@ def list_users():
 
 def create_user(**kwargs):
     user = User(**kwargs)
+    print(user.roles)
     db.session.add(user)
     db.session.commit()
 

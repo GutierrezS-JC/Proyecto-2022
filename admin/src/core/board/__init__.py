@@ -38,3 +38,6 @@ from src.core.board.config import Config
 #     db.session.commit()
 #
 #     return label
+
+def get_rol_by_id(rol_id):
+    return Rol.query.get(rol_id)
