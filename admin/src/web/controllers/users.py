@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, url_for, request
+from flask import Blueprint, redirect, url_for, request, flash
 from flask import render_template
 from flask import session
 
@@ -32,23 +32,30 @@ def user_create():
     if form.validate_on_submit():
         roles = []
 
-        for rol in form["roles"].data:
-            rol_buscado = board.get_rol_by_id(rol)
-            roles.append(rol_buscado)
+        if auth.get_user_by_email(form["email"].data):
+            flash("Error. El email ingresado ya se encuentra registrado", "danger")
+        elif auth.get_user_by_username(form["username"].data):
+            flash("Error. El nombre de usuario ya se encuentra registrado", "danger")
+        else:
+            for rol in form["roles"].data:
+                rol_buscado = board.get_rol_by_id(rol)
+                roles.append(rol_buscado)
 
-        auth.create_user(
-            email=form["email"].data,
-            username=form["username"].data,
-            first_name=form["first_name"].data,
-            last_name=form["last_name"].data,
-            password=form["password"].data,
-            status=True if (form["status"].data == "1") else False,
-            roles=roles
-        )
+            auth.create_user(
+                email=form["email"].data,
+                username=form["username"].data,
+                first_name=form["first_name"].data,
+                last_name=form["last_name"].data,
+                password=form["password"].data,
+                status=True if (form["status"].data == "1") else False,
+                roles=roles
+            )
+            flash("Usuario creado exitosamente", "success")
     else:
         print("WTF happened")
         for item in form.errors:
             for error in form[item].errors:
                 print(f"{form[item].name}  {error}")
 
-    return render_template("users/index.html", form=form)
+    return redirect(url_for("users.user_index"))
+    # return render_template("users/index.html", form=form)
