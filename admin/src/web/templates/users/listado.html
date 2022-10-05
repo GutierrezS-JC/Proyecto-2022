@@ -77,11 +77,9 @@
               <button type="button" class="btn btn-primary btn-sm mt-2 mt-lg-0">Editar</button>
               {% if not user_is_admin(user.username) %}
                 {% if user.status == True %}
-                  <a class="btn btn-warning btn-sm mt-2 mt-lg-0" href="{{ url_for('users.user_change_status(user.username)') }}" role="button">Bloquear</a>
-                  <button type="button" class="btn btn-warning btn-sm mt-2 mt-lg-0">Bloquear</button>
+                  <a class="btn btn-warning btn-sm mt-2 mt-lg-0" href="{{ url_for('users.user_change_status', username=user.username) }}" role="button">Bloquear</a>
                 {% else %}
-                  <a class="btn btn-warning btn-sm mt-2 mt-lg-0" href="{{ url_for('users.user_change_status(user.username)') }}" role="button">Bloquear</a>
-                  <button type="button" class="btn btn-success btn-sm mt-2 mt-lg-0">Activar</button>
+                  <a class="btn btn-success btn-sm mt-2 mt-lg-0" href="{{ url_for('users.user_change_status', username=user.username) }}" role="button">Activar</a>
                 {% endif %}
               {% else %}
                 <button type="button" class="btn btn-outline-secondary btn-sm mt-2 mt-lg-0" disabled>Bloquear</button>
