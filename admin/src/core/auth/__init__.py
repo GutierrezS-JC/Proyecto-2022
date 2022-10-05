@@ -1,3 +1,5 @@
+import json
+
 from src.core.database import db
 from src.core.auth.user import User
 
@@ -8,6 +10,7 @@ def list_users():
 
 def create_user(**kwargs):
     user = User(**kwargs)
+    print(user.roles)
     db.session.add(user)
     db.session.commit()
 
@@ -21,3 +24,11 @@ def find_user_by_email_and_pass(email, password):
 def get_initials(email):
     user = User.query.filter_by(email=email).all()
     return user.first_name[0] + user.last_name[0]
+
+
+def get_user_by_username(username):
+    return User.query.filter_by(username=username).first()
+
+
+def get_user_by_email(email):
+    return User.query.filter_by(email=email).first()
