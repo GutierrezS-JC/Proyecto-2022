@@ -21,7 +21,8 @@ def user_index():
 @user_blueprint.get("/listado")
 @login_required
 def user_list_all():
-    return render_template("users/listado.html")
+    users = auth.list_users()
+    return render_template("users/listado.html", users=users)
 
 
 @user_blueprint.post("/cargar")
