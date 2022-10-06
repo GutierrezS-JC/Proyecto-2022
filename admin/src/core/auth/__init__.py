@@ -17,6 +17,14 @@ def create_user(**kwargs):
     return user
 
 
+def assign_roles(user, roles):
+    user.roles.extend(roles)
+    db.session.add(user)
+    db.session.commit()
+
+    return user
+
+
 def find_user_by_email_and_pass(email, password):
     return User.query.filter_by(email=email, password=password).first()
 
