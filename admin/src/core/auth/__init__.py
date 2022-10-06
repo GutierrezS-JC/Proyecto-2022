@@ -47,6 +47,10 @@ def get_user_by_username(username):
     return User.query.filter_by(username=username).first()
 
 
+def get_user_by_id(user_id):
+    return User.query.filter_by(id=user_id).first()
+
+
 def get_user_by_email(email):
     return User.query.filter_by(email=email).first()
 
@@ -66,3 +70,15 @@ def user_set_status(username):
     db.session.commit()
 
     return True
+
+
+# APIs
+def user_json(user):
+    return {
+        'id': user.id,
+        'email': user.email,
+        'username': user.username,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'is_active': user.is_active
+    }

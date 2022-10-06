@@ -1,6 +1,6 @@
-from flask import Blueprint, redirect, url_for, request, flash
+from passlib.hash import sha256_crypt
+from flask import Blueprint, redirect, url_for, request, flash, jsonify
 from flask import render_template
-from flask import session
 
 from core import auth
 from core import board
@@ -28,10 +28,8 @@ def user_list_all():
 @user_blueprint.route("/cambiar_rol/<username>")
 @login_required
 def user_change_status(username):
-    # users = auth.list_users()
     auth.user_set_status(username)
     return redirect(url_for('users.user_list_all'))
-    # return render_template("users/listado.html", users=users, user_is_admin=auth.user_is_admin)
 
 
 @user_blueprint.post("/cargar")
@@ -51,13 +49,14 @@ def user_create():
                 rol_buscado = board.get_rol_by_id(rol)
                 roles.append(rol_buscado)
 
+            password = sha256_crypt.encrypt(form["password"].data)
             auth.create_user(
                 email=form["email"].data,
                 username=form["username"].data,
                 first_name=form["first_name"].data,
                 last_name=form["last_name"].data,
-                password=form["password"].data,
-                is_active=True if (form["status"].data == "1") else False,
+                password=password,
+                is_active=True if form["status"].data == "1" else False,
                 roles=roles
             )
             flash("Usuario creado exitosamente", "success")
@@ -68,4 +67,15 @@ def user_create():
                 print(f"{form[item].name}  {error}")
 
     return redirect(url_for("users.user_index"))
-    # return render_template("users/index.html", form=form)
+
+
+# APIs de user
+@user_blueprint.route("/api/users/<user_id>")
+@login_required
+def get_user(user_id):
+    user = auth.get_user_by_id(user_id)
+    if user is None:
+        return jsonify({'message': 'El usuario no existe'}), 404
+    user_json = auth.user_json(user)
+
+    return jsonify({'user': user_json})
