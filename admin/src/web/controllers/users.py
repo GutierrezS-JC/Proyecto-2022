@@ -57,7 +57,7 @@ def user_create():
                 first_name=form["first_name"].data,
                 last_name=form["last_name"].data,
                 password=form["password"].data,
-                status=True if (form["status"].data == "1") else False,
+                is_active=True if (form["status"].data == "1") else False,
                 roles=roles
             )
             flash("Usuario creado exitosamente", "success")

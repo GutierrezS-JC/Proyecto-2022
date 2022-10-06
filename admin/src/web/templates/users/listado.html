@@ -59,7 +59,7 @@
             <td>{{ user.email }}</td>
             <td>{{ user.username }}</td>
 
-            {% if user.status == True %}
+            {% if user.is_active == True %}
               <td>Activo</td>
             {% else %}
               <td>Bloqueado</td>
@@ -67,7 +67,7 @@
 
             <td>
               {% for rol in user.roles %}
-                {{ rol.nombre }}
+                {{ rol.name }}
                 {% if loop.nextitem %}
                    -
                 {% endif %}
@@ -76,7 +76,7 @@
             <td class="text-center">
               <button type="button" class="btn btn-primary btn-sm mt-2 mt-lg-0">Editar</button>
               {% if not user_is_admin(user.username) %}
-                {% if user.status == True %}
+                {% if user.is_active == True %}
                   <a class="btn btn-warning btn-sm mt-2 mt-lg-0" href="{{ url_for('users.user_change_status', username=user.username) }}" role="button">Bloquear</a>
                 {% else %}
                   <a class="btn btn-success btn-sm mt-2 mt-lg-0" href="{{ url_for('users.user_change_status', username=user.username) }}" role="button">Activar</a>
