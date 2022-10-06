@@ -1,5 +1,5 @@
 import json
-
+from passlib.hash import sha256_crypt
 from src.core.database import db
 from src.core.auth.user import User
 
@@ -27,6 +27,14 @@ def assign_roles(user, roles):
 
 def find_user_by_email_and_pass(email, password):
     return User.query.filter_by(email=email, password=password).first()
+
+
+def verify_login(email, password):
+    response = User.query.filter_by(email=email).first()
+    if sha256_crypt.verify(password, response.password):
+        return response
+
+    return None
 
 
 def get_initials(email):
