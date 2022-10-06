@@ -38,14 +38,14 @@ def user_is_admin(username):
     response = False
     user = get_user_by_username(username)
     for rol in user.roles:
-        if rol.nombre == "Admin":
+        if rol.name == "Admin":
             response = True
     return response
 
 
 def user_set_status(username):
     user = get_user_by_username(username)
-    user.status = not user.status
+    user.is_active = not user.is_active
     db.session.commit()
 
     return True
