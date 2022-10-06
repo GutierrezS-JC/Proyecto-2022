@@ -1,43 +1,57 @@
 from src.core.database import db
-from src.core.board.permiso import Permiso
+from src.core.board.permission import Permission
 from src.core.board.rol import Rol
 from src.core.board.config import Config
 
 
-# def list_issues():
-#     return Issue.query.all()
-#
-#
-# def create_issue(**kwargs):
-#     issue = Issue(**kwargs)
-#     db.session.add(issue)
-#     db.session.commit()
-#
-#     return issue
-#
-#
 # def assign_user(issue, user):
 #     issue.user = user
 #     db.session.add(issue)
 #     db.session.commit()
 #
 #     return issue
-#
-#
-# def assign_labels(issue, labels):
-#     issue.labels.extend(labels)
-#     db.session.add(issue)
-#     db.session.commit()
-#
-#     return issue
-#
-#
-# def create_label(**kwargs):
-#     label = Label(**kwargs)
-#     db.session.add(label)
-#     db.session.commit()
-#
-#     return label
 
+
+# Rol methods
 def get_rol_by_id(rol_id):
     return Rol.query.get(rol_id)
+
+
+def create_rol(**kwargs):
+    rol = Rol(**kwargs)
+    db.session.add(rol)
+    db.session.commit()
+
+    return rol
+
+
+def assign_permissions(rol, permissions):
+    rol.permissions.extend(permissions)
+    db.session.add(rol)
+    db.session.commit()
+
+    return rol
+
+
+# Permission methods
+def create_permission(**kwargs):
+    permission = Permission(**kwargs)
+    db.session.add(permission)
+    db.session.commit()
+
+    return permission
+
+
+# Configuration methods
+def create_configuration(**kwargs):
+    config = Config(**kwargs)
+    db.session.add(config)
+    db.session.commit()
+
+    return config
+
+
+def update_configuration(**kwargs):
+    config = Config.query.get(1)
+    for key, value in kwargs:
+        setattr(config, key, value)

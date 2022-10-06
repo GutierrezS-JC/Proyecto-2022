@@ -22,7 +22,16 @@ def user_index():
 @login_required
 def user_list_all():
     users = auth.list_users()
-    return render_template("users/listado.html", users=users)
+    return render_template("users/listado.html", users=users, user_is_admin=auth.user_is_admin)
+
+
+@user_blueprint.route("/cambiar_rol/<username>")
+@login_required
+def user_change_status(username):
+    # users = auth.list_users()
+    auth.user_set_status(username)
+    return redirect(url_for('users.user_list_all'))
+    # return render_template("users/listado.html", users=users, user_is_admin=auth.user_is_admin)
 
 
 @user_blueprint.post("/cargar")
@@ -48,7 +57,7 @@ def user_create():
                 first_name=form["first_name"].data,
                 last_name=form["last_name"].data,
                 password=form["password"].data,
-                status=True if (form["status"].data == "1") else False,
+                is_active=True if (form["status"].data == "1") else False,
                 roles=roles
             )
             flash("Usuario creado exitosamente", "success")

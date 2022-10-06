@@ -19,13 +19,13 @@ def authenticate():
     # print(request)
     if request.method == "POST":
         params = request.form
-        user = auth.find_user_by_email_and_pass(params["email"], params["password"])
+        user = auth.verify_login(params["email"], params["password"])
 
         if not user:
             flash("Usuario o clave incorrecto", "danger")
             return redirect(url_for("login.login_index"))
 
-        if not user.status:
+        if not user.is_active:
             flash("Su cuenta se encuentra deshabilitada okk", "danger")
             return redirect(url_for("login.login_index"))
 
