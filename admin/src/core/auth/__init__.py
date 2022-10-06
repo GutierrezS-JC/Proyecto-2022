@@ -31,8 +31,9 @@ def find_user_by_email_and_pass(email, password):
 
 def verify_login(email, password):
     response = User.query.filter_by(email=email).first()
-    if sha256_crypt.verify(password, response.password):
-        return response
+    if response:
+        if sha256_crypt.verify(password, response.password):
+            return response
 
     return None
 
