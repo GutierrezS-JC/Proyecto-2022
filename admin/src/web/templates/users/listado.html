@@ -34,17 +34,17 @@
     </div>
   </form>
 
-  <div class="modal fade" id="editarUsuarioModal" tabindex="-1" aria-labelledby="editarUsuarioModal" aria-hidden="true">
+  <div class="modal fade" id="editarUsuarioModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editarUsuarioModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
 
           <div class="modal-header">
             <h5 class="modal-title" id="editarUsuarioLabel">Editar usuario</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="cleanInputs()"/>
           </div>
 
           <div class="modal-body">
-            <form class="row g-3" action="{{ url_for('users.user_edit') }}" method="POST">
+            <form class="row g-3" action="{{ url_for('users.user_edit') }}" method="POST" >
               {{ form.csrf_token }}
               <div class="col-md-6">
                 {{ form.first_name.label }}
@@ -69,7 +69,7 @@
               <div class="col-12">
                   {{form.roles.label}}<br/>
                   {% for rol in form.roles %}
-                    {{ rol(class="btn-check") }}
+                    {{ rol(class="btn-check inputRoles") }}
                     {{ rol.label(class="btn btn-outline-success") }}
                   {% endfor %}
               </div>
@@ -79,7 +79,7 @@
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="cleanInputs()">Cerrar</button>
                 {{ form.submit(class="btn btn-success btn-padding") }}
               </div>
             </form>
@@ -160,6 +160,18 @@
     document.getElementById('email').value = data.user.email
     document.getElementById('username').value = data.user.username
     document.getElementById('user_id').value = data.user.id
+    data.user.roles.map((rol, index)=>{
+      document.getElementById(`roles-${rol.id - 1}`).checked = true
+    })
   }
+
+  function cleanInputs(){
+    items= document.getElementsByClassName("inputRoles")
+    for (let item of items){
+      item.checked = false
+    }
+
+  }
+
 </script>
 {% endblock %}

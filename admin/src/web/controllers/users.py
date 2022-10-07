@@ -79,13 +79,17 @@ def user_edit():
 
     if form.validate_on_submit():
         r_records = board.get_roles()
-        print(r_records)
         accepted = []
         for rol in r_records:
             if rol.id in form.roles.data:
                 accepted.append(rol)
+        print(f"Soy accepted {accepted}")
 
-        # user = auth.user_edit_roles(user_id, accepted)
+        if not accepted:
+            flash("Error. El usuario debe tener al menos un rol asignado", "danger")
+            return redirect(url_for("users.user_list_all"))
+
+        user = auth.user_edit_roles(form.user_id.data, accepted)
     else:
         print("WTF happened")
         for item in form.errors:
@@ -107,5 +111,4 @@ def get_user(user_id):
         user_roles.append(board.rol_json(rol))
 
     user_json = auth.user_json(user, user_roles)
-    print(user_json)
     return jsonify({'user': user_json})

@@ -21,7 +21,7 @@ def user_edit_roles(user_id, accepted):
     user = get_user_by_id(user_id)
     user.roles = accepted
     db.session.add(user)
-    db.session.commit(user)
+    db.session.commit()
 
     return user
 
