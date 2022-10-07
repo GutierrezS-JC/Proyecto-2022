@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import InputRequired, Length, Email
 from wtforms import StringField, IntegerField, SubmitField, SelectField, PasswordField, BooleanField, \
-    SelectMultipleField, widgets, EmailField
+    SelectMultipleField, widgets, EmailField, HiddenField
 
 
 class MultiCheckboxField(SelectMultipleField):
@@ -20,3 +20,13 @@ class RegisterUserForm(FlaskForm):
 
     submit = SubmitField("Crear Usuario")
 
+
+class EditUserForm(FlaskForm):
+    user_id = HiddenField('user_id')
+    email = StringField('Email', validators=[Email(), Length(max=50)])
+    username = StringField('Nombre de usuario', validators=[Length(min=5, max=20)])
+    first_name = StringField('Nombre', validators=[Length(max=50)])
+    last_name = StringField('Apellido', validators=[Length(max=50)])
+    roles = MultiCheckboxField('Roles', coerce=int, choices=[('1', 'Admin'), ('2', 'Operador')])
+
+    submit = SubmitField("Guardar cambios")

@@ -17,6 +17,20 @@ def create_user(**kwargs):
     return user
 
 
+def user_edit(user_id, first_name, last_name, email, username, roles):
+    user = get_user_by_id(user_id)
+    user.first_name = first_name
+    user.last_name = last_name
+    user.email = email
+    user.username = username
+    user.roles = roles
+
+    db.session.add(user)
+    db.session.commit()
+
+    return user
+
+
 def assign_roles(user, roles):
     user.roles.extend(roles)
     db.session.add(user)
@@ -31,8 +45,9 @@ def find_user_by_email_and_pass(email, password):
 
 def verify_login(email, password):
     response = User.query.filter_by(email=email).first()
-    if sha256_crypt.verify(password, response.password):
-        return response
+    if response:
+        if sha256_crypt.verify(password, response.password):
+            return response
 
     return None
 
@@ -44,6 +59,10 @@ def get_initials(email):
 
 def get_user_by_username(username):
     return User.query.filter_by(username=username).first()
+
+
+def get_user_by_id(user_id):
+    return User.query.filter_by(id=user_id).first()
 
 
 def get_user_by_email(email):
@@ -65,3 +84,16 @@ def user_set_status(username):
     db.session.commit()
 
     return True
+
+
+# APIs
+def user_json(user, user_roles):
+    return {
+        'id': user.id,
+        'email': user.email,
+        'username': user.username,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'is_active': user.is_active,
+        'roles': user_roles
+    }
