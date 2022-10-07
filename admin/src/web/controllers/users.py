@@ -6,6 +6,7 @@ from core import auth
 from core import board
 
 from src.web.helpers.forms import RegisterUserForm
+from src.web.helpers.forms import EditUserForm
 from src.web.helpers.auth import login_required
 
 user_blueprint = Blueprint("users", __name__, url_prefix="/users")
@@ -22,7 +23,8 @@ def user_index():
 @login_required
 def user_list_all():
     users = auth.list_users()
-    return render_template("users/listado.html", users=users, user_is_admin=auth.user_is_admin)
+    form = EditUserForm()
+    return render_template("users/listado.html", users=users, user_is_admin=auth.user_is_admin, form=form)
 
 
 @user_blueprint.route("/cambiar_rol/<username>")
@@ -69,13 +71,41 @@ def user_create():
     return redirect(url_for("users.user_index"))
 
 
+@user_blueprint.post("/editar_usuario")
+@login_required
+def user_edit():
+    form = EditUserForm()
+    form.roles.choices = [(rol.id, rol.name) for rol in board.get_roles()]
+
+    if form.validate_on_submit():
+        r_records = board.get_roles()
+        print(r_records)
+        accepted = []
+        for rol in r_records:
+            if rol.id in form.roles.data:
+                accepted.append(rol)
+
+        # user = auth.user_edit_roles(user_id, accepted)
+    else:
+        print("WTF happened")
+        for item in form.errors:
+            for error in form[item].errors:
+                print(f"{form[item].name}  {error}")
+
+    return redirect(url_for("users.user_list_all"))
+
+
 # APIs de user
 @user_blueprint.route("/api/users/<user_id>")
 @login_required
 def get_user(user_id):
     user = auth.get_user_by_id(user_id)
+    user_roles = []
     if user is None:
         return jsonify({'message': 'El usuario no existe'}), 404
-    user_json = auth.user_json(user)
+    for rol in user.roles:
+        user_roles.append(board.rol_json(rol))
 
+    user_json = auth.user_json(user, user_roles)
+    print(user_json)
     return jsonify({'user': user_json})

@@ -17,6 +17,15 @@ def create_user(**kwargs):
     return user
 
 
+def user_edit_roles(user_id, accepted):
+    user = get_user_by_id(user_id)
+    user.roles = accepted
+    db.session.add(user)
+    db.session.commit(user)
+
+    return user
+
+
 def assign_roles(user, roles):
     user.roles.extend(roles)
     db.session.add(user)
@@ -73,12 +82,13 @@ def user_set_status(username):
 
 
 # APIs
-def user_json(user):
+def user_json(user, user_roles):
     return {
         'id': user.id,
         'email': user.email,
         'username': user.username,
         'first_name': user.first_name,
         'last_name': user.last_name,
-        'is_active': user.is_active
+        'is_active': user.is_active,
+        'roles': user_roles
     }

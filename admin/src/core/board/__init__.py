@@ -17,6 +17,10 @@ def get_rol_by_id(rol_id):
     return Rol.query.get(rol_id)
 
 
+def get_roles():
+    return Rol.query.all()
+
+
 def create_rol(**kwargs):
     rol = Rol(**kwargs)
     db.session.add(rol)
@@ -55,3 +59,11 @@ def update_configuration(**kwargs):
     config = Config.query.get(1)
     for key, value in kwargs:
         setattr(config, key, value)
+
+
+# APIs
+def rol_json(rol):
+    return {
+        'id': rol.id,
+        'name': rol.name
+    }
