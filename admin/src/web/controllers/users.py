@@ -89,7 +89,8 @@ def user_edit():
             flash("Error. El usuario debe tener al menos un rol asignado", "danger")
             return redirect(url_for("users.user_list_all"))
 
-        user = auth.user_edit_roles(form.user_id.data, accepted)
+        user = auth.user_edit(user_id=form.user_id.data, first_name=form.first_name.data, last_name=form.last_name.data,
+                              email=form.email.data, username=form.username.data, roles=accepted)
     else:
         print("WTF happened")
         for item in form.errors:

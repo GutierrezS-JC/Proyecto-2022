@@ -17,9 +17,14 @@ def create_user(**kwargs):
     return user
 
 
-def user_edit_roles(user_id, accepted):
+def user_edit(user_id, first_name, last_name, email, username, roles):
     user = get_user_by_id(user_id)
-    user.roles = accepted
+    user.first_name = first_name
+    user.last_name = last_name
+    user.email = email
+    user.username = username
+    user.roles = roles
+
     db.session.add(user)
     db.session.commit()
 
