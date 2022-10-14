@@ -13,35 +13,36 @@
     <h2 class="my-3">Configuracion del sistema</h2>
     <form class="formStyle">
         <div class="form-group mb-3 reducedSize">
-            <label class="mb-2" for="cantElementos">Cantidad de elementos por pagina</label>
-            <input aria-required="true" required name="cantElementos" type="text" class="form-control" id="cantElementos" aria-describedby="Cantidad de elementos">
+            {{ form.elements_quantity.label(class="mb-2") }}
+            {{ form.elements_quantity(class="form-control", value=config.elements_quantity) }}
             <small id="ayudaElementos" class="form-text text-muted">Todos los listados deberán toman este valor para el paginado</small>
         </div>
 
         <div class="form-group mb-3 reducedSize">
-            <label class="mb-2" for="valorCuotaBase">Cuota base</label>
-            <input aria-required="true" required name="valorCuotaBase" type="text" class="form-control" id="valorCuotaBase" aria-describedby="Valor cuota base">
+            {{ form.monthly_fee.label(class="mb-2") }}
+            {{ form.monthly_fee(class="form-control", value=config.monthly_fee) }}
         </div>
 
         <div class="form-group mb-3 reducedSize">
-            <label class="mb-2" for="valorRecargo">Porcentaje de recargo</label>
-            <input aria-required="true" required name="valorRecargo" type="text" class="form-control" id="valorRecargo" aria-describedby="Valor de recargo">
+            {{ form.extra_charge.label(class="mb-2") }}
+            {{ form.extra_charge(class="form-control", value=config.extra_charge) }}
         </div>
 
         <div class="form-group mb-3">
-            <label class="mb-2" for="encabezado">Encabezado</label>
-            <input aria-required="true" required name="encabezado" type="text" class="form-control" id="encabezado" aria-describedby="Texto encabezado recibo de pago">
+            {{ form.payment_header.label(class="mb-2") }}
+            {{ form.payment_header(class="form-control", value=config.payment_header ) }}
             <small id="ayudaEncabezado" class="form-text text-muted">Texto para mostrar en el encabezado del <strong>recibo de pago</strong></small>
         </div>
 
         <div class="form-group mb-3">
-            <label class="mb-2" for="infoContacto">Informacion de contacto</label>
-            <textarea aria-required="true" required name="infoContacto" class="form-control" id="infoContacto" rows="3"></textarea>
+            <label class="mb-2" for="contact_information">Informacion de contacto</label>
+            <textarea aria-required="true" required name="contact_information" class="form-control"
+                      id="contact_information" rows="3" maxlength="200">{{ config.contact_information }}</textarea>
         </div>
 
         <div class="form-check form-switch mt-5">
-            <input class="form-check-input" type="checkbox" role="switch" id="switchTablaPagos">
-            <label class="form-check-label" for="switchTablaPagos">Habilitar/deshabilitar tabla de pagos</label><br/>
+            {{ form.payment_enabled(class="form-check-input", role="switch", checked=config.payment_enabled) }}
+            {{ form.payment_enabled.label(class="form-check-label") }} <br/>
             <small id="ayudaSwitchTabla" class="form-text text-muted">En la vista publica</small>
         </div>
 
