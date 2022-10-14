@@ -35,8 +35,9 @@
         </div>
 
         <div class="form-group mb-3">
-            {{ form.contact_information.label(class="mb-2") }}
-            {{ form.contact_information(class="form-control", rows="3", value=config.contact_information) }}
+            <label class="mb-2" for="contact_information">Informacion de contacto</label>
+            <textarea aria-required="true" required name="contact_information" class="form-control"
+                      id="contact_information" rows="3" maxlength="200">{{ config.contact_information }}</textarea>
         </div>
 
         <div class="form-check form-switch mt-5">
