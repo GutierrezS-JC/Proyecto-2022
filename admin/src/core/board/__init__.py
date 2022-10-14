@@ -61,6 +61,12 @@ def update_configuration(**kwargs):
         setattr(config, key, value)
 
 
+def get_configuration():
+    config = Config.query.get(1)
+
+    return config
+
+
 # APIs
 def rol_json(rol):
     return {
