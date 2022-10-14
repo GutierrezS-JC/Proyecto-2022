@@ -3,8 +3,8 @@ from datetime import datetime
 from src.core.database import db
 
 
-class Asociado(db.Model):
-    __tablename__ = "asociados"
+class Member(db.Model):
+    __tablename__ = "members"
     id = db.Column(db.Integer, primary_key=True, unique=True)
     first_name = db.Column(db.String(255))
     last_name = db.Column(db.String(255))
