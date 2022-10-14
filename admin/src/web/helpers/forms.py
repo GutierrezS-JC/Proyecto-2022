@@ -41,3 +41,18 @@ class ConfigForm(FlaskForm):
     extra_charge = IntegerField('Porcentaje de recargo', validators=[InputRequired()])
 
     submit = SubmitField("Guardar cambios")
+
+
+class MemberForm(FlaskForm):
+    first_name = StringField('Nombre', validators=[InputRequired(), Length(max=50)])
+    last_name = StringField('Apellido', validators=[InputRequired(), Length(max=50)])
+    doc_type = SelectField('Tipo de documento', choices=[('1', 'DNI'), ('2', 'LE'), ('3', 'LC')], default="1")
+    doc_num = StringField('Nro de documento', validators=[InputRequired()])
+    genre = SelectField('Genero', choices=[('1', 'M'), ('2', 'F'), ('3', 'Otro')], default="1")
+    member_num = StringField('Telefono (Opcional)', validators=[Length(max=50)])  # Revisar este
+    address = StringField('Direccion', validators=[InputRequired()])
+    is_active = SelectField('Estado', choices=[('1', 'Activo'), ('2', 'Inactivo')], default="1")
+    phone_num = StringField('Telefono (Opcional)', validators=[InputRequired()])
+    email = StringField('Email (Opcional)', validators=[Email(), Length(max=50)])
+
+    submit = SubmitField("Cargar socio")

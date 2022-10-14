@@ -25,76 +25,58 @@
 
           <div class="modal-body">
             <form class="row g-3">
-
+                {{ form.csrf_token }}
               <div class="col-md-6">
-                <label for="inputNombre" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="inputNombre">
+                {{ form.first_name.label(class="mb-2") }}
+                {{ form.first_name(class="form-control") }}
               </div>
 
               <div class="col-md-6">
-                <label for="inputApellido" class="form-label">Apellido</label>
-                <input type="text" class="form-control" id="inputApellido">
+                {{ form.last_name.label(class="mb-2") }}
+                {{ form.last_name(class="form-control") }}
               </div>
 
               <div class="col-md-5">
-                <label for="inputTipoDocumento" class="form-label">Tipo de documento</label>
-                <select id="inputTipoDocumento" class="form-select">
-                  <option selected>DNI</option>
-                  <option>LE</option>
-                  <option>LC</option>
-                </select>
+                {{ form.doc_type.label(class="mb-2") }}
+                {{ form.doc_type(class="form-select") }}
               </div>
 
                <div class="col-md-7">
-                <label for="inputNroDocumento" class="form-label">Nro de documento</label>
-                <input type="text" class="form-control" id="inputNroDocumento">
+                 {{ form.doc_num.label(class="mb-2") }}
+                 {{ form.doc_num(class="form-control") }}
               </div>
 
               <div class="col-md-12">
-                <label for="inputGenero" class="form-label">Genero</label>
-                <select id="inputGenero" class="form-select">
-                  <option selected>...</option>
-                  <option value="1">M</option>
-                  <option value="2">F</option>
-                  <option value="3">Otro</option>
-                </select>
-              </div>
-
-              <div class="col-md-5">
-                <label for="inputNroDocumento" class="form-label">Nro de Socio</label>
-                <input type="text" class="form-control" id="inputNroSocio" value="3" disabled>
+                {{ form.genre.label(class="mb-2") }}
+                {{ form.genre(class="form-select") }}
               </div>
 
               <div class="col-12">
-                <label for="inputDireccion" class="form-label">Direccion</label>
-                <input type="text" class="form-control" id="inputDireccion" placeholder="Calle, numero, piso...">
+                {{ form.address.label(class="mb-2") }}
+                {{ form.address(class="form-control") }}
               </div>
 
               <div class="col-md-12">
-                <label for="inputEstado" class="form-label">Estado</label>
-                <select id="inputEstado" class="form-select">
-                  <option selected>...</option>
-                  <option value="1">Activo</option>
-                  <option value="2">No-Activo</option>
-                </select>
+                {{ form.is_active.label(class="mb-2") }}
+                {{ form.is_active(class="form-select") }}
               </div>
 
 <!--              <hr class="mx-auto" style="width: 95%; margin-top: 2em;">-->
 
               <div class="col-12 mt-4">
-                <label for="inputTelefono" class="form-label">Telefono (Opcional)</label>
-                <input type="text" class="form-control" id="inputTelefono">
+                {{ form.phone_num.label(class="mb-2") }}
+                {{ form.phone_num(class="form-control") }}
               </div>
 
               <div class="col-12">
-                <label for="inputEmail" class="form-label">Email (Opcional)</label>
-                <input type="text" class="form-control" id="inputEmail">
+                {{ form.email.label(class="mb-2") }}
+                {{ form.email(class="form-control") }}
               </div>
 
 
               <div class="col-md-5">
                 <label for="inputFechaAlta" class="form-label">Fecha de alta</label>
-                <input type="text" class="form-control" id="inputFechaAlta" value="02/10/22" disabled>
+                <input type="text" class="form-control" id="inputFechaAlta" disabled>
               </div>
 
             </form>
@@ -102,7 +84,7 @@
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-success">Cargar socio</button>
+            {{ form.submit(class="btn btn-success")}}
           </div>
 
         </div>
@@ -190,4 +172,9 @@
 </div>
 
 </div>
+
+<script>
+  const today = new Date().toLocaleDateString("es-AR");
+  document.getElementById('inputFechaAlta').value = today
+</script>
 {% endblock %}
