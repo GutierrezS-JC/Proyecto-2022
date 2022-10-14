@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms.validators import InputRequired, Length, Email
+from wtforms.validators import InputRequired, Length, Email, NumberRange
 from wtforms import StringField, IntegerField, SubmitField, SelectField, PasswordField, BooleanField, \
-    SelectMultipleField, widgets, EmailField, HiddenField
+    SelectMultipleField, widgets, EmailField, HiddenField, TextAreaField, FloatField
 
 
 class MultiCheckboxField(SelectMultipleField):
@@ -28,5 +28,16 @@ class EditUserForm(FlaskForm):
     first_name = StringField('Nombre', validators=[Length(max=50)])
     last_name = StringField('Apellido', validators=[Length(max=50)])
     roles = MultiCheckboxField('Roles', coerce=int, choices=[('1', 'Admin'), ('2', 'Operador')])
+
+    submit = SubmitField("Guardar cambios")
+
+
+class ConfigForm(FlaskForm):
+    elements_quantity = StringField('Cantidad de elementos', validators=[InputRequired()])
+    payment_enabled = BooleanField('Habilitar/deshabilitar tabla de pagos', validators=[InputRequired()])
+    contact_information = TextAreaField('Informacion de contacto', validators=[InputRequired(), Length(max=200)])
+    payment_header = StringField('Encabezado', validators=[InputRequired(), Length(min=5, max=50)])
+    monthly_fee = FloatField('Cuota base', validators=[InputRequired(), NumberRange(min=0)])
+    extra_charge = IntegerField('Porcentaje de recargo', validators=[InputRequired()])
 
     submit = SubmitField("Guardar cambios")
