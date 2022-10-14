@@ -153,7 +153,8 @@
 
 <script>
   async function getUserToEdit(userId){
-    let response = await fetch("http://127.0.0.1:5000/users/api/users/"+ userId)
+    let response = await fetch("{{request.url_root}}users/api/users/"+ userId)
+    // let response = await fetch(`{{ url_for('users.get_user', user_id=5) }}`)
     let data = await response.json()
     document.getElementById('first_name').value = data.user.first_name
     document.getElementById('last_name').value = data.user.last_name
