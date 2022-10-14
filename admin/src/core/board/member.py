@@ -9,9 +9,9 @@ class Member(db.Model):
     first_name = db.Column(db.String(255))
     last_name = db.Column(db.String(255))
 
-    doc_type = db.Column(db.String(100))
+    doc_type = db.Column(db.Integer())
     doc_num = db.Column(db.String(100))
-    genre = db.Column(db.String(100))
+    genre = db.Column(db.Integer())  # Integer?
     member_num = db.Column(db.String(100), unique=True)
 
     address = db.Column(db.String(100))

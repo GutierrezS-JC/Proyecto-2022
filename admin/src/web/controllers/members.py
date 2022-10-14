@@ -13,4 +13,5 @@ member_blueprint = Blueprint("members", __name__, url_prefix="/members")
 @login_required
 def member_index():
     form = MemberForm()
-    return render_template("members/index.html", form=form)
+    members = board.list_members()
+    return render_template("members/index.html", form=form, members=members)

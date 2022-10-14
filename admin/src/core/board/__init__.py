@@ -2,7 +2,7 @@ from src.core.database import db
 from src.core.board.permission import Permission
 from src.core.board.rol import Rol
 from src.core.board.config import Config
-
+from src.core.board.member import Member
 
 # def assign_user(issue, user):
 #     issue.user = user
@@ -65,6 +65,11 @@ def get_configuration():
     config = Config.query.get(1)
 
     return config
+
+
+# Members (Socios) methods
+def list_members():
+    return Member.query.all()
 
 
 # APIs

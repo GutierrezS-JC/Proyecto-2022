@@ -141,30 +141,24 @@
         </tr>
         </thead>
         <tbody>
+        {% for member in members %}
           <tr>
-            <th scope="row"> 1 </th>
-            <td>Manaos Light</td>
-            <td>935115115</td>
-            <td>115</td>
-            <td>Bloqueado</td>
-            <td>02/10/22</td>
+            <th scope="row"> {{ member.id }} </th>
+            <td>{{ member.first_name}} {{ member.last_name }}</td>
+            <td>{{ member.doc_num }}</td>
+            <td>{{ member.member_num }}</td>
+            {% if member.is_active == True %}
+              <td>Activo</td>
+            {% else %}
+              <td>Bloqueado</td>
+            {% endif %}
+            <td>{{ member.inserted_at.strftime('%d/%m/%Y') }}</td>
             <td class="text-center">
               <button type="button" class="btn btn-secondary btn-sm">Editar</button>
               <button type="button" class="btn btn-danger btn-sm mt-2 mt-lg-0">Eliminar</button>
             </td>
           </tr>
-          <tr>
-            <th scope="row"> 2 </th>
-            <td>Manaos Life</td>
-            <td>935115115</td>
-            <td>116</td>
-            <td>Actvo</td>
-            <td>02/10/22</td>
-            <td class="text-center">
-              <button type="button" class="btn btn-secondary btn-sm">Editar</button>
-              <button type="button" class="btn btn-danger btn-sm mt-2 mt-lg-0">Eliminar</button>
-            </td>
-          </tr>
+        {% endfor %}
         </tbody>
       </table>
     </div>
