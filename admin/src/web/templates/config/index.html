@@ -14,35 +14,33 @@
     <form class="formStyle">
         <div class="form-group mb-3 reducedSize">
             {{ form.elements_quantity.label(class="mb-2") }}
-            {{ form.elements_quantity(class="form-control") }}
+            {{ form.elements_quantity(class="form-control", value=config.elements_quantity) }}
             <small id="ayudaElementos" class="form-text text-muted">Todos los listados deberán toman este valor para el paginado</small>
         </div>
 
         <div class="form-group mb-3 reducedSize">
             {{ form.monthly_fee.label(class="mb-2") }}
-            {{ form.monthly_fee(class="form-control") }}
+            {{ form.monthly_fee(class="form-control", value=config.monthly_fee) }}
         </div>
 
         <div class="form-group mb-3 reducedSize">
-            <label class="mb-2" for="valorRecargo">Porcentaje de recargo</label>
-            <input aria-required="true" required name="valorRecargo" type="text" class="form-control" id="valorRecargo" aria-describedby="Valor de recargo">
             {{ form.extra_charge.label(class="mb-2") }}
-            {{ form.extra_charge(class="form-control") }}
+            {{ form.extra_charge(class="form-control", value=config.extra_charge) }}
         </div>
 
         <div class="form-group mb-3">
             {{ form.payment_header.label(class="mb-2") }}
-            {{ form.payment_header(class="form-control") }}
+            {{ form.payment_header(class="form-control", value=config.payment_header ) }}
             <small id="ayudaEncabezado" class="form-text text-muted">Texto para mostrar en el encabezado del <strong>recibo de pago</strong></small>
         </div>
 
         <div class="form-group mb-3">
             {{ form.contact_information.label(class="mb-2") }}
-            {{ form.contact_information(class="form-control", rows="3") }}
+            {{ form.contact_information(class="form-control", rows="3", value=config.contact_information) }}
         </div>
 
         <div class="form-check form-switch mt-5">
-            {{ form.payment_enabled(class="form-check-input", role="switch") }}
+            {{ form.payment_enabled(class="form-check-input", role="switch", checked=config.payment_enabled) }}
             {{ form.payment_enabled.label(class="form-check-label") }} <br/>
             <small id="ayudaSwitchTabla" class="form-text text-muted">En la vista publica</small>
         </div>

@@ -37,7 +37,7 @@ class ConfigForm(FlaskForm):
     payment_enabled = BooleanField('Habilitar/deshabilitar tabla de pagos', validators=[InputRequired()])
     contact_information = TextAreaField('Informacion de contacto', validators=[InputRequired(), Length(max=200)])
     payment_header = StringField('Encabezado', validators=[InputRequired(), Length(min=5, max=50)])
-    monthly_fee = FloatField('Cuota base', validators=[InputRequired(), NumberRange(min=0)])
+    monthly_fee = StringField('Cuota base', validators=[InputRequired()])
     extra_charge = IntegerField('Porcentaje de recargo', validators=[InputRequired()])
 
     submit = SubmitField("Guardar cambios")
