@@ -10,7 +10,7 @@ class Member(db.Model):
     last_name = db.Column(db.String(255))
 
     doc_type = db.Column(db.Integer())
-    doc_num = db.Column(db.String(100))
+    doc_num = db.Column(db.String(100), unique=True)
     genre = db.Column(db.Integer())  # Integer?
     member_num = db.Column(db.String(100), unique=True)
 

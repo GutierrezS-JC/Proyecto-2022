@@ -72,6 +72,26 @@ def list_members():
     return Member.query.all()
 
 
+def get_member_by_email(email):
+    return Member.query.filter_by(email=email).first()
+
+
+def get_member_by_doc_num(doc_num):
+    return Member.query.filter_by(doc_num=doc_num).first()
+
+
+def get_last_member_num():
+    return db.engine.execute("SELECT * FROM members WHERE id IN (SELECT MAX(id) FROM members)").first()
+
+
+def create_member(**kwargs):
+    member = Member(**kwargs)
+    db.session.add(member)
+    db.session.commit()
+
+    return member
+
+
 # APIs
 def rol_json(rol):
     return {

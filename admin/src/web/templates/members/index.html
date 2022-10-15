@@ -24,7 +24,7 @@
           </div>
 
           <div class="modal-body">
-            <form class="row g-3">
+            <form class="row g-3" action="{{ url_for('members.member_create') }}" method="POST">
                 {{ form.csrf_token }}
               <div class="col-md-6">
                 {{ form.first_name.label(class="mb-2") }}
@@ -79,13 +79,13 @@
                 <input type="text" class="form-control" id="inputFechaAlta" disabled>
               </div>
 
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                {{ form.submit(class="btn btn-success")}}
+              </div>
             </form>
           </div>
 
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            {{ form.submit(class="btn btn-success")}}
-          </div>
 
         </div>
     </div>

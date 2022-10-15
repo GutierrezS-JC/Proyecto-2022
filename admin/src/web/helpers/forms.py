@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms.validators import InputRequired, Length, Email, NumberRange
+from wtforms.validators import InputRequired, Length, Email, NumberRange, Optional
 from wtforms import StringField, IntegerField, SubmitField, SelectField, PasswordField, BooleanField, \
     SelectMultipleField, widgets, EmailField, HiddenField, TextAreaField, FloatField
 
@@ -52,7 +52,7 @@ class MemberForm(FlaskForm):
     member_num = StringField('Telefono (Opcional)', validators=[Length(max=50)])  # Revisar este
     address = StringField('Direccion', validators=[InputRequired()])
     is_active = SelectField('Estado', choices=[('1', 'Activo'), ('2', 'Inactivo')], default="1")
-    phone_num = StringField('Telefono (Opcional)', validators=[InputRequired()])
-    email = StringField('Email (Opcional)', validators=[Email(), Length(max=50)])
+    phone_num = StringField('Telefono (Opcional)', validators=[Optional()])
+    email = EmailField('Email (Opcional)', validators=[Length(max=50), Optional()])
 
     submit = SubmitField("Cargar socio")
