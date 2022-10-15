@@ -1,9 +1,10 @@
-from flask import Blueprint, flash, redirect, url_for
+from flask import Blueprint, flash, redirect, url_for, jsonify
 from flask import render_template
 
 from core import board
 
 from src.web.helpers.forms import MemberForm
+from src.web.helpers.forms import EditMemberForm
 from src.web.helpers.auth import login_required
 
 member_blueprint = Blueprint("members", __name__, url_prefix="/members")
@@ -13,8 +14,9 @@ member_blueprint = Blueprint("members", __name__, url_prefix="/members")
 @login_required
 def member_index():
     form = MemberForm()
+    edit_form = EditMemberForm()
     members = board.list_members()
-    return render_template("members/index.html", form=form, members=members)
+    return render_template("members/index.html", form=form, members=members, edit_form=edit_form)
 
 
 @member_blueprint.post("/cargar")
@@ -61,3 +63,16 @@ def member_create():
                 print(f"{form[item].name}  {error}")
 
     return redirect(url_for("members.member_index"))
+
+
+# APIs de user
+@member_blueprint.route("/api/member/<member_id>")
+@login_required
+def get_user(member_id):
+    member = board.get_member_by_id(member_id)
+
+    if member is None:
+        return jsonify({'message': 'El socio no existe'}), 404
+
+    member_json = board.member_json(member)
+    return jsonify({'member': member_json})

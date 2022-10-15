@@ -84,6 +84,10 @@ def get_last_member_num():
     return db.engine.execute("SELECT * FROM members WHERE id IN (SELECT MAX(id) FROM members)").first()
 
 
+def get_member_by_id(member_id):
+    return Member.query.filter_by(id=member_id).first()
+
+
 def create_member(**kwargs):
     member = Member(**kwargs)
     db.session.add(member)
@@ -97,4 +101,18 @@ def rol_json(rol):
     return {
         'id': rol.id,
         'name': rol.name
+    }
+
+
+def member_json(member):
+    print(member.is_active)
+    return {
+        'id': member.id,
+        'first_name': member.first_name,
+        'last_name': member.last_name,
+        'genre': member.genre,
+        'address': member.address,
+        'is_active': member.is_active,
+        'phone_num': member.phone_num,
+        'email': member.email
     }

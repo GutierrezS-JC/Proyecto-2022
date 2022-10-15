@@ -85,12 +85,65 @@
               </div>
             </form>
           </div>
-
-
         </div>
     </div>
   </div>
 
+    <div class="modal fade" id="editarMemberModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editarMemberModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title" id="editarMemberLabel">Editar usuario</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+          </div>
+
+          <div class="modal-body">
+            <form class="row g-3" action="{{ url_for('users.user_edit') }}" method="POST" >
+              {{ edit_form.csrf_token }}
+              <div class="col-md-6">
+                {{ edit_form.first_name_edit.label }}
+                {{ edit_form.first_name_edit(class="form-control") }}
+              </div>
+
+              <div class="col-md-6">
+                  {{ edit_form.last_name_edit.label }}
+                  {{ edit_form.last_name_edit(class="form-control") }}
+              </div>
+
+              <div class="col-12">
+                  {{ edit_form.genre_edit.label }}
+                  {{ edit_form.genre_edit(class="form-select") }}
+              </div>
+
+              <div class="col-12">
+                  {{ edit_form.address_edit.label }}
+                  {{ edit_form.address_edit(class="form-control") }}
+              </div>
+
+              <div class="col-12">
+                  {{ edit_form.is_active_edit.label }}
+                  {{ edit_form.is_active_edit(class="form-select") }}
+              </div>
+
+              <div class="col-12">
+                  {{ edit_form.phone_num_edit.label }}
+                  {{ edit_form.phone_num_edit(class="form-control") }}
+              </div>
+
+              <div class="col-12" hidden>
+                  {{ edit_form.member_id_edit(class="form-control") }}
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                {{ edit_form.submit_edit(class="btn btn-success btn-padding") }}
+              </div>
+            </form>
+          </div>
+        </div>
+    </div>
+  </div>
 
   <hr>
 
@@ -154,7 +207,7 @@
             {% endif %}
             <td>{{ member.inserted_at.strftime('%d/%m/%Y') }}</td>
             <td class="text-center">
-              <button type="button" class="btn btn-secondary btn-sm">Editar</button>
+              <button class="btn btn-primary btn-sm mt-2 mt-lg-0" data-bs-toggle="modal" data-bs-target="#editarMemberModal" type="button" onclick="getMemberToEdit({{member.id}})">Editar</button>
               <button type="button" class="btn btn-danger btn-sm mt-2 mt-lg-0">Eliminar</button>
             </td>
           </tr>
@@ -170,5 +223,18 @@
 <script>
   const today = new Date().toLocaleDateString("es-AR");
   document.getElementById('inputFechaAlta').value = today
+
+   async function getMemberToEdit(memberId){
+     let response = await fetch("{{request.url_root}}members/api/member/"+ memberId)
+     let data = await response.json()
+
+     document.getElementById('first_name_edit').value = data.member.first_name
+     document.getElementById('last_name_edit').value = data.member.last_name
+     document.getElementById('address_edit').value = data.member.address
+     document.getElementById('is_active_edit').value = data.member.is_active ? 1 : 2
+     document.getElementById('phone_num_edit').value = data.member.phone_num
+     document.getElementById('member_id_edit').value = data.member.id
+   }
+
 </script>
 {% endblock %}
