@@ -19,19 +19,24 @@ def user_index():
     return render_template("users/index.html", form=form)
 
 
-@user_blueprint.get("/listado")
+@user_blueprint.route("/listado")
 @login_required
 def user_list_all():
-    users = auth.list_users()
+    page = request.args.get('page', 1, type=int)
+    pagination = auth.list_users_paginated(page, per_page=1)
     form = EditUserForm()
-    return render_template("users/listado.html", users=users, user_is_admin=auth.user_is_admin, form=form)
+    return render_template("users/listado.html", pagination=pagination, user_is_admin=auth.user_is_admin, form=form)
 
 
 @user_blueprint.route("/cambiar_rol/<username>")
 @login_required
 def user_change_status(username):
     auth.user_set_status(username)
-    return redirect(url_for('users.user_list_all'))
+    page = request.args.get('page', 1, type=int)
+    pagination = auth.list_users_paginated(page, per_page=1)
+    form = EditUserForm()
+    # return redirect(url_for('users.user_list_all'))
+    return render_template("users/listado.html", pagination=pagination, user_is_admin=auth.user_is_admin, form=form)
 
 
 @user_blueprint.post("/cargar")

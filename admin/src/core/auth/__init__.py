@@ -4,8 +4,16 @@ from src.core.database import db
 from src.core.auth.user import User
 
 
+def all_paginated(page=1, per_page=10):
+    return User.query.order_by(User.id.asc()).paginate(page=page, per_page=per_page)
+
+
 def list_users():
     return User.query.all()
+
+
+def list_users_paginated(page, per_page):
+    return all_paginated(page, per_page)
 
 
 def create_user(**kwargs):
