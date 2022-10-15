@@ -96,6 +96,7 @@ def user_edit():
 
         user = auth.user_edit(user_id=form.user_id.data, first_name=form.first_name.data, last_name=form.last_name.data,
                               email=form.email.data, username=form.username.data, roles=accepted)
+        flash("El usuario fue editado con exito", "success")
     else:
         print("WTF happened")
         for item in form.errors:
