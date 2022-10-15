@@ -96,6 +96,23 @@ def create_member(**kwargs):
     return member
 
 
+def member_edit(member_id, first_name, last_name, genre, address, is_active, phone_num, email):
+    member = get_member_by_id(member_id)
+
+    member.first_name = first_name
+    member.last_name = last_name
+    member.genre = genre
+    member.address = address
+    member.is_active = is_active
+    member.phone_num = phone_num
+    member.email = email
+
+    db.session.add(member)
+    db.session.commit()
+
+    return member
+
+
 # APIs
 def rol_json(rol):
     return {
@@ -105,7 +122,6 @@ def rol_json(rol):
 
 
 def member_json(member):
-    print(member.is_active)
     return {
         'id': member.id,
         'first_name': member.first_name,

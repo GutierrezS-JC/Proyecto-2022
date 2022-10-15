@@ -99,7 +99,7 @@
           </div>
 
           <div class="modal-body">
-            <form class="row g-3" action="{{ url_for('users.user_edit') }}" method="POST" >
+            <form class="row g-3" action="{{ url_for('members.member_edit') }}" method="POST" >
               {{ edit_form.csrf_token }}
               <div class="col-md-6">
                 {{ edit_form.first_name_edit.label }}
@@ -129,6 +129,11 @@
               <div class="col-12">
                   {{ edit_form.phone_num_edit.label }}
                   {{ edit_form.phone_num_edit(class="form-control") }}
+              </div>
+
+              <div class="col-12">
+                  {{ edit_form.email_edit.label }}
+                  {{ edit_form.email_edit(class="form-control") }}
               </div>
 
               <div class="col-12" hidden>
@@ -230,9 +235,11 @@
 
      document.getElementById('first_name_edit').value = data.member.first_name
      document.getElementById('last_name_edit').value = data.member.last_name
+     document.getElementById('genre_edit').value = data.member.genre
      document.getElementById('address_edit').value = data.member.address
      document.getElementById('is_active_edit').value = data.member.is_active ? 1 : 2
      document.getElementById('phone_num_edit').value = data.member.phone_num
+     document.getElementById('email_edit').value = data.member.email
      document.getElementById('member_id_edit').value = data.member.id
    }
 

@@ -65,6 +65,27 @@ def member_create():
     return redirect(url_for("members.member_index"))
 
 
+@member_blueprint.post("/editar_socio")
+@login_required
+def member_edit():
+    form = EditMemberForm()
+
+    if form.validate_on_submit():
+        member = board.member_edit(member_id=form.member_id_edit.data, first_name=form.first_name_edit.data,
+                                   last_name=form.last_name_edit.data, genre=form.genre_edit.data,
+                                   address=form.address_edit.data,
+                                   is_active=True if form["is_active_edit"].data == "1" else False,
+                                   phone_num=form.phone_num_edit.data, email=form.email_edit.data)
+        flash("Socio editado exitosamente", "success")
+    else:
+        print("WTF happened")
+        for item in form.errors:
+            for error in form[item].errors:
+                print(f"{form[item].name}  {error}")
+
+    return redirect(url_for("members.member_index"))
+
+
 # APIs de user
 @member_blueprint.route("/api/member/<member_id>")
 @login_required
