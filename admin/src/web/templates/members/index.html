@@ -24,91 +24,131 @@
           </div>
 
           <div class="modal-body">
-            <form class="row g-3">
-
+            <form class="row g-3" action="{{ url_for('members.member_create') }}" method="POST">
+                {{ form.csrf_token }}
               <div class="col-md-6">
-                <label for="inputNombre" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="inputNombre">
+                {{ form.first_name.label(class="mb-2") }}
+                {{ form.first_name(class="form-control") }}
               </div>
 
               <div class="col-md-6">
-                <label for="inputApellido" class="form-label">Apellido</label>
-                <input type="text" class="form-control" id="inputApellido">
+                {{ form.last_name.label(class="mb-2") }}
+                {{ form.last_name(class="form-control") }}
               </div>
 
               <div class="col-md-5">
-                <label for="inputTipoDocumento" class="form-label">Tipo de documento</label>
-                <select id="inputTipoDocumento" class="form-select">
-                  <option selected>DNI</option>
-                  <option>LE</option>
-                  <option>LC</option>
-                </select>
+                {{ form.doc_type.label(class="mb-2") }}
+                {{ form.doc_type(class="form-select") }}
               </div>
 
                <div class="col-md-7">
-                <label for="inputNroDocumento" class="form-label">Nro de documento</label>
-                <input type="text" class="form-control" id="inputNroDocumento">
+                 {{ form.doc_num.label(class="mb-2") }}
+                 {{ form.doc_num(class="form-control") }}
               </div>
 
               <div class="col-md-12">
-                <label for="inputGenero" class="form-label">Genero</label>
-                <select id="inputGenero" class="form-select">
-                  <option selected>...</option>
-                  <option value="1">M</option>
-                  <option value="2">F</option>
-                  <option value="3">Otro</option>
-                </select>
-              </div>
-
-              <div class="col-md-5">
-                <label for="inputNroDocumento" class="form-label">Nro de Socio</label>
-                <input type="text" class="form-control" id="inputNroSocio" value="3" disabled>
+                {{ form.genre.label(class="mb-2") }}
+                {{ form.genre(class="form-select") }}
               </div>
 
               <div class="col-12">
-                <label for="inputDireccion" class="form-label">Direccion</label>
-                <input type="text" class="form-control" id="inputDireccion" placeholder="Calle, numero, piso...">
+                {{ form.address.label(class="mb-2") }}
+                {{ form.address(class="form-control") }}
               </div>
 
               <div class="col-md-12">
-                <label for="inputEstado" class="form-label">Estado</label>
-                <select id="inputEstado" class="form-select">
-                  <option selected>...</option>
-                  <option value="1">Activo</option>
-                  <option value="2">No-Activo</option>
-                </select>
+                {{ form.is_active.label(class="mb-2") }}
+                {{ form.is_active(class="form-select") }}
               </div>
 
 <!--              <hr class="mx-auto" style="width: 95%; margin-top: 2em;">-->
 
               <div class="col-12 mt-4">
-                <label for="inputTelefono" class="form-label">Telefono (Opcional)</label>
-                <input type="text" class="form-control" id="inputTelefono">
+                {{ form.phone_num.label(class="mb-2") }}
+                {{ form.phone_num(class="form-control") }}
               </div>
 
               <div class="col-12">
-                <label for="inputEmail" class="form-label">Email (Opcional)</label>
-                <input type="text" class="form-control" id="inputEmail">
+                {{ form.email.label(class="mb-2") }}
+                {{ form.email(class="form-control") }}
               </div>
 
 
               <div class="col-md-5">
                 <label for="inputFechaAlta" class="form-label">Fecha de alta</label>
-                <input type="text" class="form-control" id="inputFechaAlta" value="02/10/22" disabled>
+                <input type="text" class="form-control" id="inputFechaAlta" disabled>
               </div>
 
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                {{ form.submit(class="btn btn-success")}}
+              </div>
             </form>
           </div>
-
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-success">Cargar socio</button>
-          </div>
-
         </div>
     </div>
   </div>
 
+    <div class="modal fade" id="editarMemberModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editarMemberModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title" id="editarMemberLabel">Editar usuario</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+          </div>
+
+          <div class="modal-body">
+            <form class="row g-3" action="{{ url_for('members.member_edit') }}" method="POST" >
+              {{ edit_form.csrf_token }}
+              <div class="col-md-6">
+                {{ edit_form.first_name_edit.label }}
+                {{ edit_form.first_name_edit(class="form-control") }}
+              </div>
+
+              <div class="col-md-6">
+                  {{ edit_form.last_name_edit.label }}
+                  {{ edit_form.last_name_edit(class="form-control") }}
+              </div>
+
+              <div class="col-12">
+                  {{ edit_form.genre_edit.label }}
+                  {{ edit_form.genre_edit(class="form-select") }}
+              </div>
+
+              <div class="col-12">
+                  {{ edit_form.address_edit.label }}
+                  {{ edit_form.address_edit(class="form-control") }}
+              </div>
+
+              <div class="col-12">
+                  {{ edit_form.is_active_edit.label }}
+                  {{ edit_form.is_active_edit(class="form-select") }}
+              </div>
+
+              <div class="col-12">
+                  {{ edit_form.phone_num_edit.label }}
+                  {{ edit_form.phone_num_edit(class="form-control") }}
+              </div>
+
+              <div class="col-12">
+                  {{ edit_form.email_edit.label }}
+                  {{ edit_form.email_edit(class="form-control") }}
+              </div>
+
+              <div class="col-12" hidden>
+                  {{ edit_form.member_id_edit(class="form-control") }}
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                {{ edit_form.submit_edit(class="btn btn-success btn-padding") }}
+              </div>
+            </form>
+          </div>
+        </div>
+    </div>
+  </div>
 
   <hr>
 
@@ -159,30 +199,24 @@
         </tr>
         </thead>
         <tbody>
+        {% for member in members %}
           <tr>
-            <th scope="row"> 1 </th>
-            <td>Manaos Light</td>
-            <td>935115115</td>
-            <td>115</td>
-            <td>Bloqueado</td>
-            <td>02/10/22</td>
+            <th scope="row"> {{ member.id }} </th>
+            <td>{{ member.first_name}} {{ member.last_name }}</td>
+            <td>{{ member.doc_num }}</td>
+            <td>{{ member.member_num }}</td>
+            {% if member.is_active == True %}
+              <td>Activo</td>
+            {% else %}
+              <td>Bloqueado</td>
+            {% endif %}
+            <td>{{ member.inserted_at.strftime('%d/%m/%Y') }}</td>
             <td class="text-center">
-              <button type="button" class="btn btn-secondary btn-sm">Editar</button>
+              <button class="btn btn-primary btn-sm mt-2 mt-lg-0" data-bs-toggle="modal" data-bs-target="#editarMemberModal" type="button" onclick="getMemberToEdit({{member.id}})">Editar</button>
               <button type="button" class="btn btn-danger btn-sm mt-2 mt-lg-0">Eliminar</button>
             </td>
           </tr>
-          <tr>
-            <th scope="row"> 2 </th>
-            <td>Manaos Life</td>
-            <td>935115115</td>
-            <td>116</td>
-            <td>Actvo</td>
-            <td>02/10/22</td>
-            <td class="text-center">
-              <button type="button" class="btn btn-secondary btn-sm">Editar</button>
-              <button type="button" class="btn btn-danger btn-sm mt-2 mt-lg-0">Eliminar</button>
-            </td>
-          </tr>
+        {% endfor %}
         </tbody>
       </table>
     </div>
@@ -190,4 +224,24 @@
 </div>
 
 </div>
+
+<script>
+  const today = new Date().toLocaleDateString("es-AR");
+  document.getElementById('inputFechaAlta').value = today
+
+   async function getMemberToEdit(memberId){
+     let response = await fetch("{{request.url_root}}members/api/member/"+ memberId)
+     let data = await response.json()
+
+     document.getElementById('first_name_edit').value = data.member.first_name
+     document.getElementById('last_name_edit').value = data.member.last_name
+     document.getElementById('genre_edit').value = data.member.genre
+     document.getElementById('address_edit').value = data.member.address
+     document.getElementById('is_active_edit').value = data.member.is_active ? 1 : 2
+     document.getElementById('phone_num_edit').value = data.member.phone_num
+     document.getElementById('email_edit').value = data.member.email
+     document.getElementById('member_id_edit').value = data.member.id
+   }
+
+</script>
 {% endblock %}
