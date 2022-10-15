@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms.validators import InputRequired, Length, Email, NumberRange
+from wtforms.validators import InputRequired, Length, Email, NumberRange, Optional
 from wtforms import StringField, IntegerField, SubmitField, SelectField, PasswordField, BooleanField, \
     SelectMultipleField, widgets, EmailField, HiddenField, TextAreaField, FloatField
 
@@ -41,3 +41,31 @@ class ConfigForm(FlaskForm):
     extra_charge = IntegerField('Porcentaje de recargo', validators=[InputRequired()])
 
     submit = SubmitField("Guardar cambios")
+
+
+class MemberForm(FlaskForm):
+    first_name = StringField('Nombre', validators=[InputRequired(), Length(max=50)])
+    last_name = StringField('Apellido', validators=[InputRequired(), Length(max=50)])
+    doc_type = SelectField('Tipo de documento', choices=[('1', 'DNI'), ('2', 'LE'), ('3', 'LC')], default="1")
+    doc_num = StringField('Nro de documento', validators=[InputRequired()])
+    genre = SelectField('Genero', choices=[('1', 'M'), ('2', 'F'), ('3', 'Otro')], default="1")
+    member_num = StringField('Numero de socio', validators=[Length(max=50)])  # Revisar este
+    address = StringField('Direccion', validators=[InputRequired()])
+    is_active = SelectField('Estado', choices=[('1', 'Activo'), ('2', 'Inactivo')], default="1")
+    phone_num = StringField('Telefono (Opcional)', validators=[Optional()])
+    email = EmailField('Email (Opcional)', validators=[Length(max=50), Optional()])
+
+    submit = SubmitField("Cargar socio")
+
+
+class EditMemberForm(FlaskForm):
+    member_id_edit = HiddenField('member_id')
+    first_name_edit = StringField('Nombre', validators=[Length(max=50)])
+    last_name_edit = StringField('Apellido', validators=[Length(max=50)])
+    genre_edit = SelectField('Genero', choices=[('1', 'M'), ('2', 'F'), ('3', 'Otro')], default="1")
+    address_edit = StringField('Direccion')
+    is_active_edit = SelectField('Estado', choices=[('1', 'Activo'), ('2', 'Inactivo')], default="1")
+    phone_num_edit = StringField('Telefono (Opcional)', validators=[Optional()])
+    email_edit = EmailField('Email (Opcional)', validators=[Length(max=50), Optional()])
+
+    submit_edit = SubmitField("Guardar cambios")

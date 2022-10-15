@@ -2,7 +2,7 @@ from src.core.database import db
 from src.core.board.permission import Permission
 from src.core.board.rol import Rol
 from src.core.board.config import Config
-
+from src.core.board.member import Member
 
 # def assign_user(issue, user):
 #     issue.user = user
@@ -67,9 +67,68 @@ def get_configuration():
     return config
 
 
+# Members (Socios) methods
+def list_members():
+    return Member.query.all()
+
+
+def get_member_by_email(email):
+    return Member.query.filter_by(email=email).first()
+
+
+def get_member_by_doc_num(doc_num):
+    return Member.query.filter_by(doc_num=doc_num).first()
+
+
+def get_last_member_num():
+    return db.engine.execute("SELECT * FROM members WHERE id IN (SELECT MAX(id) FROM members)").first()
+
+
+def get_member_by_id(member_id):
+    return Member.query.filter_by(id=member_id).first()
+
+
+def create_member(**kwargs):
+    member = Member(**kwargs)
+    db.session.add(member)
+    db.session.commit()
+
+    return member
+
+
+def member_edit(member_id, first_name, last_name, genre, address, is_active, phone_num, email):
+    member = get_member_by_id(member_id)
+
+    member.first_name = first_name
+    member.last_name = last_name
+    member.genre = genre
+    member.address = address
+    member.is_active = is_active
+    member.phone_num = phone_num
+    member.email = email
+
+    db.session.add(member)
+    db.session.commit()
+
+    return member
+
+
 # APIs
 def rol_json(rol):
     return {
         'id': rol.id,
         'name': rol.name
+    }
+
+
+def member_json(member):
+    return {
+        'id': member.id,
+        'first_name': member.first_name,
+        'last_name': member.last_name,
+        'genre': member.genre,
+        'address': member.address,
+        'is_active': member.is_active,
+        'phone_num': member.phone_num,
+        'email': member.email
     }
