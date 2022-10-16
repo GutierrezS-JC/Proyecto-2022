@@ -11,7 +11,8 @@
     <hr>
 
     <h2 class="my-3">Configuracion del sistema</h2>
-    <form class="formStyle">
+    <form class="formStyle" method="POST" action="{{ url_for('config.config_edit') }}">
+        {{ form.csrf_token }}
         <div class="form-group mb-3 reducedSize">
             {{ form.elements_quantity.label(class="mb-2") }}
             {{ form.elements_quantity(class="form-control", value=config.elements_quantity) }}
@@ -40,14 +41,13 @@
                       id="contact_information" rows="3" maxlength="200">{{ config.contact_information }}</textarea>
         </div>
 
-        <div class="form-check form-switch mt-5">
-            {{ form.payment_enabled(class="form-check-input", role="switch", checked=config.payment_enabled) }}
-            {{ form.payment_enabled.label(class="form-check-label") }} <br/>
-            <small id="ayudaSwitchTabla" class="form-text text-muted">En la vista publica</small>
+        <div class="form-group mb-3">
+          {{ form.payment_enabled.label(class="mb-2") }}
+          {{ form.payment_enabled(class="form-select") }}
+          <small id="ayudaSelectTabla" class="form-text text-muted">En la vista publica</small>
         </div>
 
-
-        <button type="submit" class="btn btn-dark btn-padding my-5">Guardar cambios</button>
+        {{ form.submit(class="btn btn-dark btn-padding my-4") }}
     </form>
 </div>
 {% endblock %}

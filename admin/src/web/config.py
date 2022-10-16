@@ -27,7 +27,7 @@ class DevelopmentConfig(Config):
     # Database values
     DEBUG = True
     DB_USER = environ.get("DB_USER", "postgres")
-    DB_PASS = environ.get("DB_PASS", "postgres")
+    DB_PASS = environ.get("DB_PASS", "935root935")
     DB_HOST = environ.get("DB_HOST", "localhost")
     DB_NAME = environ.get("DB_NAME", "club")
     SQLALCHEMY_TRACK_MODIFICATIONS = True
