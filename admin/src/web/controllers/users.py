@@ -23,7 +23,8 @@ def user_index():
 @login_required
 def user_list_all():
     page = request.args.get('page', 1, type=int)
-    pagination = auth.list_users_paginated(page, per_page=1)
+    per_page = board.get_configuration()
+    pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
     form = EditUserForm()
     return render_template("users/listado.html", pagination=pagination, user_is_admin=auth.user_is_admin, form=form)
 
@@ -33,7 +34,8 @@ def user_list_all():
 def user_change_status(username):
     auth.user_set_status(username)
     page = request.args.get('page', 1, type=int)
-    pagination = auth.list_users_paginated(page, per_page=1)
+    per_page = board.get_configuration()
+    pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
     form = EditUserForm()
     # return redirect(url_for('users.user_list_all'))
     return render_template("users/listado.html", pagination=pagination, user_is_admin=auth.user_is_admin, form=form)
