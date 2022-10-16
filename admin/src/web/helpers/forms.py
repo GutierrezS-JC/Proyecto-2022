@@ -69,3 +69,10 @@ class EditMemberForm(FlaskForm):
     email_edit = EmailField('Email (Opcional)', validators=[Length(max=50), Optional()])
 
     submit_edit = SubmitField("Guardar cambios")
+
+
+class SearchUserForm(FlaskForm):
+    email = StringField('Email', validators=[Length(max=50), Optional()])
+    is_active_search = SelectField('Estado', choices=[('0', 'Todos'), ('1', 'Activo'), ('2', 'Bloqueado')], default="0")
+
+    submit_search = SubmitField("Buscar")

@@ -7,6 +7,7 @@ from core import board
 
 from src.web.helpers.forms import RegisterUserForm
 from src.web.helpers.forms import EditUserForm
+from src.web.helpers.forms import SearchUserForm
 from src.web.helpers.auth import login_required
 
 user_blueprint = Blueprint("users", __name__, url_prefix="/users")
@@ -22,11 +23,14 @@ def user_index():
 @user_blueprint.route("/listado")
 @login_required
 def user_list_all():
+    print(request.args)
     page = request.args.get('page', 1, type=int)
     per_page = board.get_configuration()
     pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
     form = EditUserForm()
-    return render_template("users/listado.html", pagination=pagination, user_is_admin=auth.user_is_admin, form=form)
+    search_form = SearchUserForm()
+    return render_template("users/listado.html", pagination=pagination, user_is_admin=auth.user_is_admin,
+                           form=form, search_form=search_form)
 
 
 @user_blueprint.route("/cambiar_rol/<username>")
@@ -36,7 +40,7 @@ def user_change_status(username):
     page = request.args.get('page', 1, type=int)
     per_page = board.get_configuration()
     pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
-    return redirect(url_for('users.user_list_all', page=pagination.page))
+    return redirect(url_for('users.user_list_all', page=pagination.page, email="", status=""))
 
 
 @user_blueprint.post("/cargar")
@@ -108,6 +112,16 @@ def user_edit():
     pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
 
     return redirect(url_for("users.user_list_all", page=pagination.page))
+
+
+@user_blueprint.route("/buscar_usuario", methods=["GET"])
+@login_required
+def user_search():
+    page = request.args.get('page', 1, type=int)
+    per_page = board.get_configuration()
+    pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
+
+    return redirect(url_for("users.user_list_all", page=pagination.page, email="", status=""))
 
 
 # APIs de user

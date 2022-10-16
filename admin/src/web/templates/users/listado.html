@@ -16,20 +16,25 @@
   <hr>
 
   <h2 class="h3">Busqueda</h2>
-  <form id="formBusquedda" name="formularioBusqueda" role="form">
-    <div class="row mb-4">
+  <form id="formBusqueda" name="formularioBusqueda" action="{{ url_for('users.user_list_all', page=pagination.page) }}" method="GET">
+      <div class="row mb-4">
       <div class="col-lg-3 d-flex">
-        <input type="text" id="emailBusqueda" class="form-control rounded text-black" placeholder="Ingrese un email . . ." />
+          <input type="text" id="page" class="form-control rounded text-black" name="page" hidden value="1" />
+
+<!--        <input type="text" id="emailBusqueda" class="form-control rounded text-black" placeholder="Ingrese un email . . ." />-->
+        {{ search_form.email(class="form-control rounded text-black", placeholder="Ingrese un email...")}}
       </div>
       <div class="col-lg-2 text-start">
-        <select id="criterioBusqueda" class="form-select">
-          <option value="0" selected>Todos</option>
-          <option value="1">Activo</option>
-          <option value="2">Bloqueado</option>
-        </select>
+<!--        <select id="criterioBusqueda" class="form-select">-->
+<!--          <option value="0" selected>Todos</option>-->
+<!--          <option value="1">Activo</option>-->
+<!--          <option value="2">Bloqueado</option>-->
+<!--        </select>-->
+        {{ search_form.is_active_search(class="form-select") }}
       </div>
       <div class="col-lg-1">
         <button type="submit" id="btnBusqueda" class="btn btn-outline-dark">Buscar</button>
+<!--        {{ search_form.submit_search(class="btn btn-outline-dark") }}-->
       </div>
     </div>
   </form>
@@ -134,9 +139,9 @@
               <button class="btn btn-primary btn-sm mt-2 mt-lg-0" data-bs-toggle="modal" data-bs-target="#editarUsuarioModal" type="button" onclick="getUserToEdit({{user.id}})">Editar</button>
               {% if not user_is_admin(user.username) %}
                 {% if user.is_active == True %}
-                  <a class="btn btn-warning btn-sm mt-2 mt-lg-0" href="{{ url_for('users.user_change_status', username=user.username, page=pagination.page) }}" role="button">Bloquear</a>
+                  <a class="btn btn-warning btn-sm mt-2 mt-lg-0" href="{{ url_for('users.user_change_status', username=user.username, page=pagination.page,  email='', status='' ) }}" role="button">Bloquear</a>
                 {% else %}
-                  <a class="btn btn-success btn-sm mt-2 mt-lg-0" href="{{ url_for('users.user_change_status', username=user.username, page=pagination.page) }}" role="button">Activar</a>
+                  <a class="btn btn-success btn-sm mt-2 mt-lg-0" href="{{ url_for('users.user_change_status', username=user.username, page=pagination.page, email='', status='') }}" role="button">Activar</a>
                 {% endif %}
               {% else %}
                 <button type="button" class="btn btn-outline-secondary btn-sm mt-2 mt-lg-0" disabled>Bloquear</button>
@@ -153,7 +158,7 @@
   <div class="pagination mt-4 d-flex justify-content-center">
     {% if pagination.has_prev %}
         <span>
-            <a class='page-number text-decoration-none me-2' href="{{ url_for('users.user_list_all', page=pagination.prev_num) }}"
+            <a class='page-number text-decoration-none me-2' href="{{ url_for('users.user_list_all', page=pagination.prev_num, email='', status=search_form.is_active_search.data ) }}"
             style="color: inherit;">
                 {{ '<<' }}
             </a>
@@ -166,7 +171,7 @@
         {% for number in pagination.iter_pages() %}
           {% if pagination.page != number %}
               <a class="btn btn-outline-dark btn-sm"
-                 href="{{ url_for('users.user_list_all', page=number) }}" role="button">
+                 href="{{ url_for('users.user_list_all', page=number, email=search_form.email.value, status=search_form.is_active_search.data) }}" role="button">
                 {{ number }}
               </a>
         {% else %}
@@ -177,7 +182,7 @@
     {% if pagination.has_next %}
         <span>
             <a class='page-number text-decoration-none ms-2'  style="color: inherit"
-                href="{{ url_for('users.user_list_all', page=pagination.next_num) }}">
+                href="{{ url_for('users.user_list_all', page=pagination.next_num, email='', status=search_form.is_active_search.data) }}">
                 {{ '>>' }}
             </a>
         </span>
