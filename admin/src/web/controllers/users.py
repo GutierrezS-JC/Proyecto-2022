@@ -36,9 +36,7 @@ def user_change_status(username):
     page = request.args.get('page', 1, type=int)
     per_page = board.get_configuration()
     pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
-    form = EditUserForm()
-    # return redirect(url_for('users.user_list_all'))
-    return render_template("users/listado.html", pagination=pagination, user_is_admin=auth.user_is_admin, form=form)
+    return redirect(url_for('users.user_list_all', page=pagination.page))
 
 
 @user_blueprint.post("/cargar")
@@ -105,7 +103,11 @@ def user_edit():
             for error in form[item].errors:
                 print(f"{form[item].name}  {error}")
 
-    return redirect(url_for("users.user_list_all"))
+    page = request.args.get('page', 1, type=int)
+    per_page = board.get_configuration()
+    pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
+
+    return redirect(url_for("users.user_list_all", page=pagination.page))
 
 
 # APIs de user

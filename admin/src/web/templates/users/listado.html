@@ -44,7 +44,7 @@
           </div>
 
           <div class="modal-body">
-            <form class="row g-3" action="{{ url_for('users.user_edit') }}" method="POST" >
+            <form class="row g-3" action="{{ url_for('users.user_edit', page=pagination.page) }}" method="POST" >
               {{ form.csrf_token }}
               <div class="col-md-6">
                 {{ form.first_name.label }}
@@ -206,7 +206,6 @@
     for (let item of items){
       item.checked = false
     }
-
   }
 
 </script>
