@@ -19,19 +19,24 @@ def user_index():
     return render_template("users/index.html", form=form)
 
 
-@user_blueprint.get("/listado")
+@user_blueprint.route("/listado")
 @login_required
 def user_list_all():
-    users = auth.list_users()
+    page = request.args.get('page', 1, type=int)
+    per_page = board.get_configuration()
+    pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
     form = EditUserForm()
-    return render_template("users/listado.html", users=users, user_is_admin=auth.user_is_admin, form=form)
+    return render_template("users/listado.html", pagination=pagination, user_is_admin=auth.user_is_admin, form=form)
 
 
 @user_blueprint.route("/cambiar_rol/<username>")
 @login_required
 def user_change_status(username):
     auth.user_set_status(username)
-    return redirect(url_for('users.user_list_all'))
+    page = request.args.get('page', 1, type=int)
+    per_page = board.get_configuration()
+    pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
+    return redirect(url_for('users.user_list_all', page=pagination.page))
 
 
 @user_blueprint.post("/cargar")
@@ -91,13 +96,18 @@ def user_edit():
 
         user = auth.user_edit(user_id=form.user_id.data, first_name=form.first_name.data, last_name=form.last_name.data,
                               email=form.email.data, username=form.username.data, roles=accepted)
+        flash("El usuario fue editado con exito", "success")
     else:
         print("WTF happened")
         for item in form.errors:
             for error in form[item].errors:
                 print(f"{form[item].name}  {error}")
 
-    return redirect(url_for("users.user_list_all"))
+    page = request.args.get('page', 1, type=int)
+    per_page = board.get_configuration()
+    pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
+
+    return redirect(url_for("users.user_list_all", page=pagination.page))
 
 
 # APIs de user
