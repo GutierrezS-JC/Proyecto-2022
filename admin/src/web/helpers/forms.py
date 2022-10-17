@@ -34,7 +34,8 @@ class EditUserForm(FlaskForm):
 
 class ConfigForm(FlaskForm):
     elements_quantity = StringField('Cantidad de elementos', validators=[InputRequired()])
-    payment_enabled = BooleanField('Habilitar/deshabilitar tabla de pagos', validators=[InputRequired()])
+    payment_enabled = SelectField('Habilitar/deshabilitar tabla de pagos',
+                                  choices=[('1', 'Habilitado'), ('2', 'Deshabilitado')], default="1")
     contact_information = TextAreaField('Informacion de contacto', validators=[InputRequired(), Length(max=200)])
     payment_header = StringField('Encabezado', validators=[InputRequired(), Length(min=5, max=50)])
     monthly_fee = StringField('Cuota base', validators=[InputRequired()])

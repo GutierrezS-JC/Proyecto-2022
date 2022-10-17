@@ -55,10 +55,20 @@ def create_configuration(**kwargs):
     return config
 
 
-def update_configuration(**kwargs):
+def update_configuration(elements_quantity, payment_enabled, contact_information, payment_header,
+                         monthly_fee, extra_charge):
     config = Config.query.get(1)
-    for key, value in kwargs:
-        setattr(config, key, value)
+
+    config.elements_quantity = elements_quantity
+    config.payment_enabled = payment_enabled
+    config.contact_information = contact_information
+    config.payment_header = payment_header
+    config.monthly_fee = monthly_fee
+    config.extra_charge = extra_charge
+
+    db.session.add(config)
+    db.session.commit()
+    return config
 
 
 def get_configuration():
