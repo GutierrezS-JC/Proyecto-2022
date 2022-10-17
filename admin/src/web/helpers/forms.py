@@ -23,7 +23,7 @@ class RegisterUserForm(FlaskForm):
 
 class EditUserForm(FlaskForm):
     user_id = HiddenField('user_id')
-    email = StringField('Email', validators=[Email(), Length(max=50)])
+    email = StringField('Email', validators=[Email(), Length(max=50)], id='email_edit')
     username = StringField('Nombre de usuario', validators=[Length(min=5, max=20)])
     first_name = StringField('Nombre', validators=[Length(max=50)])
     last_name = StringField('Apellido', validators=[Length(max=50)])
@@ -34,7 +34,8 @@ class EditUserForm(FlaskForm):
 
 class ConfigForm(FlaskForm):
     elements_quantity = StringField('Cantidad de elementos', validators=[InputRequired()])
-    payment_enabled = SelectField('Habilitar/deshabilitar tabla de pagos', choices=[('1', 'Habilitado'), ('2', 'Deshabilitado')], default="1")
+    payment_enabled = SelectField('Habilitar/deshabilitar tabla de pagos',
+                                  choices=[('1', 'Habilitado'), ('2', 'Deshabilitado')], default="1")
     contact_information = TextAreaField('Informacion de contacto', validators=[InputRequired(), Length(max=200)])
     payment_header = StringField('Encabezado', validators=[InputRequired(), Length(min=5, max=50)])
     monthly_fee = StringField('Cuota base', validators=[InputRequired()])
@@ -69,3 +70,11 @@ class EditMemberForm(FlaskForm):
     email_edit = EmailField('Email (Opcional)', validators=[Length(max=50), Optional()])
 
     submit_edit = SubmitField("Guardar cambios")
+
+
+class SearchUserForm(FlaskForm):
+    email = StringField('Email', validators=[Length(max=50), Optional()], name="email")
+    is_active_search = SelectField('Estado', choices=[('0', 'Todos'), ('1', 'Activo'), ('2', 'Bloqueado')], default="0",
+                                   name="status")
+
+    submit_search = SubmitField("Buscar")

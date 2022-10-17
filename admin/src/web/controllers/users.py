@@ -7,6 +7,7 @@ from core import board
 
 from src.web.helpers.forms import RegisterUserForm
 from src.web.helpers.forms import EditUserForm
+from src.web.helpers.forms import SearchUserForm
 from src.web.helpers.auth import login_required
 
 user_blueprint = Blueprint("users", __name__, url_prefix="/users")
@@ -22,11 +23,22 @@ def user_index():
 @user_blueprint.route("/listado")
 @login_required
 def user_list_all():
+    print(request.args)
+
     page = request.args.get('page', 1, type=int)
     per_page = board.get_configuration()
+
+    # Otra opcion para busqueda --> consultar por query param seteado y hacer una consulta sql apropiada
     pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
+
+    email = request.args.get('email', '')
+    status = request.args.get('status', '', type=str)
     form = EditUserForm()
-    return render_template("users/listado.html", pagination=pagination, user_is_admin=auth.user_is_admin, form=form)
+    search_form = SearchUserForm()
+    search_form.is_active_search.data = status
+    search_form.email.data = email
+    return render_template("users/listado.html", pagination=pagination, user_is_admin=auth.user_is_admin,
+                           form=form, search_form=search_form)
 
 
 @user_blueprint.route("/cambiar_rol/<username>")
@@ -34,9 +46,9 @@ def user_list_all():
 def user_change_status(username):
     auth.user_set_status(username)
     page = request.args.get('page', 1, type=int)
-    per_page = board.get_configuration()
-    pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
-    return redirect(url_for('users.user_list_all', page=pagination.page))
+    email = request.args.get('email', '')
+    status = request.args.get('status', '', type=str)
+    return redirect(url_for('users.user_list_all', page=page, email=email, status=status))
 
 
 @user_blueprint.post("/cargar")
@@ -92,7 +104,7 @@ def user_edit():
 
         if not accepted:
             flash("Error. El usuario debe tener al menos un rol asignado", "danger")
-            return redirect(url_for("users.user_list_all"))
+            return redirect(url_for("users.user_list_all", ))
 
         user = auth.user_edit(user_id=form.user_id.data, first_name=form.first_name.data, last_name=form.last_name.data,
                               email=form.email.data, username=form.username.data, roles=accepted)
@@ -104,10 +116,21 @@ def user_edit():
                 print(f"{form[item].name}  {error}")
 
     page = request.args.get('page', 1, type=int)
-    per_page = board.get_configuration()
-    pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
+    email = request.args.get('email', '')
+    status = request.args.get('status', '0', type=str)
+    return redirect(url_for('users.user_list_all', page=page, email=email, status=status))
 
-    return redirect(url_for("users.user_list_all", page=pagination.page))
+
+@user_blueprint.route("/buscar_usuario", methods=["GET"])
+@login_required
+def user_search():
+    # Logica consulta BD para traer usuarios
+    page = request.args.get('page', 1, type=int)
+    email = request.args.get('email', '')
+    status = request.args.get('status', '')
+
+    # Render_template es una opcion
+    return redirect(url_for("users.user_list_all", page=page, email=email, status=status))
 
 
 # APIs de user
