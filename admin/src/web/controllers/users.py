@@ -24,13 +24,16 @@ def user_index():
 @login_required
 def user_list_all():
     print(request.args)
+
     page = request.args.get('page', 1, type=int)
     per_page = board.get_configuration()
     pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
+    email = request.args.get('email', '')
+    status = request.args.get('status', '', type=str)
     form = EditUserForm()
     search_form = SearchUserForm()
     return render_template("users/listado.html", pagination=pagination, user_is_admin=auth.user_is_admin,
-                           form=form, search_form=search_form)
+                           form=form, search_form=search_form, email=email, status=status)
 
 
 @user_blueprint.route("/cambiar_rol/<username>")
@@ -118,10 +121,13 @@ def user_edit():
 @login_required
 def user_search():
     page = request.args.get('page', 1, type=int)
+
+    email = request.args.get('email', '')
+    status = request.args.get('status', '')
     per_page = board.get_configuration()
     pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
 
-    return redirect(url_for("users.user_list_all", page=pagination.page, email="", status=""))
+    return redirect(url_for("users.user_list_all", page=pagination.page, email=email, status=status))
 
 
 # APIs de user
