@@ -23,7 +23,7 @@ class RegisterUserForm(FlaskForm):
 
 class EditUserForm(FlaskForm):
     user_id = HiddenField('user_id')
-    email = StringField('Email', validators=[Email(), Length(max=50)])
+    email = StringField('Email', validators=[Email(), Length(max=50)], id='email_edit')
     username = StringField('Nombre de usuario', validators=[Length(min=5, max=20)])
     first_name = StringField('Nombre', validators=[Length(max=50)])
     last_name = StringField('Apellido', validators=[Length(max=50)])
