@@ -1,5 +1,11 @@
-from flask import Blueprint, flash, redirect, url_for, jsonify, request
+import os
+from datetime import datetime
+
+from flask import Blueprint, flash, redirect, url_for, jsonify, request, Response
 from flask import render_template
+
+import io
+import csv
 
 from core import board
 
@@ -117,6 +123,36 @@ def member_edit():
     status = request.args.get('status', '0', type=str)
 
     return redirect(url_for("members.member_index", page=page, apellido=apellido, status=status))
+
+
+# CSV
+@member_blueprint.route('download/report/csv')
+def download_report_csv():
+    last_name = request.args.get('apellido', '')
+    status = request.args.get('status', '', type=str)
+
+    name_file = f"ListadoSocios_{datetime.today().strftime('%d-%m-%Y')}.csv"
+    with open(name_file, 'w', newline='') as file_csv:
+        fieldnames = ['Id socio', 'Nombre', 'Apellido', 'Nro documento', 'Genero', 'Direccion', 'Email']
+        writer = csv.DictWriter(file_csv, fieldnames=fieldnames)
+
+        if last_name:
+            if status == '2':
+                result = board.get_list_members_with_last_name(last_name)
+            else:
+                result = board.get_list_members_with_last_name_status(last_name, status)
+        else:
+            if status == '2':
+                result = board.get_all_members()
+            else:
+                result = board.get_list_members_with_status(status)
+
+        for row in result:
+            writer.writerow({'Id socio': row.member_num, 'Nombre': row.first_name, 'Apellido': row.last_name,
+                             'Nro documento': row.doc_num, 'Genero': row.genre, 'Direccion': row.address,
+                             'Email': row.email})
+        file_csv.close()
+    return Response(mimetype="text/csv", headers={'Content-Disposition': f'attachment; filename={name_file}'})
 
 
 # APIs de user

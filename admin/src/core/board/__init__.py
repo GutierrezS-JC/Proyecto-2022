@@ -4,6 +4,7 @@ from src.core.board.rol import Rol
 from src.core.board.config import Config
 from src.core.board.member import Member
 
+
 # def assign_user(issue, user):
 #     issue.user = user
 #     db.session.add(issue)
@@ -78,10 +79,6 @@ def get_configuration():
 
 
 # Members (Socios) methods
-def list_members():
-    return Member.query.order_by(Member.member_num).all()
-
-
 def all_paginated(page=1, per_page=10):
     return Member.query.order_by(Member.member_num.asc()).paginate(page=page, per_page=per_page, error_out=False)
 
@@ -92,7 +89,7 @@ def list_members_with_last_name(last_name, page, per_page):
 
 
 def list_members_with_last_name_status(last_name, status, page, per_page):
-    return Member.query.filter(Member.last_name.like(f'%{last_name}%'), Member.is_active == status)\
+    return Member.query.filter(Member.last_name.like(f'%{last_name}%'), Member.is_active == status) \
         .paginate(page=page, per_page=per_page, error_out=False)
 
 
@@ -139,6 +136,23 @@ def member_edit(member_id, first_name, last_name, genre, address, is_active, pho
     db.session.commit()
 
     return member
+
+
+# Member Files
+def get_list_members_with_last_name(last_name):
+    return Member.query.filter(Member.last_name.like(f'%{last_name}%'))
+
+
+def get_list_members_with_last_name_status(last_name, status):
+    return Member.query.filter(Member.last_name.like(f'%{last_name}%'), Member.is_active == status)
+
+
+def get_all_members():
+    return Member.query.order_by(Member.member_num).all()
+
+
+def get_list_members_with_status(status):
+    return Member.query.filter(Member.is_active == status)
 
 
 # APIs
