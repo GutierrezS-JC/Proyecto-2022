@@ -132,27 +132,35 @@ def download_report_csv():
     status = request.args.get('status', '', type=str)
 
     name_file = f"ListadoSocios_{datetime.today().strftime('%d-%m-%Y')}.csv"
-    with open(name_file, 'w', newline='') as file_csv:
-        fieldnames = ['Id socio', 'Nombre', 'Apellido', 'Nro documento', 'Genero', 'Direccion', 'Email']
-        writer = csv.DictWriter(file_csv, fieldnames=fieldnames)
 
-        if last_name:
-            if status == '2':
-                result = board.get_list_members_with_last_name(last_name)
-            else:
-                result = board.get_list_members_with_last_name_status(last_name, status)
+    output = io.StringIO()
+    writer = csv.writer(output)
+
+    line = ['Id socio', 'Nombre', 'Apellido', 'Nro documento', 'Genero', 'Direccion', 'Email']
+    writer.writerow(line)
+
+    if last_name:
+        if status == '2':
+            result = board.get_list_members_with_last_name(last_name)
         else:
-            if status == '2':
-                result = board.get_all_members()
-            else:
-                result = board.get_list_members_with_status(status)
+            result = board.get_list_members_with_last_name_status(last_name, status)
+    else:
+        if status == '2':
+            result = board.get_all_members()
+        else:
+            result = board.get_list_members_with_status(status)
 
-        for row in result:
-            writer.writerow({'Id socio': row.member_num, 'Nombre': row.first_name, 'Apellido': row.last_name,
-                             'Nro documento': row.doc_num, 'Genero': row.genre, 'Direccion': row.address,
-                             'Email': row.email})
-        file_csv.close()
-    return Response(mimetype="text/csv", headers={'Content-Disposition': f'attachment; filename={name_file}'})
+    for row in result:
+        if row.genre == 1:
+            row.genre = 'M'
+        elif row.genre == 2:
+            row.genre = 'F'
+        else:
+            row.genre = 'X'
+        line = [str(row.member_num), row.first_name, row.last_name, row.doc_num, str(row.genre), row.address, row.email]
+        writer.writerow(line)
+    output.seek(0)
+    return Response(output, mimetype="text/csv", headers={'Content-Disposition': f'attachment; filename={name_file}'})
 
 
 # APIs de user
