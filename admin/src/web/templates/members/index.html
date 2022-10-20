@@ -189,10 +189,10 @@
       <table class="table table-bordered align-middle">
         <thead>
         <tr>
-          <th scope="col">#</th>
+          <th scope="col">Nro de socio</th>
           <th scope="col">Nombre completo</th>
           <th scope="col">Documento</th>
-          <th scope="col">Nro de socio</th>
+          <th scope="col">Email</th>
           <th scope="col">Estado</th>
           <th scope="col">Fecha de alta</th>
           <th scope="col"></th>
@@ -201,10 +201,14 @@
         <tbody>
         {% for member in members %}
           <tr>
-            <th scope="row"> {{ member.id }} </th>
+            <th scope="row"> {{ member.member_num }} </th>
             <td>{{ member.first_name}} {{ member.last_name }}</td>
             <td>{{ member.doc_num }}</td>
-            <td>{{ member.member_num }}</td>
+            {% if member.email == None %}
+              <td> - </td>
+            {% else %}
+              <td> {{ member.email }} </td>
+            {% endif %}
             {% if member.is_active == True %}
               <td>Activo</td>
             {% else %}
