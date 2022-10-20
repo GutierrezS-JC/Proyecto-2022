@@ -65,7 +65,7 @@ class EditMemberForm(FlaskForm):
     last_name_edit = StringField('Apellido', validators=[Length(max=50)])
     genre_edit = SelectField('Genero', choices=[('1', 'M'), ('2', 'F'), ('3', 'Otro')], default="1")
     address_edit = StringField('Direccion')
-    is_active_edit = SelectField('Estado', choices=[('1', 'Activo'), ('2', 'Inactivo')], default="1")
+    is_active_edit = SelectField('Estado', choices=[('1', 'Activo'), ('0', 'Inactivo')], default="1")
     phone_num_edit = StringField('Telefono (Opcional)', validators=[Optional()])
     email_edit = EmailField('Email (Opcional)', validators=[Length(max=50), Optional()])
 

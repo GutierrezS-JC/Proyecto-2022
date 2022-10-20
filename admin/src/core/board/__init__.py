@@ -83,19 +83,21 @@ def list_members():
 
 
 def all_paginated(page=1, per_page=10):
-    return Member.query.order_by(Member.member_num.asc()).paginate(page=page, per_page=per_page)
+    return Member.query.order_by(Member.member_num.asc()).paginate(page=page, per_page=per_page, error_out=False)
 
 
 def list_members_with_last_name(last_name, page, per_page):
-    return Member.query.filter(Member.last_name.like(f'%{last_name}%')).paginate(page=page, per_page=per_page)
+    return Member.query.filter(Member.last_name.like(f'%{last_name}%')).paginate(page=page, per_page=per_page,
+                                                                                 error_out=False)
 
 
 def list_members_with_last_name_status(last_name, status, page, per_page):
-    return Member.query.filter(Member.last_name.like(f'%{last_name}%'), Member.is_active == status).paginate(page=page, per_page=per_page)
+    return Member.query.filter(Member.last_name.like(f'%{last_name}%'), Member.is_active == status)\
+        .paginate(page=page, per_page=per_page, error_out=False)
 
 
 def list_members_with_status(status, page, per_page):
-    return Member.query.filter(Member.is_active == status).paginate(page=page, per_page=per_page)
+    return Member.query.filter(Member.is_active == status).paginate(page=page, per_page=per_page, error_out=False)
 
 
 def get_member_by_email(email):

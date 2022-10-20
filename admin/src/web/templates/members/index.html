@@ -99,7 +99,7 @@
           </div>
 
           <div class="modal-body">
-            <form class="row g-3" action="{{ url_for('members.member_edit') }}" method="POST" >
+            <form class="row g-3" action="{{ url_for('members.member_edit', page=pagination.page, apellido=search_form.last_name.data, status=search_form.is_active_search.data ) }}" method="POST" >
               {{ edit_form.csrf_token }}
               <div class="col-md-6">
                 {{ edit_form.first_name_edit.label }}
@@ -153,7 +153,7 @@
   <hr>
 
   <h2 class="h3">Busqueda</h2>
-  <form id="formBusquedda" name="formularioBusqueda" role="form">
+  <form id="formBusquedda" name="formularioBusqueda" role="form" method="GET">
     <div class="row mb-4">
       <div class="col-lg-3 d-flex">
         <input type="text" id="page" class="form-control rounded text-black" name="page" hidden value="1" />
@@ -224,6 +224,42 @@
   </div>
 </div>
 
+<div class="pagination mt-4 d-flex justify-content-center">
+    {% if pagination.has_prev %}
+        <span>
+            <a class='page-number text-decoration-none me-2' href="{{ url_for('members.member_index', page=pagination.prev_num, apellido=search_form.last_name.data, status=search_form.is_active_search.data ) }}"
+            style="color: inherit;">
+                {{ '<<' }}
+            </a>
+        </span>
+    {% endif %}
+
+    <div>
+    <div class="btn-toolbar" role="toolbar">
+      <div class="btn-group" role="group" aria-label="First group">
+        {% for number in pagination.iter_pages() %}
+          {% if pagination.page != number %}
+              <a class="btn btn-outline-dark btn-sm"
+                 href="{{ url_for('members.member_index', page=number, apellido=search_form.last_name.data, status=search_form.is_active_search.data) }}" role="button">
+                {{ number }}
+              </a>
+        {% else %}
+                <button type="button" class="btn btn-dark btn-sm">{{ number }}</button>
+        {% endif %}
+    {% endfor %}
+    </div>
+    {% if pagination.has_next %}
+        <span>
+            <a class='page-number text-decoration-none ms-2'  style="color: inherit"
+                href="{{ url_for('members.member_index', page=pagination.next_num, apellido=search_form.last_name.data, status=search_form.is_active_search.data ) }}">
+                {{ '>>' }}
+            </a>
+        </span>
+    {% endif %}
+    </div>
+  </div>
+</div>
+
 </div>
 
 <script>
@@ -238,7 +274,7 @@
      document.getElementById('last_name_edit').value = data.member.last_name
      document.getElementById('genre_edit').value = data.member.genre
      document.getElementById('address_edit').value = data.member.address
-     document.getElementById('is_active_edit').value = data.member.is_active ? 1 : 2
+     document.getElementById('is_active_edit').value = data.member.is_active ? 1 : 0
      document.getElementById('phone_num_edit').value = data.member.phone_num
      document.getElementById('email_edit').value = data.member.email
      document.getElementById('member_id_edit').value = data.member.id

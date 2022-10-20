@@ -15,7 +15,6 @@ member_blueprint = Blueprint("members", __name__, url_prefix="/members")
 @member_blueprint.get("/listado")
 @login_required
 def member_index():
-
     # Paginacion
     page = request.args.get('page', 1, type=int)
     per_page = board.get_configuration()
@@ -35,10 +34,10 @@ def member_index():
         else:
             pagination = board.list_members_with_status(status, page, per_page=per_page.elements_quantity)
 
-    print(pagination.items)
+    # print(pagination.page != 1 and len(pagination.items) == 0)
+    # print(pagination.last)
     form = MemberForm()
     edit_form = EditMemberForm()
-    # members = board.list_members()
     search_form = SearchMemberForm()
     search_form.last_name.data = last_name
     search_form.is_active_search.data = status
@@ -96,8 +95,9 @@ def member_create():
 @member_blueprint.post("/editar_socio")
 @login_required
 def member_edit():
+    print(request.args)
     form = EditMemberForm()
-
+    print(form.is_active_edit.data)
     if form.validate_on_submit():
         member = board.member_edit(member_id=form.member_id_edit.data, first_name=form.first_name_edit.data,
                                    last_name=form.last_name_edit.data, genre=form.genre_edit.data,
@@ -112,7 +112,11 @@ def member_edit():
             for error in form[item].errors:
                 print(f"{form[item].name}  {error}")
 
-    return redirect(url_for("members.member_index"))
+    page = request.args.get('page', 1, type=int)
+    apellido = request.args.get('apellido', '')
+    status = request.args.get('status', '0', type=str)
+
+    return redirect(url_for("members.member_index", page=page, apellido=apellido, status=status))
 
 
 # APIs de user
