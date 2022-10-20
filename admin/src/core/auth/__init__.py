@@ -16,6 +16,18 @@ def list_users_paginated(page, per_page):
     return all_paginated(page, per_page)
 
 
+def list_users_with_email(email, page, per_page):
+    return User.query.filter(User.email.like(f'%{email}%')).paginate(page=page, per_page=per_page)
+
+
+def list_users_with_email_status(email, status, page, per_page):
+    return User.query.filter(User.email.like(f'%{email}%'), User.is_active == status).paginate(page=page, per_page=per_page)
+
+
+def list_users_with_status(status, page, per_page):
+    return User.query.filter(User.is_active == status).paginate(page=page, per_page=per_page)
+
+
 def create_user(**kwargs):
     user = User(**kwargs)
     print(user.roles)

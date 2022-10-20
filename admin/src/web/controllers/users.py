@@ -28,11 +28,23 @@ def user_list_all():
     page = request.args.get('page', 1, type=int)
     per_page = board.get_configuration()
 
-    # Otra opcion para busqueda --> consultar por query param seteado y hacer una consulta sql apropiada
-    pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
-
     email = request.args.get('email', '')
     status = request.args.get('status', '', type=str)
+
+    # Otra opcion para busqueda --> consultar por query param seteado y hacer una consulta sql apropiada
+    # pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
+
+    if email:
+        if status == '2':
+            pagination = auth.list_users_with_email(email, page, per_page=per_page.elements_quantity)
+        else:
+            pagination = auth.list_users_with_email_status(email, status, page, per_page=per_page.elements_quantity)
+    else:
+        if status == '2':
+            pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
+        else:
+            pagination = auth.list_users_with_status(status, page, per_page=per_page.elements_quantity)
+
     form = EditUserForm()
     search_form = SearchUserForm()
     search_form.is_active_search.data = status
