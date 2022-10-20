@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, redirect, url_for, jsonify
+from flask import Blueprint, flash, redirect, url_for, jsonify, request
 from flask import render_template
 
 from core import board
@@ -7,16 +7,44 @@ from src.web.helpers.forms import MemberForm
 from src.web.helpers.forms import EditMemberForm
 from src.web.helpers.auth import login_required
 
+from src.web.helpers.forms import SearchMemberForm
+
 member_blueprint = Blueprint("members", __name__, url_prefix="/members")
 
 
-@member_blueprint.get("/")
+@member_blueprint.get("/listado")
 @login_required
 def member_index():
+
+    # Paginacion
+    page = request.args.get('page', 1, type=int)
+    per_page = board.get_configuration()
+
+    last_name = request.args.get('apellido', '')
+    status = request.args.get('status', '', type=str)
+
+    if last_name:
+        if status == '2':
+            pagination = board.list_members_with_last_name(last_name, page, per_page=per_page.elements_quantity)
+        else:
+            pagination = board.list_members_with_last_name_status(last_name, status, page,
+                                                                  per_page=per_page.elements_quantity)
+    else:
+        if status == '2':
+            pagination = board.all_paginated(page, per_page=per_page.elements_quantity)
+        else:
+            pagination = board.list_members_with_status(status, page, per_page=per_page.elements_quantity)
+
+    print(pagination.items)
     form = MemberForm()
     edit_form = EditMemberForm()
-    members = board.list_members()
-    return render_template("members/index.html", form=form, members=members, edit_form=edit_form)
+    # members = board.list_members()
+    search_form = SearchMemberForm()
+    search_form.last_name.data = last_name
+    search_form.is_active_search.data = status
+
+    return render_template("members/index.html", form=form, edit_form=edit_form, search_form=search_form,
+                           pagination=pagination)
 
 
 @member_blueprint.post("/cargar")
@@ -75,7 +103,8 @@ def member_edit():
                                    last_name=form.last_name_edit.data, genre=form.genre_edit.data,
                                    address=form.address_edit.data,
                                    is_active=True if form["is_active_edit"].data == "1" else False,
-                                   phone_num=form.phone_num_edit.data, email=form.email_edit.data)
+                                   phone_num=form["phone_num_edit"].data if form["phone_num_edit"].data else None,
+                                   email=form["email_edit"].data if form["email_edit"].data else None)
         flash("Socio editado exitosamente", "success")
     else:
         print("WTF happened")

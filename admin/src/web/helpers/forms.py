@@ -78,3 +78,11 @@ class SearchUserForm(FlaskForm):
                                    name="status")
 
     submit_search = SubmitField("Buscar")
+
+
+class SearchMemberForm(FlaskForm):
+    last_name = StringField('Apellido', validators=[Length(max=50), Optional()], name="apellido")
+    is_active_search = SelectField('Estado', choices=[('2', 'Todos'), ('1', 'Activo'), ('0', 'Bloqueado')], default="2",
+                                   name="status")
+
+    submit_search = SubmitField("Buscar")
