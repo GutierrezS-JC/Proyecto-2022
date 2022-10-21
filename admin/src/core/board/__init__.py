@@ -158,6 +158,15 @@ def get_list_members_with_status(status):
 
 
 # Discipline methods
+
+def create_discipline(**kwargs):
+    discipline = Discipline(**kwargs)
+    db.session.add(discipline)
+    db.session.commit()
+
+    return discipline
+
+
 def list_disciplines_with_name(discipline, page, per_page):
     return Discipline.query.filter(Discipline.name.like(f'%{discipline}%')).paginate(page=page, per_page=per_page,
                                                                                      error_out=False)

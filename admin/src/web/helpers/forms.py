@@ -95,7 +95,7 @@ class DisciplineForm(FlaskForm):
     instructors = StringField('Instructores', validators=[InputRequired()])
     days_hours = StringField('Dias y horarios', validators=[InputRequired()])
     monthly_fee = StringField('Costo mensual', validators=[InputRequired()])
-    is_active = SelectField('Estado', choices=[('1', 'Activo'), ('2', 'Inactivo')], default="1")
+    is_active = SelectField('Estado', choices=[('1', 'Habilitado'), ('2', 'Deshabilitado')], default="1")
 
     submit = SubmitField("Cargar Disciplina")
 
@@ -112,7 +112,7 @@ class EditDisciplineForm(FlaskForm):
 
 
 class SearchDisciplineForm(FlaskForm):
-    discipline_name = StringField('Apellido', validators=[Length(max=50), Optional()], name="disciplina")
+    discipline_name = StringField('Disciplina', validators=[Length(max=50), Optional()], name="disciplina")
     is_active_search = SelectField('Estado', choices=[('2', 'Todos'), ('1', 'Activo'), ('0', 'Bloqueado')], default="2",
                                    name="status")
 

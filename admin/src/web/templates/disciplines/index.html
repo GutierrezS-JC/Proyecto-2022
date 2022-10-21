@@ -24,41 +24,47 @@
         </div>
 
         <div class="modal-body">
-          <form class="row g-3">
-
+          <form class="row g-3" action="{{ url_for('disciplines.discipline_create', page=pagination.page, disciplina=search_form.discipline_name.data, status=search_form.is_active_search.data) }}" method="POST">
+            {{ form.csrf_token }}
             <div class="col-md-6">
-              <label for="inputNombre" class="form-label">Nombre</label>
-              <input type="text" class="form-control" id="inputNombre">
+              {{ form.name.label(class="mb-2") }}
+              {{ form.name(class="form-control") }}
             </div>
 
             <div class="col-md-6">
-              <label for="inputCategoria" class="form-label">Categoría</label>
-              <input type="text" class="form-control" id="inputCategoria">
+              {{ form.category.label(class="mb-2") }}
+              {{ form.category(class="form-control") }}
+            </div>
+
+            <div class="col-md-12">
+              {{ form.instructors.label(class="mb-2") }}
+              {{ form.instructors(class="form-control") }}
+            </div>
+
+            <div class="col-md-12">
+              {{ form.days_hours.label(class="mb-2") }}
+              {{ form.days_hours(class="form-control") }}
+            </div>
+
+            <div class="col-md-12">
+              {{ form.monthly_fee.label(class="mb-2") }}
+              {{ form.monthly_fee(class="form-control") }}
+            </div>
+
+            <div class="col-md-12">
+              {{ form.is_active.label(class="mb-2") }}
+              {{ form.is_active(class="form-select") }}
             </div>
 
             <div class="col-md-5">
-              <label for="inputInstructor" class="form-label">Instructor</label>
-              <input type="text" class="form-control" id="inputInstructor">
+                <label for="inputFechaCarga" class="form-label">Fecha de carga</label>
+                <input type="text" class="form-control" id="inputFechaCarga" disabled>
             </div>
 
-              <div class="col-md-7">
-              <label for="inputDiasHorarios" class="form-label">Días y Horarios</label>
-              <input type="text" class="form-control" id="inputDiasHorarios">
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              {{ form.submit(class="btn btn-success")}}
             </div>
-
-            <div class="col-md-12">
-              <label for="inputCosto" class="form-label">Costo mensual</label>
-              <input type="text" class="form-control" id="inputCosto">
-            </div>
-
-            <div class="col-md-12">
-              <label for="inputHabilitada" class="form-label">Habilitada</label>
-              <select id="inputHabilitada" class="form-select">
-                <option selected>...</option>
-                <option value="1">SI</option>
-                <option value="2">NO</option>
-              </select>
-            </div>  
           </form>  
         </div>
       </div>
@@ -104,15 +110,15 @@
               {% endif %}
             </div>
             <div class="card-body">
-              <h5 class="card-title">{{ discipline.name }}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">{{ discipline.category }}</h6>
+              <h5 class="card-title fw-bold">{{ discipline.name }}</h5>
+              <h6 class="card-subtitle mb-2 fw-semibold">{{ discipline.category }}</h6>
 
-              <b>Instructores:</b>
+              <em>Instructores:</em>
               <ul>
                 <li>{{ discipline.instructors }}</li>
               </ul>
 
-              <b>Dias y horarios:</b>
+              <em>Dias y horarios:</em>
               <ul>
                 <li>{{ discipline.days_hours }}</li>
               </ul>
@@ -135,4 +141,10 @@
 
   </div>
 </div>
+
+<script>
+  const today = new Date().toLocaleDateString("es-AR");
+  document.getElementById('inputFechaCarga').value = today
+
+</script>
 {% endblock %}
