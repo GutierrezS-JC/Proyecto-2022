@@ -3,6 +3,7 @@ from src.core.board.permission import Permission
 from src.core.board.rol import Rol
 from src.core.board.config import Config
 from src.core.board.member import Member
+from src.core.board.disciplines import Discipline
 
 
 # def assign_user(issue, user):
@@ -154,6 +155,26 @@ def get_all_members():
 
 def get_list_members_with_status(status):
     return Member.query.filter(Member.is_active == status)
+
+
+# Discipline methods
+def list_disciplines_with_name(discipline, page, per_page):
+    return Discipline.query.filter(Discipline.name.like(f'%{discipline}%')).paginate(page=page, per_page=per_page,
+                                                                                     error_out=False)
+
+
+def list_disciplines_with_name_status(discipline, status, page, per_page):
+    return Discipline.query.filter(Discipline.name.like(f'%{discipline}%'), Discipline.is_active == status) \
+        .paginate(page=page, per_page=per_page, error_out=False)
+
+
+def list_disciplines_paginated(page, per_page):
+    return Discipline.query.order_by(Discipline.id.asc()).paginate(page=page, per_page=per_page, error_out=False)
+
+
+def list_us_with_status(status, page, per_page):
+    return Discipline.query.filter(Discipline.is_active == status).paginate(page=page, per_page=per_page,
+                                                                            error_out=False)
 
 
 # APIs

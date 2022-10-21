@@ -71,15 +71,12 @@
   <form id="formBusquedda" name="formularioBusqueda" role="form">
     <div class="row mb-4">
       <div class="col-lg-3 d-flex">
-        <input type="text" id="apellidoBusqueda" class="form-control rounded text-black" placeholder="Ingrese una disciplina . . ." />
+        <input type="text" id="page" class="form-control rounded text-black" name="page" hidden value="1" />
+        {{ search_form.discipline_name(class="form-control rounded text-black", placeholder="Ingrese una disciplina...") }}
       </div>
 
       <div class="col-lg-2 text-start">
-        <select id="criterioBusqueda" class="form-select">
-          <option value="0" selected>Todos</option>
-          <option value="1">Habilitada</option>
-          <option value="2">Inhabilitada</option>
-        </select>
+        {{ search_form.is_active_search(class="form-select") }}
       </div>
 
       <div class="col-lg-1">
@@ -96,59 +93,34 @@
     </div>
 
     <div id="cardsContainer" class="row">
-      <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 cardFlex">
-        <div class="card" style="width: 18rem; height: 24rem">
-          <div class="card-header"> <span class="badge rounded-pill text-bg-success text-end">Habilitado</span> </div>
-          <div class="card-body">
-            <h5 class="card-title">Fuboool</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Categoria 2010</h6>
-
-            <b>Instructores:</b>
-            <ul>
-              <li>Manaos Light, Pepe Sapo, JijoDeBu</li>
-            </ul>
-
-            <b>Dias y horarios:</b>
-            <ul>
-              <li>Lunes y Miercoles 17:00 - 19:00</li>
-            </ul>
-
-            <div>
-              <b>Costo mensual:</b> $3000
+      {% for discipline in pagination.items %}
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 cardFlex">
+          <div class="card" style="width: 18rem; height: 24rem">
+            <div class="card-header">
+              {% if discipline.is_active == True %}
+                <span class="badge rounded-pill text-bg-success text-end">Habilitado</span>
+              {% else %}
+                <span class="badge rounded-pill text-bg-danger text-end">Deshabilitado</span>
+              {% endif %}
             </div>
-          </div>
+            <div class="card-body">
+              <h5 class="card-title">{{ discipline.name }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{ discipline.category }}</h6>
 
-          <div class="card-footer bg-transparent">
-            <div>
-              <button type="button" class="btn btn-sm btn-outline-primary">Editar</button>
-              <button type="button" class="btn btn-sm btn-outline-danger">Eliminar</button>
+              <b>Instructores:</b>
+              <ul>
+                <li>{{ discipline.instructors }}</li>
+              </ul>
+
+              <b>Dias y horarios:</b>
+              <ul>
+                <li>{{ discipline.days_hours }}</li>
+              </ul>
+
+              <div>
+                <b>Costo mensual:</b> ${{ discipline.monthly_fee }}
+              </div>
             </div>
-          </div>
-
-        </div>
-      </div>
-
-      <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 cardFlex">
-        <div class="card" style="width: 18rem; height: 24rem">
-          <div class="card-header"> <span class="badge rounded-pill text-bg-danger text-end">Deshabilitado</span> </div>
-          <div class="card-body">
-            <h5 class="card-title">Fuboool</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Categoria 2010</h6>
-
-            <b>Instructores:</b>
-            <ul>
-              <li>Manaos Light, Pepe Sapo</li>
-            </ul>
-
-            <b>Dias y horarios:</b>
-            <ul>
-              <li>Lunes y Miercoles 17:00 - 19:00</li>
-            </ul>
-
-            <div>
-              <b>Costo mensual:</b> $3000
-            </div>
-          </div>
 
             <div class="card-footer bg-transparent">
               <div>
@@ -156,10 +128,11 @@
                 <button type="button" class="btn btn-sm btn-outline-danger">Eliminar</button>
               </div>
             </div>
+          </div>
         </div>
-      </div>
-
+      {% endfor %}
     </div>
+
   </div>
 </div>
 {% endblock %}
