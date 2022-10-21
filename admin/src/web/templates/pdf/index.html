@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+  </style>
+    <meta charset="UTF-8">
+    <title>PDF - Reporte</title>
+</head>
+<body>
+    <table>
+      <tr>
+        <th>Nro de socio</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Nro de documento</th>
+        <th>Genero</th>
+        <th>Direccion</th>
+        <th>Email</th>
+      </tr>
+      {% for member in list %}
+        <tr>
+          <td>{{ member.member_num }}</td>
+          <td>{{ member.first_name }}</td>
+          <td>{{ member.last_name }}</td>
+          <td>{{ member.doc_num }}</td>
+          {% if member.genre == 1 %}
+              <td> M </td>
+          {% elif member.genre == 2%}
+              <td> F </td>
+          {% else %}
+              <td> X </td>
+          {% endif %}
+
+          <td>{{ member.address }}</td>
+
+          {% if member.email == None %}
+              <td> - </td>
+          {% else %}
+              <td> {{ member.email }} </td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </table>
+</body>
+</html>
