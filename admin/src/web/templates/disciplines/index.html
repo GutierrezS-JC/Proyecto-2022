@@ -2,11 +2,11 @@
 {% block title %}Disciplinas{% endblock %}
 {% block head %}
   {{ super() }}
-  <link rel="stylesheet" href="{{ url_for('static', filename='users.css') }}" >
+  <link rel="stylesheet" href="{{ url_for('static', filename='disciplinas.css') }}" >
 {% endblock %}
 
 {% block content %}
-<div class="container mt-4 disciplinaContainer">
+<div class="container mt-4 userContainer mb-5">
   <h1 class="display-3">Gestion de disciplinas</h1>
   <div class="row">
     <div class="col">
@@ -89,60 +89,76 @@
   </form>
 
   <div class="mt-5">
-    <div class="row mb-4">
+    <div class="row mb-2">
       <div class="col-12">
-        <h1 class="h3">Listado de Disciplinas</h1>
-      </div>
-
-      <div class="col-12">
-        <button type="submit" id="btnCsv" class="btn btn-sm btn-outline-secondary">Exportar CSV</button>
-        <button type="submit" id="btnPdf" class="btn btn-sm btn-outline-secondary ms-2">Exportar PDF</button>
+        <h1 class="h3">Disciplinas</h1>
       </div>
     </div>
 
-    <div class="table-responsive-lg">
-      <table class="table table-bordered align-middle">
-        <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Nombre</th>
-          <th scope="col">Categoría</th>
-          <th scope="col">Instructores</th>
-          <th scope="col">Días y Horarios</th>
-          <th scope="col">Costo Mensual</th>
-          <th scope="col">Habilitada</th>
-          <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row"> 1 </th>
-            <td>Fútbol</td>
-            <td>2010</td>
-            <td>Juan Perez, Nicolas Rodriguez</td>
-            <td>Lunes y Miercoles - 17:00-19:00</td>
-            <td>$3000</td>
-            <td>SI</td>
-            <td class="text-center">
-              <button type="button" class="btn btn-secondary btn-sm">Editar</button>
-              <button type="button" class="btn btn-danger btn-sm mt-2 mt-lg-0">Eliminar</button>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row"> 1 </th>
-            <td>Fútbol</td>
-            <td>2010</td>
-            <td>Juan Perez, Nicolas Rodriguez</td>
-            <td>Lunes y Miercoles - 17:00-19:00</td>
-            <td>$3000</td>
-            <td>SI</td>
-            <td class="text-center">
-              <button type="button" class="btn btn-secondary btn-sm">Editar</button>
-              <button type="button" class="btn btn-danger btn-sm mt-2 mt-lg-0">Eliminar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div id="cardsContainer" class="row">
+      <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 cardFlex">
+        <div class="card" style="width: 18rem; height: 24rem">
+          <div class="card-header"> <span class="badge rounded-pill text-bg-success text-end">Habilitado</span> </div>
+          <div class="card-body">
+            <h5 class="card-title">Fuboool</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Categoria 2010</h6>
+
+            <b>Instructores:</b>
+            <ul>
+              <li>Manaos Light, Pepe Sapo, JijoDeBu</li>
+            </ul>
+
+            <b>Dias y horarios:</b>
+            <ul>
+              <li>Lunes y Miercoles 17:00 - 19:00</li>
+            </ul>
+
+            <div>
+              <b>Costo mensual:</b> $3000
+            </div>
+          </div>
+
+          <div class="card-footer bg-transparent">
+            <div>
+              <button type="button" class="btn btn-sm btn-outline-primary">Editar</button>
+              <button type="button" class="btn btn-sm btn-outline-danger">Eliminar</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 cardFlex">
+        <div class="card" style="width: 18rem; height: 24rem">
+          <div class="card-header"> <span class="badge rounded-pill text-bg-danger text-end">Deshabilitado</span> </div>
+          <div class="card-body">
+            <h5 class="card-title">Fuboool</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Categoria 2010</h6>
+
+            <b>Instructores:</b>
+            <ul>
+              <li>Manaos Light, Pepe Sapo</li>
+            </ul>
+
+            <b>Dias y horarios:</b>
+            <ul>
+              <li>Lunes y Miercoles 17:00 - 19:00</li>
+            </ul>
+
+            <div>
+              <b>Costo mensual:</b> $3000
+            </div>
+          </div>
+
+            <div class="card-footer bg-transparent">
+              <div>
+                <button type="button" class="btn btn-sm btn-outline-primary">Editar</button>
+                <button type="button" class="btn btn-sm btn-outline-danger">Eliminar</button>
+              </div>
+            </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
