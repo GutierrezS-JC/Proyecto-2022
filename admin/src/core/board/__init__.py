@@ -181,9 +181,13 @@ def list_disciplines_paginated(page, per_page):
     return Discipline.query.order_by(Discipline.id.asc()).paginate(page=page, per_page=per_page, error_out=False)
 
 
-def list_us_with_status(status, page, per_page):
+def list_disciplines_with_status(status, page, per_page):
     return Discipline.query.filter(Discipline.is_active == status).paginate(page=page, per_page=per_page,
                                                                             error_out=False)
+
+
+def get_discipline_by_id(discipline_id):
+    return Discipline.query.filter_by(id=discipline_id).first()
 
 
 # APIs
@@ -204,4 +208,16 @@ def member_json(member):
         'is_active': member.is_active,
         'phone_num': member.phone_num,
         'email': member.email
+    }
+
+
+def discipline_json(discipline):
+    return {
+        'id': discipline.id,
+        'name': discipline.name,
+        'category': discipline.category,
+        'instructors': discipline.instructors,
+        'days_hours': discipline.days_hours,
+        'monthly_fee': discipline.monthly_fee,
+        'is_active': discipline.is_active
     }

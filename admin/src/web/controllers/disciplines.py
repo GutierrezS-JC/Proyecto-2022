@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, url_for, request, flash
+from flask import Blueprint, redirect, url_for, request, flash, jsonify
 from flask import render_template
 from flask import session
 
@@ -9,7 +9,7 @@ from src.web.helpers.forms import DisciplineForm
 from src.web.helpers.forms import EditDisciplineForm
 from src.web.helpers.forms import SearchDisciplineForm
 
-disciplines_blueprint = Blueprint("disciplines", __name__, url_prefix="/disciplinas")
+disciplines_blueprint = Blueprint("disciplines", __name__, url_prefix="/disciplines")
 
 
 @disciplines_blueprint.get("/listado")
@@ -32,7 +32,7 @@ def discipline_index():
         if status == '2':
             pagination = board.list_disciplines_paginated(page, per_page=per_page.elements_quantity)
         else:
-            pagination = board.list_us_with_status(status, page, per_page=per_page.elements_quantity)
+            pagination = board.list_disciplines_with_status(status, page, per_page=per_page.elements_quantity)
 
     form = DisciplineForm()
     edit_form = EditDisciplineForm()
@@ -72,3 +72,39 @@ def discipline_create():
     status = request.args.get('status', '0', type=str)
 
     return redirect(url_for("disciplines.discipline_index", page=page, discipline=discipline, status=status))
+
+
+@disciplines_blueprint.post("/editar_socio")
+@login_required
+def discipline_edit():
+    form = EditDisciplineForm()
+    if form.validate_on_submit():
+        member = board.discipline_edit(name=form.member_id_edit.data, category=form.first_name_edit.data,
+                                   instructors=form.last_name_edit.data, days_hours=form.genre_edit.data,
+                                   monthly_fee=form.address_edit.data,
+                                   is_active=True if form["is_active_edit"].data == "1" else False)
+        flash("Disciplina editada exitosamente", "success")
+    else:
+        print("WTF happened")
+        for item in form.errors:
+            for error in form[item].errors:
+                print(f"{form[item].name}  {error}")
+
+    page = request.args.get('page', 1, type=int)
+    disciplina = request.args.get('apellido', '')
+    status = request.args.get('status', '0', type=str)
+
+    return redirect(url_for("disciplines.discipline_index", page=page, disciplina=disciplina, status=status))
+
+
+# APIs de disciplina
+@disciplines_blueprint.route("/api/discipline/<discipline_id>")
+@login_required
+def get_discipline(discipline_id):
+    discipline = board.get_discipline_by_id(discipline_id)
+    print(discipline)
+    if discipline is None:
+        return jsonify({'message': 'La disciplina no existe'}), 404
+
+    discipline_json = board.discipline_json(discipline)
+    return jsonify({'discipline': discipline_json})

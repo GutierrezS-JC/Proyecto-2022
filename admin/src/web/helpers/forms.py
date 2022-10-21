@@ -101,11 +101,12 @@ class DisciplineForm(FlaskForm):
 
 
 class EditDisciplineForm(FlaskForm):
-    name_edit = HiddenField('member_id')
-    category_edit = StringField('Nombre', validators=[Length(max=50)])
-    instructors_edit = StringField('Apellido', validators=[Length(max=50)])
-    days_hours_edit = SelectField('Genero', choices=[('1', 'M'), ('2', 'F'), ('3', 'Otro')], default="1")
-    monthly_fee_edit = StringField('Direccion')
+    discipline_id_edit = HiddenField('discipline_id')
+    name_edit = StringField('Nombre', validators=[InputRequired(), Length(max=50)])
+    category_edit = StringField('Categoria', validators=[InputRequired(), Length(max=50)])
+    instructors_edit = StringField('Instructores', validators=[InputRequired()])
+    days_hours_edit = StringField('Dias y horarios', validators=[InputRequired()])
+    monthly_fee_edit = StringField('Costo mensual', validators=[InputRequired()])
     is_active_edit = SelectField('Estado', choices=[('1', 'Activo'), ('0', 'Inactivo')], default="1")
 
     submit_edit = SubmitField("Guardar cambios")
