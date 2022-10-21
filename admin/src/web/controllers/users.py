@@ -43,6 +43,7 @@ def user_list_all():
         if status == '2':
             pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
         else:
+            print(status)
             pagination = auth.list_users_with_status(status, page, per_page=per_page.elements_quantity)
 
     form = EditUserForm()
@@ -106,6 +107,10 @@ def user_edit():
     form = EditUserForm()
     form.roles.choices = [(rol.id, rol.name) for rol in board.get_roles()]
 
+    page = request.args.get('page', 1, type=int)
+    email = request.args.get('email', '')
+    status = request.args.get('status', '0', type=str)
+
     if form.validate_on_submit():
         r_records = board.get_roles()
         accepted = []
@@ -116,7 +121,7 @@ def user_edit():
 
         if not accepted:
             flash("Error. El usuario debe tener al menos un rol asignado", "danger")
-            return redirect(url_for("users.user_list_all", ))
+            return redirect(url_for("users.user_list_all", page=page, email=email, status=status))
 
         user = auth.user_edit(user_id=form.user_id.data, first_name=form.first_name.data, last_name=form.last_name.data,
                               email=form.email.data, username=form.username.data, roles=accepted)
@@ -127,9 +132,6 @@ def user_edit():
             for error in form[item].errors:
                 print(f"{form[item].name}  {error}")
 
-    page = request.args.get('page', 1, type=int)
-    email = request.args.get('email', '')
-    status = request.args.get('status', '0', type=str)
     return redirect(url_for('users.user_list_all', page=page, email=email, status=status))
 
 
