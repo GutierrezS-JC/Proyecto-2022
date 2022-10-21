@@ -1,11 +1,12 @@
 import os
 from datetime import datetime
 
-from flask import Blueprint, flash, redirect, url_for, jsonify, request, Response
+from flask import Blueprint, flash, redirect, url_for, jsonify, request, Response, make_response
 from flask import render_template
 
 import io
 import csv
+import pdfkit
 
 from core import board
 
@@ -127,6 +128,7 @@ def member_edit():
 
 # CSV
 @member_blueprint.route('download/report/csv')
+@login_required
 def download_report_csv():
     last_name = request.args.get('apellido', '')
     status = request.args.get('status', '', type=str)
@@ -161,6 +163,37 @@ def download_report_csv():
         writer.writerow(line)
     output.seek(0)
     return Response(output, mimetype="text/csv", headers={'Content-Disposition': f'attachment; filename={name_file}'})
+
+
+# PDF
+@member_blueprint.route('download/report/pdf')
+@login_required
+def download_report_pdf():
+    last_name = request.args.get('apellido', '')
+    status = request.args.get('status', '', type=str)
+
+    if last_name:
+        if status == '2':
+            result = board.get_list_members_with_last_name(last_name)
+        else:
+            result = board.get_list_members_with_last_name_status(last_name, status)
+    else:
+        if status == '2':
+            result = board.get_all_members()
+        else:
+            result = board.get_list_members_with_status(status)
+
+    fecha = datetime.today().strftime('%d-%m-%Y')
+    file_name = f"Listado_Socios_{fecha}.pdf"
+
+    rendered = render_template('pdf/index.html', list=result)
+    pdf = pdfkit.from_string(rendered, False)
+
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename={file_name}'
+
+    return response
 
 
 # APIs de user
