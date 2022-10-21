@@ -77,13 +77,15 @@ def member_create():
             flash("Error. El numero de documento ya se encuentra registrado", "danger")
         else:
             member_num_db = board.get_last_member_num()
+
+            member_reg = 1 if member_num_db is None else (int(member_num_db.member_num) + 1)
             board.create_member(
                 first_name=form["first_name"].data,
                 last_name=form["last_name"].data,
                 doc_type=form["doc_type"].data,
                 doc_num=form["doc_num"].data,
                 genre=form["genre"].data,
-                member_num=member_num_db['id'] + 1,
+                member_num=member_reg,
                 address=form["address"].data,
                 is_active=True if form["is_active"].data == "1" else False,
                 phone_num=form["phone_num"].data if form["phone_num"].data else None,
@@ -96,7 +98,11 @@ def member_create():
             for error in form[item].errors:
                 print(f"{form[item].name}  {error}")
 
-    return redirect(url_for("members.member_index"))
+    page = request.args.get('page', 1, type=int)
+    apellido = request.args.get('apellido', '')
+    status = request.args.get('status', '0', type=str)
+
+    return redirect(url_for("members.member_index", page=page, apellido=apellido, status=status))
 
 
 @member_blueprint.post("/editar_socio")
