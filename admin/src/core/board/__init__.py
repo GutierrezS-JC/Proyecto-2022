@@ -106,7 +106,8 @@ def get_member_by_doc_num(doc_num):
 
 
 def get_last_member_num():
-    return db.engine.execute("SELECT * FROM members WHERE id IN (SELECT MAX(id) FROM members)").first()
+    return db.engine.execute("SELECT coalesce(member_num, '0') as member_num FROM members"
+                             " WHERE id IN (SELECT MAX(id) FROM members)").first()
 
 
 def get_member_by_id(member_id):

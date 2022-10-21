@@ -24,7 +24,7 @@
           </div>
 
           <div class="modal-body">
-            <form class="row g-3" action="{{ url_for('members.member_create') }}" method="POST">
+            <form class="row g-3" action="{{ url_for('members.member_create', page=pagination.page, apellido=search_form.last_name.data, status=search_form.is_active_search.data) }}" method="POST">
                 {{ form.csrf_token }}
               <div class="col-md-6">
                 {{ form.first_name.label(class="mb-2") }}
