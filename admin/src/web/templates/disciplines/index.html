@@ -98,7 +98,7 @@
       </div>
     </div>
 
-    <div id="cardsContainer" class="row">
+    <div id="cardsContainer" class="row mb-5">
       {% for discipline in pagination.items %}
         <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 cardFlex">
           <div class="card" style="width: 18rem; height: 24rem">
@@ -140,6 +140,41 @@
     </div>
 
   </div>
+  <div class="pagination mt-4 d-flex justify-content-center">
+    {% if pagination.has_prev %}
+        <span>
+            <a class='page-number text-decoration-none me-2' href="{{ url_for('disciplines.discipline_index', page=pagination.prev_num, disciplina=search_form.discipline_name.data, status=search_form.is_active_search.data ) }}"
+            style="color: inherit;">
+                {{ '<<' }}
+            </a>
+        </span>
+    {% endif %}
+
+    <div>
+      <div class="btn-toolbar" role="toolbar">
+        <div class="btn-group" role="group" aria-label="First group">
+          {% for number in pagination.iter_pages() %}
+            {% if pagination.page != number %}
+              <a class="btn btn-outline-dark btn-sm"
+                 href="{{ url_for('disciplines.discipline_index', page=number, disciplina=search_form.discipline_name.data, status=search_form.is_active_search.data) }}" role="button">
+                {{ number }}
+              </a>
+            {% else %}
+              <button type="button" class="btn btn-dark btn-sm">{{ number }}</button>
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% if pagination.has_next %}
+          <span>
+            <a class='page-number text-decoration-none ms-2'  style="color: inherit"
+                href="{{ url_for('disciplines.discipline_index', page=pagination.next_num, disciplina=search_form.discipline_name.data, status=search_form.is_active_search.data ) }}">
+                {{ '>>' }}
+            </a>
+          </span>
+        {% endif %}
+      </div>
+    </div>
+</div>
 </div>
 
 <script>

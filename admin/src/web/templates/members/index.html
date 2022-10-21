@@ -243,29 +243,29 @@
     {% endif %}
 
     <div>
-    <div class="btn-toolbar" role="toolbar">
-      <div class="btn-group" role="group" aria-label="First group">
-        {% for number in pagination.iter_pages() %}
-          {% if pagination.page != number %}
+      <div class="btn-toolbar" role="toolbar">
+        <div class="btn-group" role="group" aria-label="First group">
+          {% for number in pagination.iter_pages() %}
+            {% if pagination.page != number %}
               <a class="btn btn-outline-dark btn-sm"
                  href="{{ url_for('members.member_index', page=number, apellido=search_form.last_name.data, status=search_form.is_active_search.data) }}" role="button">
                 {{ number }}
               </a>
-        {% else %}
-                <button type="button" class="btn btn-dark btn-sm">{{ number }}</button>
-        {% endif %}
-    {% endfor %}
-    </div>
-    {% if pagination.has_next %}
-        <span>
+            {% else %}
+              <button type="button" class="btn btn-dark btn-sm">{{ number }}</button>
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% if pagination.has_next %}
+          <span>
             <a class='page-number text-decoration-none ms-2'  style="color: inherit"
                 href="{{ url_for('members.member_index', page=pagination.next_num, apellido=search_form.last_name.data, status=search_form.is_active_search.data ) }}">
                 {{ '>>' }}
             </a>
-        </span>
-    {% endif %}
+          </span>
+        {% endif %}
+      </div>
     </div>
-  </div>
 </div>
 
 </div>
