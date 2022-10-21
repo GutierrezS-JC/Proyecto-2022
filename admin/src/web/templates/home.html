@@ -52,7 +52,7 @@
 
         <div class="col">
             <div class="card" id="gestionDisciplinas" onmouseover="imHovered(this)" onmouseout="imNotHovered(this)" style="width: 18rem; height: 15em">
-                <a href="{{url_for('disciplinas.disciplinas_index') }}" class="linkNone">
+                <a href="{{url_for('disciplines.discipline_index', page=1, disciplina='',status='2') }}" class="linkNone">
                     <div class="card-body">
                         <h5 class="card-title">Gestion de disciplinas</h5>
                         <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>

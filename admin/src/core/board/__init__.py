@@ -3,6 +3,7 @@ from src.core.board.permission import Permission
 from src.core.board.rol import Rol
 from src.core.board.config import Config
 from src.core.board.member import Member
+from src.core.board.disciplines import Discipline
 
 
 # def assign_user(issue, user):
@@ -156,6 +157,55 @@ def get_list_members_with_status(status):
     return Member.query.filter(Member.is_active == status)
 
 
+# Discipline methods
+
+def create_discipline(**kwargs):
+    discipline = Discipline(**kwargs)
+    db.session.add(discipline)
+    db.session.commit()
+
+    return discipline
+
+
+def discipline_edit(discipline_id, name, category, instructors, days_hours, monthly_fee, is_active):
+    discipline = get_discipline_by_id(discipline_id)
+
+    discipline.name = name
+    discipline.category = category
+    discipline.instructors = instructors
+    discipline.days_hours = days_hours
+    discipline.monthly_fee = monthly_fee
+    discipline.is_active = is_active
+
+    db.session.add(discipline)
+    db.session.commit()
+
+    return discipline
+
+
+def list_disciplines_with_name(discipline, page, per_page):
+    return Discipline.query.filter(Discipline.name.like(f'%{discipline}%')).paginate(page=page, per_page=per_page,
+                                                                                     error_out=False)
+
+
+def list_disciplines_with_name_status(discipline, status, page, per_page):
+    return Discipline.query.filter(Discipline.name.like(f'%{discipline}%'), Discipline.is_active == status) \
+        .paginate(page=page, per_page=per_page, error_out=False)
+
+
+def list_disciplines_paginated(page, per_page):
+    return Discipline.query.order_by(Discipline.id.asc()).paginate(page=page, per_page=per_page, error_out=False)
+
+
+def list_disciplines_with_status(status, page, per_page):
+    return Discipline.query.filter(Discipline.is_active == status).paginate(page=page, per_page=per_page,
+                                                                            error_out=False)
+
+
+def get_discipline_by_id(discipline_id):
+    return Discipline.query.filter_by(id=discipline_id).first()
+
+
 # APIs
 def rol_json(rol):
     return {
@@ -174,4 +224,16 @@ def member_json(member):
         'is_active': member.is_active,
         'phone_num': member.phone_num,
         'email': member.email
+    }
+
+
+def discipline_json(discipline):
+    return {
+        'id': discipline.id,
+        'name': discipline.name,
+        'category': discipline.category,
+        'instructors': discipline.instructors,
+        'days_hours': discipline.days_hours,
+        'monthly_fee': discipline.monthly_fee,
+        'is_active': discipline.is_active
     }

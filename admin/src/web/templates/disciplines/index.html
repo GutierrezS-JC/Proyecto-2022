@@ -1,0 +1,257 @@
+{% extends "layout.html" %}
+{% block title %}Disciplinas{% endblock %}
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='disciplinas.css') }}" >
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 userContainer mb-5">
+  <h1 class="display-3">Gestion de disciplinas</h1>
+  <div class="row">
+    <div class="col">
+      <button class="btn btn-dark btn-padding mt-2" data-bs-toggle="modal" data-bs-target="#cargarDisciplinaModal" type="button">Cargar una nueva disciplina</button>
+    </div>
+  </div>
+
+  <!-- MODAL CREATE -->
+  <div class="modal fade" id="cargarDisciplinaModal" tabindex="-1" aria-labelledby="cargarDisciplinaModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="cargarDisciplinaLabel">Nueva Disciplina</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <form class="row g-3" action="{{ url_for('disciplines.discipline_create', page=pagination.page, disciplina=search_form.discipline_name.data, status=search_form.is_active_search.data) }}" method="POST">
+            {{ form.csrf_token }}
+            <div class="col-md-6">
+              {{ form.name.label(class="mb-2") }}
+              {{ form.name(class="form-control") }}
+            </div>
+
+            <div class="col-md-6">
+              {{ form.category.label(class="mb-2") }}
+              {{ form.category(class="form-control") }}
+            </div>
+
+            <div class="col-md-12">
+              {{ form.instructors.label(class="mb-2") }}
+              {{ form.instructors(class="form-control") }}
+            </div>
+
+            <div class="col-md-12">
+              {{ form.days_hours.label(class="mb-2") }}
+              {{ form.days_hours(class="form-control") }}
+            </div>
+
+            <div class="col-md-12">
+              {{ form.monthly_fee.label(class="mb-2") }}
+              {{ form.monthly_fee(class="form-control") }}
+            </div>
+
+            <div class="col-md-12">
+              {{ form.is_active.label(class="mb-2") }}
+              {{ form.is_active(class="form-select") }}
+            </div>
+
+            <div class="col-md-5">
+                <label for="inputFechaCarga" class="form-label">Fecha de carga</label>
+                <input type="text" class="form-control" id="inputFechaCarga" disabled>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              {{ form.submit(class="btn btn-success")}}
+            </div>
+          </form>  
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL EDIT -->
+  <div class="modal fade" id="editarDisciplinaModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editarMemberModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title" id="editarDisciplinaLabel">Editar usuario</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+          </div>
+
+          <div class="modal-body">
+            <form class="row g-3" action="{{ url_for('disciplines.discipline_edit', page=pagination.page, disciplina=search_form.discipline_name.data, status=search_form.is_active_search.data ) }}" method="POST" >
+              {{ edit_form.csrf_token }}
+              <div class="col-md-6">
+                {{ edit_form.name_edit.label }}
+                {{ edit_form.name_edit(class="form-control") }}
+              </div>
+
+              <div class="col-md-6">
+                  {{ edit_form.category_edit.label }}
+                  {{ edit_form.category_edit(class="form-control") }}
+              </div>
+
+              <div class="col-12">
+                  {{ edit_form.instructors_edit.label }}
+                  {{ edit_form.instructors_edit(class="form-control") }}
+              </div>
+
+              <div class="col-12">
+                  {{ edit_form.days_hours_edit.label }}
+                  {{ edit_form.days_hours_edit(class="form-control") }}
+              </div>
+
+              <div class="col-12">
+                  {{ edit_form.monthly_fee_edit.label }}
+                  {{ edit_form.monthly_fee_edit(class="form-control") }}
+              </div>
+
+              <div class="col-12">
+                  {{ edit_form.is_active_edit.label }}
+                  {{ edit_form.is_active_edit(class="form-select") }}
+              </div>
+
+              <div class="col-12" hidden>
+                  {{ edit_form.discipline_id_edit(class="form-control") }}
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                {{ edit_form.submit_edit(class="btn btn-success btn-padding") }}
+              </div>
+            </form>
+          </div>
+        </div>
+    </div>
+  </div>
+
+
+  <hr>
+  <h2 class="h3">Busqueda</h2>
+  <form id="formBusquedda" name="formularioBusqueda" role="form">
+    <div class="row mb-4">
+      <div class="col-lg-3 d-flex">
+        <input type="text" id="page" class="form-control rounded text-black" name="page" hidden value="1" />
+        {{ search_form.discipline_name(class="form-control rounded text-black", placeholder="Ingrese una disciplina...") }}
+      </div>
+
+      <div class="col-lg-2 text-start">
+        {{ search_form.is_active_search(class="form-select") }}
+      </div>
+
+      <div class="col-lg-1">
+        <button type="submit" id="btnBusqueda" class="btn btn-outline-dark">Buscar</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="mt-5">
+    <div class="row mb-2">
+      <div class="col-12">
+        <h1 class="h3">Disciplinas</h1>
+      </div>
+    </div>
+
+    <div id="cardsContainer" class="row mb-5">
+      {% for discipline in pagination.items %}
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 cardFlex">
+          <div class="card" style="width: 18rem; height: 24rem">
+            <div class="card-header">
+              {% if discipline.is_active == True %}
+                <span class="badge rounded-pill text-bg-success text-end">Habilitado</span>
+              {% else %}
+                <span class="badge rounded-pill text-bg-danger text-end">Deshabilitado</span>
+              {% endif %}
+            </div>
+            <div class="card-body">
+              <h5 class="card-title fw-bold">{{ discipline.name }}</h5>
+              <h6 class="card-subtitle mb-2 fw-semibold">{{ discipline.category }}</h6>
+
+              <em>Instructores:</em>
+              <ul>
+                <li>{{ discipline.instructors }}</li>
+              </ul>
+
+              <em>Dias y horarios:</em>
+              <ul>
+                <li>{{ discipline.days_hours }}</li>
+              </ul>
+
+              <div>
+                <b>Costo mensual:</b> ${{ discipline.monthly_fee }}
+              </div>
+            </div>
+
+            <div class="card-footer bg-transparent">
+              <div>
+                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                        data-bs-target="#editarDisciplinaModal" onclick="getDisciplineToEdit({{discipline.id}})">Editar</button>
+                <button type="button" class="btn btn-sm btn-outline-danger">Eliminar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+  <div class="pagination mt-4 d-flex justify-content-center">
+    {% if pagination.has_prev %}
+        <span>
+            <a class='page-number text-decoration-none me-2' href="{{ url_for('disciplines.discipline_index', page=pagination.prev_num, disciplina=search_form.discipline_name.data, status=search_form.is_active_search.data ) }}"
+            style="color: inherit;">
+                {{ '<<' }}
+            </a>
+        </span>
+    {% endif %}
+
+    <div>
+      <div class="btn-toolbar" role="toolbar">
+        <div class="btn-group" role="group" aria-label="First group">
+          {% for number in pagination.iter_pages() %}
+            {% if pagination.page != number %}
+              <a class="btn btn-outline-dark btn-sm"
+                 href="{{ url_for('disciplines.discipline_index', page=number, disciplina=search_form.discipline_name.data, status=search_form.is_active_search.data) }}" role="button">
+                {{ number }}
+              </a>
+            {% else %}
+              <button type="button" class="btn btn-dark btn-sm">{{ number }}</button>
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% if pagination.has_next %}
+          <span>
+            <a class='page-number text-decoration-none ms-2'  style="color: inherit"
+                href="{{ url_for('disciplines.discipline_index', page=pagination.next_num, disciplina=search_form.discipline_name.data, status=search_form.is_active_search.data ) }}">
+                {{ '>>' }}
+            </a>
+          </span>
+        {% endif %}
+      </div>
+    </div>
+</div>
+</div>
+
+<script>
+  const today = new Date().toLocaleDateString("es-AR");
+  document.getElementById('inputFechaCarga').value = today
+
+  async function getDisciplineToEdit(disciplineId){
+    let response = await fetch("{{request.url_root}}disciplines/api/discipline/"+ disciplineId)
+    let data = await response.json()
+
+    document.getElementById('name_edit').value = data.discipline.name
+    document.getElementById('category_edit').value = data.discipline.category
+    document.getElementById('instructors_edit').value = data.discipline.instructors
+    document.getElementById('days_hours_edit').value = data.discipline.days_hours
+    document.getElementById('monthly_fee_edit').value = data.discipline.monthly_fee
+    document.getElementById('is_active_edit').value = data.discipline.is_active ? 1 : 0
+
+    document.getElementById('discipline_id_edit').value = data.discipline.id
+ }
+</script>
+{% endblock %}

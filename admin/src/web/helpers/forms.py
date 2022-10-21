@@ -86,3 +86,35 @@ class SearchMemberForm(FlaskForm):
                                    name="status")
 
     submit_search = SubmitField("Buscar")
+
+
+# Discipline Forms
+class DisciplineForm(FlaskForm):
+    name = StringField('Nombre', validators=[InputRequired(), Length(max=50)])
+    category = StringField('Categoria', validators=[InputRequired(), Length(max=50)])
+    instructors = StringField('Instructores', validators=[InputRequired()])
+    days_hours = StringField('Dias y horarios', validators=[InputRequired()])
+    monthly_fee = StringField('Costo mensual', validators=[InputRequired()])
+    is_active = SelectField('Estado', choices=[('1', 'Habilitado'), ('2', 'Deshabilitado')], default="1")
+
+    submit = SubmitField("Cargar Disciplina")
+
+
+class EditDisciplineForm(FlaskForm):
+    discipline_id_edit = HiddenField('discipline_id')
+    name_edit = StringField('Nombre', validators=[InputRequired(), Length(max=50)])
+    category_edit = StringField('Categoria', validators=[InputRequired(), Length(max=50)])
+    instructors_edit = StringField('Instructores', validators=[InputRequired()])
+    days_hours_edit = StringField('Dias y horarios', validators=[InputRequired()])
+    monthly_fee_edit = StringField('Costo mensual', validators=[InputRequired()])
+    is_active_edit = SelectField('Estado', choices=[('1', 'Activo'), ('0', 'Inactivo')], default="1")
+
+    submit_edit = SubmitField("Guardar cambios")
+
+
+class SearchDisciplineForm(FlaskForm):
+    discipline_name = StringField('Disciplina', validators=[Length(max=50), Optional()], name="disciplina")
+    is_active_search = SelectField('Estado', choices=[('2', 'Todos'), ('1', 'Activo'), ('0', 'Bloqueado')], default="2",
+                                   name="status")
+
+    submit_search = SubmitField("Buscar")
