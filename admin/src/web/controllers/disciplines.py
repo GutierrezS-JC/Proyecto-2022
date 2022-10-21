@@ -79,9 +79,9 @@ def discipline_create():
 def discipline_edit():
     form = EditDisciplineForm()
     if form.validate_on_submit():
-        member = board.discipline_edit(name=form.member_id_edit.data, category=form.first_name_edit.data,
-                                   instructors=form.last_name_edit.data, days_hours=form.genre_edit.data,
-                                   monthly_fee=form.address_edit.data,
+        member = board.discipline_edit(discipline_id=form.discipline_id_edit.data, name=form.name_edit.data,
+                                   category=form.category_edit.data, instructors=form.instructors_edit.data,
+                                   days_hours=form.days_hours_edit.data, monthly_fee=form.monthly_fee_edit.data,
                                    is_active=True if form["is_active_edit"].data == "1" else False)
         flash("Disciplina editada exitosamente", "success")
     else:

@@ -167,6 +167,22 @@ def create_discipline(**kwargs):
     return discipline
 
 
+def discipline_edit(discipline_id, name, category, instructors, days_hours, monthly_fee, is_active):
+    discipline = get_discipline_by_id(discipline_id)
+
+    discipline.name = name
+    discipline.category = category
+    discipline.instructors = instructors
+    discipline.days_hours = days_hours
+    discipline.monthly_fee = monthly_fee
+    discipline.is_active = is_active
+
+    db.session.add(discipline)
+    db.session.commit()
+
+    return discipline
+
+
 def list_disciplines_with_name(discipline, page, per_page):
     return Discipline.query.filter(Discipline.name.like(f'%{discipline}%')).paginate(page=page, per_page=per_page,
                                                                                      error_out=False)
