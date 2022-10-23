@@ -206,6 +206,10 @@ def get_discipline_by_id(discipline_id):
     return Discipline.query.filter_by(id=discipline_id).first()
 
 
+def get_members_for_discipline(name):
+    return Member.query.filter(Member.first_name.like(f'%{name}%')).limit(10).all()
+
+
 # APIs
 def rol_json(rol):
     return {
@@ -223,7 +227,8 @@ def member_json(member):
         'address': member.address,
         'is_active': member.is_active,
         'phone_num': member.phone_num,
-        'email': member.email
+        'email': member.email,
+        'doc_num': member.doc_num
     }
 
 

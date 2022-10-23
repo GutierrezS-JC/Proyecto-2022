@@ -8,6 +8,7 @@ from core import board
 from src.web.helpers.forms import DisciplineForm
 from src.web.helpers.forms import EditDisciplineForm
 from src.web.helpers.forms import SearchDisciplineForm
+from src.web.helpers.forms import SearchMemberForDisciplineForm
 
 disciplines_blueprint = Blueprint("disciplines", __name__, url_prefix="/disciplines")
 
@@ -34,6 +35,8 @@ def discipline_index():
         else:
             pagination = board.list_disciplines_with_status(status, page, per_page=per_page.elements_quantity)
 
+    search_member_form = SearchMemberForDisciplineForm()
+
     form = DisciplineForm()
     edit_form = EditDisciplineForm()
     search_form = SearchDisciplineForm()
@@ -41,7 +44,7 @@ def discipline_index():
     search_form.discipline_name.data = discipline
 
     return render_template("disciplines/index.html", form=form, edit_form=edit_form, search_form=search_form,
-                           pagination=pagination)
+                           search_member_form=search_member_form, pagination=pagination)
 
 
 @disciplines_blueprint.post("/cargar")
@@ -80,9 +83,9 @@ def discipline_edit():
     form = EditDisciplineForm()
     if form.validate_on_submit():
         member = board.discipline_edit(discipline_id=form.discipline_id_edit.data, name=form.name_edit.data,
-                                   category=form.category_edit.data, instructors=form.instructors_edit.data,
-                                   days_hours=form.days_hours_edit.data, monthly_fee=form.monthly_fee_edit.data,
-                                   is_active=True if form["is_active_edit"].data == "1" else False)
+                                       category=form.category_edit.data, instructors=form.instructors_edit.data,
+                                       days_hours=form.days_hours_edit.data, monthly_fee=form.monthly_fee_edit.data,
+                                       is_active=True if form["is_active_edit"].data == "1" else False)
         flash("Disciplina editada exitosamente", "success")
     else:
         print("WTF happened")
@@ -102,9 +105,22 @@ def discipline_edit():
 @login_required
 def get_discipline(discipline_id):
     discipline = board.get_discipline_by_id(discipline_id)
-    print(discipline)
     if discipline is None:
         return jsonify({'message': 'La disciplina no existe'}), 404
 
     discipline_json = board.discipline_json(discipline)
     return jsonify({'discipline': discipline_json})
+
+
+@disciplines_blueprint.route("/api/members_discipline/<name>")
+@login_required
+def get_members_for_discipline(name):
+    members = board.get_members_for_discipline(name)
+    if members is None:
+        return jsonify({'members_discipline': []})
+
+    result = []
+    for member in members:
+        result.append(board.member_json(member))
+
+    return jsonify({'members_discipline': result})
