@@ -2,6 +2,12 @@ from datetime import datetime
 
 from src.core.database import db
 
+discipline_members = db.Table(
+    "discipline_members",
+    db.Column("discipline_id", db.Integer, db.ForeignKey("disciplines.id"), primary_key=True),
+    db.Column("member_id", db.Integer, db.ForeignKey("members.id"), primary_key=True),
+)
+
 
 class Discipline(db.Model):
     __tablename__ = "disciplines"
@@ -14,5 +20,6 @@ class Discipline(db.Model):
     is_active = db.Column(db.Boolean)
     is_deleted = db.Column(db.Boolean)
 
+    members = db.relationship("Member", secondary=discipline_members, backref="disciplines")
     updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now)
     inserted_at = db.Column(db.DateTime, default=datetime.now())
