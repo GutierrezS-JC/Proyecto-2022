@@ -25,7 +25,7 @@ const warningAlert = (text) =>{
     })
 }
 
-const questionAlert = (text, title='¿Seguro?') =>{
+const questionAlert = (text, doc_num, disciplineId, title='¿Seguro?') =>{
     Swal.fire({
       title: title,
       text: text,
@@ -37,11 +37,7 @@ const questionAlert = (text, title='¿Seguro?') =>{
       cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed){
-            Swal.fire(
-              'Agregado!',
-              'El socio fue agregado con exito',
-              'success'
-            )
+            window.location.href = `/disciplines/agregar_socio_disciplina/${doc_num}/${disciplineId}`
         }
     })
 }

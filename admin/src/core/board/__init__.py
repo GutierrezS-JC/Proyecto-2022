@@ -210,6 +210,11 @@ def get_members_for_discipline(name):
     return Member.query.filter(Member.first_name.like(f'%{name}%')).limit(10).all()
 
 
+def discipline_add_member(discipline, member):
+    res = discipline.members.append(member)
+    db.session.commit()
+    return res
+
 # APIs
 def rol_json(rol):
     return {

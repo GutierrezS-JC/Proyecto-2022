@@ -123,5 +123,7 @@ class SearchDisciplineForm(FlaskForm):
 class SearchMemberForDisciplineForm(FlaskForm):
     input = StringField('Nombre de socio', validators=[Length(max=50), InputRequired()],
                         name="inputBusqueda")
+    discipline_id_add = discipline_id_edit = HiddenField('discipline_id')
+    member_id_add = HiddenField('member_id')
 
     submit_search = SubmitField("Buscar")

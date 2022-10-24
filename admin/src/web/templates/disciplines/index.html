@@ -343,7 +343,7 @@
 
     li.appendChild(divContainer)
     li.onclick = () => { questionAlert(`¿Desea asignar al usuario ${item.first_name} (${item.doc_num}) en la disciplina
-     ${disciplineNameToAddMember} - ${disciplineCategoryToAddMember}?`, 'Confirmar asignacion')}
+     ${disciplineNameToAddMember} - ${disciplineCategoryToAddMember}?`, item.doc_num, disciplineIdToAddMember, 'Confirmar asignacion')}
     li.classList.add('list-group-item')
     li.classList.add('list-group-item-action')
     return li;
@@ -352,6 +352,7 @@
   function clearList(){
     list.innerHTML = ""
   }
+
   const formSearchMembers = document.getElementById('formSearchMembers');
   formSearchMembers.addEventListener('submit', searchMembers);
 </script>

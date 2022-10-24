@@ -21,7 +21,7 @@ def discipline_index():
     per_page = board.get_configuration()
 
     discipline = request.args.get('disciplina', '')
-    status = request.args.get('status', '', type=str)
+    status = request.args.get('status', '2', type=str)
 
     if discipline:
         if status == '2':
@@ -77,7 +77,7 @@ def discipline_create():
     return redirect(url_for("disciplines.discipline_index", page=page, discipline=discipline, status=status))
 
 
-@disciplines_blueprint.post("/editar_socio")
+@disciplines_blueprint.route("/editar_socio")
 @login_required
 def discipline_edit():
     form = EditDisciplineForm()
@@ -95,7 +95,25 @@ def discipline_edit():
 
     page = request.args.get('page', 1, type=int)
     disciplina = request.args.get('apellido', '')
-    status = request.args.get('status', '0', type=str)
+    status = request.args.get('status', '2', type=str)
+
+    return redirect(url_for("disciplines.discipline_index", page=page, disciplina=disciplina, status=status))
+
+
+@disciplines_blueprint.route("/agregar_socio_disciplina/<member_doc_num>/<discipline_id>")
+@login_required
+def discipline_add_member(member_doc_num, discipline_id):
+    member_searched = board.get_member_by_doc_num(member_doc_num)
+    discipline_searched = board.get_discipline_by_id(discipline_id)
+    if member_searched:
+        board.discipline_add_member(discipline_searched, member_searched)
+        flash("El socio fue asignado en la disciplina correctamente", "success")
+    else:
+        flash('Exploto todo ok?', 'danger')
+
+    page = request.args.get('page', 1, type=int)
+    disciplina = request.args.get('apellido', '')
+    status = request.args.get('status', '2', type=str)
 
     return redirect(url_for("disciplines.discipline_index", page=page, disciplina=disciplina, status=status))
 
