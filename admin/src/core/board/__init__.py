@@ -85,12 +85,12 @@ def all_paginated(page=1, per_page=10):
 
 
 def list_members_with_last_name(last_name, page, per_page):
-    return Member.query.filter(Member.last_name.like(f'%{last_name}%')).paginate(page=page, per_page=per_page,
-                                                                                 error_out=False)
+    return Member.query.filter(Member.last_name.ilike(f'%{last_name}%')).paginate(page=page, per_page=per_page,
+                                                                                  error_out=False)
 
 
 def list_members_with_last_name_status(last_name, status, page, per_page):
-    return Member.query.filter(Member.last_name.like(f'%{last_name}%'), Member.is_active == status) \
+    return Member.query.filter(Member.last_name.ilike(f'%{last_name}%'), Member.is_active == status) \
         .paginate(page=page, per_page=per_page, error_out=False)
 
 
@@ -142,11 +142,11 @@ def member_edit(member_id, first_name, last_name, genre, address, is_active, pho
 
 # Member Files
 def get_list_members_with_last_name(last_name):
-    return Member.query.filter(Member.last_name.like(f'%{last_name}%'))
+    return Member.query.filter(Member.last_name.ilike(f'%{last_name}%'))
 
 
 def get_list_members_with_last_name_status(last_name, status):
-    return Member.query.filter(Member.last_name.like(f'%{last_name}%'), Member.is_active == status)
+    return Member.query.filter(Member.last_name.ilike(f'%{last_name}%'), Member.is_active == status)
 
 
 def get_all_members():
@@ -184,12 +184,12 @@ def discipline_edit(discipline_id, name, category, instructors, days_hours, mont
 
 
 def list_disciplines_with_name(discipline, page, per_page):
-    return Discipline.query.filter(Discipline.name.like(f'%{discipline}%')).paginate(page=page, per_page=per_page,
-                                                                                     error_out=False)
+    return Discipline.query.filter(Discipline.name.ilike(f'%{discipline}%')).paginate(page=page, per_page=per_page,
+                                                                                      error_out=False)
 
 
 def list_disciplines_with_name_status(discipline, status, page, per_page):
-    return Discipline.query.filter(Discipline.name.like(f'%{discipline}%'), Discipline.is_active == status) \
+    return Discipline.query.filter(Discipline.name.ilike(f'%{discipline}%'), Discipline.is_active == status) \
         .paginate(page=page, per_page=per_page, error_out=False)
 
 
@@ -218,6 +218,7 @@ def discipline_add_member(discipline, member):
 
 def does_discipline_includes_member(discipline, member):
     return member in discipline.members
+
 
 # APIs
 def rol_json(rol):
