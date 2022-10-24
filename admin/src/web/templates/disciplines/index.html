@@ -129,6 +129,40 @@
     </div>
   </div>
 
+  <!-- MODAL SEARCH -->
+  <div class="modal fade" id="cargarSocioEnDisciplinaModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editarMemberModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title" id="cargarSocioEnDisciplinaLabel">Agregar socio</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="clearList()" />
+          </div>
+
+          <div class="modal-body">
+            Ingrese el nombre del socio
+            <form class="mt-2" method="POST" id="formSearchMembers">
+              {{ form.csrf_token }}
+              <div class="col-12" hidden>
+                   <input type="text" id="disciplineIdToAdd" class="form-control rounded text-black" name="page" hidden />
+              </div>
+              <div class="row mb-4">
+                <div class="col-8 d-flex">
+                  {{ search_member_form.input(class="form-control rounded text-black", placeholder="...") }}
+                </div>
+
+                <div class="col-4">
+                  <button type="submit" id="btnBusquedaMember" class="btn btn-outline-dark">Buscar</button>
+                </div>
+              </div>
+            </form>
+
+            <ul class="list-group" id="listResultMembers"></ul>
+          </div>
+        </div>
+    </div>
+  </div>
+
 
   <hr>
   <h2 class="h3">Busqueda</h2>
@@ -188,8 +222,14 @@
 
             <div class="card-footer bg-transparent">
               <div>
+                {% if discipline.is_active == True %}
+                  <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal"
+                        data-bs-target="#cargarSocioEnDisciplinaModal" onclick="setDisciplineData{{ discipline.id, discipline.name, discipline.category}}">Agregar socio
+                {% endif %}
+                </button>
                 <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                        data-bs-target="#editarDisciplinaModal" onclick="getDisciplineToEdit({{discipline.id}})">Editar</button>
+                        data-bs-target="#editarDisciplinaModal" onclick="getDisciplineToEdit({{discipline.id}})">Editar
+                </button>
                 <button type="button" class="btn btn-sm btn-outline-danger">Eliminar</button>
               </div>
             </div>
@@ -237,10 +277,16 @@
 </div>
 
 <!-- Custom JS desde public -->
-<script type=text/javascript src="{{url_for('static', filename='js/functions.js') }}"></script>
+<!--<script type=text/javascript src="{{url_for('static', filename='js/functions.js') }}"></script>-->
 
 <!-- JS Exclusivo del template -->
 <script>
+
+  // Please forgive me for this mess
+  let disciplineIdToAddMember = null
+  let disciplineNameToAddMember = null
+  let disciplineCategoryToAddMember = null
+
   const today = new Date().toLocaleDateString("es-AR");
   document.getElementById('inputFechaCarga').value = today
 
@@ -257,5 +303,59 @@
 
     document.getElementById('discipline_id_edit').value = data.discipline.id
  }
+
+ function setDisciplineData(disciplineId, disciplineName, disciplineCategory){
+   disciplineIdToAddMember = disciplineId
+   disciplineNameToAddMember = disciplineName
+   disciplineCategoryToAddMember = disciplineCategory
+ }
+
+  async function searchMembers(event) {
+    event.preventDefault();
+
+    memberName = document.getElementById('inputBusqueda').value
+
+    let response = await fetch("{{request.url_root}}disciplines/api/members_discipline/" + memberName)
+    let data = await response.json()
+
+    list = document.getElementById('listResultMembers')
+    clearList()
+
+    for(let i = 0; i < data.members_discipline.length; i ++ ){
+      list.appendChild(createItem(data.members_discipline[i]))
+    }
+
+    list.style.cursor = 'pointer'
+  }
+
+  function createItem(item) {
+    let li = document.createElement('li');
+    let div = document.createElement('div')
+    let divContainer = document.createElement('div')
+    let span = document.createElement('span')
+
+    divContainer.classList.add('ms-2')
+    div.classList.add('fw-bold')
+
+    div.textContent = item.first_name
+    span.textContent = `Documento: ${item.doc_num}`
+
+    divContainer.appendChild(div)
+    divContainer.appendChild(span)
+
+    li.appendChild(divContainer)
+    li.onclick = () => { questionAlert(`¿Desea asignar al usuario ${item.first_name} (${item.doc_num}) en la disciplina
+     ${disciplineNameToAddMember} - ${disciplineCategoryToAddMember}?`, item.doc_num, disciplineIdToAddMember, 'Confirmar asignacion')}
+    li.classList.add('list-group-item')
+    li.classList.add('list-group-item-action')
+    return li;
+  }
+
+  function clearList(){
+    list.innerHTML = ""
+  }
+
+  const formSearchMembers = document.getElementById('formSearchMembers');
+  formSearchMembers.addEventListener('submit', searchMembers);
 </script>
 {% endblock %}
