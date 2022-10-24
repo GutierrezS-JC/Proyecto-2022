@@ -107,6 +107,20 @@ def user_set_status(username):
     return True
 
 
+def does_user_has_permission(user, in_permission):
+    user = get_user_by_email(user)
+    response = False
+    for rol in user.roles:
+        for permission in rol.permissions:
+            if permission.name == in_permission:
+                response = True
+    return response
+
+
+def is_active(user):
+    return get_user_by_email(user).is_active
+
+
 # APIs
 def user_json(user, user_roles):
     return {

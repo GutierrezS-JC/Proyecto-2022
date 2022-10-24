@@ -42,6 +42,7 @@ def create_app(env="development", static_folder="static"):
     app.register_blueprint(disciplines_blueprint)
 
     app.register_error_handler(401, handlers.unauthorized_error)
+    app.register_error_handler(403, handlers.forbidden_error)
     app.register_error_handler(404, handlers.not_found_error)
     app.register_error_handler(500, handlers.internal_server_error)
 

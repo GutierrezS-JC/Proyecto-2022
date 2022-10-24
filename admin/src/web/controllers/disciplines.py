@@ -3,6 +3,7 @@ from flask import render_template
 from flask import session
 
 from src.web.helpers.auth import login_required
+from web.helpers import permissions
 
 from core import board
 from src.web.helpers.forms import DisciplineForm
@@ -16,6 +17,10 @@ disciplines_blueprint = Blueprint("disciplines", __name__, url_prefix="/discipli
 @disciplines_blueprint.get("/listado")
 @login_required
 def discipline_index():
+
+    # Validar permisos
+    permissions.validate_permissions('discipline_index')
+
     # Paginacion
     page = request.args.get('page', 1, type=int)
     per_page = board.get_configuration()
