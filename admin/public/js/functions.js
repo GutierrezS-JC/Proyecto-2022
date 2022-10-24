@@ -16,9 +16,9 @@ const successAlert = (text) =>{
     })
 }
 
-const warningAlert = (text) =>{
+const warningAlert = (text, title='Alerta') =>{
     Swal.fire({
-      title: 'Cuidate cuidate',
+      title: title,
       text: text,
       icon: 'warning',
       confirmButtonText: 'Ok'

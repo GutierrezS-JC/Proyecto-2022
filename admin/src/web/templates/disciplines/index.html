@@ -222,8 +222,10 @@
 
             <div class="card-footer bg-transparent">
               <div>
-                <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal"
+                {% if discipline.is_active == True %}
+                  <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal"
                         data-bs-target="#cargarSocioEnDisciplinaModal" onclick="setDisciplineData{{ discipline.id, discipline.name, discipline.category}}">Agregar socio
+                {% endif %}
                 </button>
                 <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                         data-bs-target="#editarDisciplinaModal" onclick="getDisciplineToEdit({{discipline.id}})">Editar

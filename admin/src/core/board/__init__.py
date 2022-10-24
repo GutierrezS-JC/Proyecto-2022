@@ -215,6 +215,10 @@ def discipline_add_member(discipline, member):
     db.session.commit()
     return res
 
+
+def does_discipline_includes_member(discipline, member):
+    return member in discipline.members
+
 # APIs
 def rol_json(rol):
     return {
