@@ -5,6 +5,8 @@ from flask import render_template
 from core import auth
 from core import board
 
+from src.web.helpers import permissions
+
 from src.web.helpers.forms import RegisterUserForm
 from src.web.helpers.forms import EditUserForm
 from src.web.helpers.forms import SearchUserForm
@@ -16,6 +18,9 @@ user_blueprint = Blueprint("users", __name__, url_prefix="/users")
 @user_blueprint.get("/")
 @login_required
 def user_index():
+    # Validar permisos
+    permissions.validate_permissions('user_new')
+
     form = RegisterUserForm()
     return render_template("users/index.html", form=form)
 
@@ -23,6 +28,10 @@ def user_index():
 @user_blueprint.route("/listado")
 @login_required
 def user_list_all():
+
+    # Validar permisos
+    permissions.validate_permissions('user_index')
+
     print(request.args)
 
     page = request.args.get('page', 1, type=int)
@@ -57,6 +66,9 @@ def user_list_all():
 @user_blueprint.route("/cambiar_rol/<username>")
 @login_required
 def user_change_status(username):
+    # Validar permisos
+    permissions.validate_permissions('user_update')
+
     auth.user_set_status(username)
     page = request.args.get('page', 1, type=int)
     email = request.args.get('email', '')
@@ -67,6 +79,9 @@ def user_change_status(username):
 @user_blueprint.post("/cargar")
 @login_required
 def user_create():
+    # Validar permisos
+    permissions.validate_permissions('user_new')
+
     form = RegisterUserForm()
 
     if form.validate_on_submit():
@@ -104,6 +119,9 @@ def user_create():
 @user_blueprint.post("/editar_usuario")
 @login_required
 def user_edit():
+    # Validar permisos
+    permissions.validate_permissions('user_update')
+
     form = EditUserForm()
     form.roles.choices = [(rol.id, rol.name) for rol in board.get_roles()]
 
@@ -138,6 +156,9 @@ def user_edit():
 @user_blueprint.route("/buscar_usuario", methods=["GET"])
 @login_required
 def user_search():
+    # Validar permisos
+    permissions.validate_permissions('user_index')
+
     # Logica consulta BD para traer usuarios
     page = request.args.get('page', 1, type=int)
     email = request.args.get('email', '')

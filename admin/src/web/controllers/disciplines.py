@@ -3,7 +3,7 @@ from flask import render_template
 from flask import session
 
 from src.web.helpers.auth import login_required
-from web.helpers import permissions
+from src.web.helpers import permissions
 
 from core import board
 from src.web.helpers.forms import DisciplineForm
@@ -55,6 +55,9 @@ def discipline_index():
 @disciplines_blueprint.post("/cargar")
 @login_required
 def discipline_create():
+    # Validar permisos
+    permissions.validate_permissions('discipline_new')
+
     form = DisciplineForm()
 
     if form.validate_on_submit():
@@ -85,6 +88,9 @@ def discipline_create():
 @disciplines_blueprint.route("/editar_socio")
 @login_required
 def discipline_edit():
+    # Validar permisos
+    permissions.validate_permissions('discipline_update')
+
     form = EditDisciplineForm()
     if form.validate_on_submit():
         member = board.discipline_edit(discipline_id=form.discipline_id_edit.data, name=form.name_edit.data,
@@ -108,6 +114,9 @@ def discipline_edit():
 @disciplines_blueprint.route("/agregar_socio_disciplina/<member_doc_num>/<discipline_id>")
 @login_required
 def discipline_add_member(member_doc_num, discipline_id):
+    # Validar permisos
+    permissions.validate_permissions('discipline_update')
+
     page = request.args.get('page', 1, type=int)
     disciplina = request.args.get('apellido', '')
     status = request.args.get('status', '2', type=str)

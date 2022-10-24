@@ -10,6 +10,7 @@ import pdfkit
 
 from core import board
 
+from src.web.helpers import permissions
 from src.web.helpers.forms import MemberForm
 from src.web.helpers.forms import EditMemberForm
 from src.web.helpers.auth import login_required
@@ -22,6 +23,9 @@ member_blueprint = Blueprint("members", __name__, url_prefix="/members")
 @member_blueprint.get("/listado")
 @login_required
 def member_index():
+    # Validar permisos
+    permissions.validate_permissions('member_index')
+
     # Paginacion
     page = request.args.get('page', 1, type=int)
     per_page = board.get_configuration()
@@ -56,8 +60,10 @@ def member_index():
 @member_blueprint.post("/cargar")
 @login_required
 def member_create():
-    form = MemberForm()
+    # Validar permisos
+    permissions.validate_permissions('member_new')
 
+    form = MemberForm()
     if form.validate_on_submit():
 
         # Verificammos data opcional
@@ -108,6 +114,9 @@ def member_create():
 @member_blueprint.post("/editar_socio")
 @login_required
 def member_edit():
+    # Validar permisos
+    permissions.validate_permissions('member_update')
+
     print(request.args)
     form = EditMemberForm()
     print(form.is_active_edit.data)
@@ -136,6 +145,9 @@ def member_edit():
 @member_blueprint.route('download/report/csv')
 @login_required
 def download_report_csv():
+    # Validar permisos
+    permissions.validate_permissions('member_index')
+
     last_name = request.args.get('apellido', '')
     status = request.args.get('status', '', type=str)
 
@@ -175,6 +187,9 @@ def download_report_csv():
 @member_blueprint.route('download/report/pdf')
 @login_required
 def download_report_pdf():
+    # Validar permisos
+    permissions.validate_permissions('member_index')
+
     last_name = request.args.get('apellido', '')
     status = request.args.get('status', '', type=str)
 
