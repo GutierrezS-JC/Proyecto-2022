@@ -127,3 +127,9 @@ class SearchMemberForDisciplineForm(FlaskForm):
     member_id_add = HiddenField('member_id')
 
     submit_search = SubmitField("Buscar")
+
+
+class PaymentSearchForm(FlaskForm):
+    input_search = StringField('Apellido/Nro de socio', validators=[Length(max=50)])
+
+    submit_search = SubmitField("Buscar")

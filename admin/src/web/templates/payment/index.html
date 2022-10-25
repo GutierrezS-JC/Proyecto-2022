@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='disciplinas.css') }}" >
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 userContainer">
+  <h1 class="display-3">Gestion de pagos</h1>
+  <div class="row">
+    <div class="col">
+      <button class="btn btn-dark btn-padding mt-2" data-bs-toggle="modal" data-bs-target="#cargarSocioModal" type="button">Cargar un nuevo socio</button>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2 class="h3">Busqueda</h2>
+  <form id="formBusquedda" name="formularioBusqueda" role="form" method="GET">
+    <div class="row mb-4">
+      <div class="col-lg-3 d-flex">
+        <input type="text" id="page" class="form-control rounded text-black" name="page" hidden value="1" />
+        {{ search_form.input_search(class="form-control rounded text-black", placeholder="Apellido/Nro de socio...") }}
+      </div>
+
+      <div class="col-lg-1">
+        <button type="submit" id="btnBusqueda" class="btn btn-outline-dark">Buscar</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="mt-5">
+    <div class="row mb-4">
+      <div class="col-12">
+        <h1 class="h3">Listado de asociados</h1>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

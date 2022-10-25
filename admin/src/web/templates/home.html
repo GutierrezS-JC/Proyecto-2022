@@ -71,19 +71,21 @@
 
         <div class="col">
             <div class="card" id="gestionPagos" onmouseover="imHovered(this)" onmouseout="imNotHovered(this)" style="width: 18rem; height: 15em">
-                <div class="card-body">
-                    <h5 class="card-title">Gestion de pagos</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                    <div class="row justify-content-center">
-                        <div class="col-6 mb-2 text-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-credit-card" viewBox="0 0 16 16">
-                                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
-                                <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
-                            </svg>
+                <a href="{{url_for('payment.payment_index', input='') }}" class="linkNone">
+                    <div class="card-body">
+                        <h5 class="card-title">Gestion de pagos</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <div class="row justify-content-center">
+                            <div class="col-6 mb-2 text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-credit-card" viewBox="0 0 16 16">
+                                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
+                                    <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
+                                </svg>
+                            </div>
                         </div>
+                        <p class="card-text">Some quick example text to build on the card title and make.</p>
                     </div>
-                    <p class="card-text">Some quick example text to build on the card title and make.</p>
-                </div>
+                </a>
             </div>
         </div>
 

@@ -4,6 +4,7 @@ from src.core.board.rol import Rol
 from src.core.board.config import Config
 from src.core.board.member import Member
 from src.core.board.disciplines import Discipline
+from src.core.board.fee import Fee
 
 
 # Rol methods
@@ -209,6 +210,16 @@ def discipline_add_member(discipline, member):
 
 def does_discipline_includes_member(discipline, member):
     return member in discipline.members
+
+
+# Payment (Fee) methods
+def list_payment_records(page, per_page):
+    return Fee.query.order_by(Fee.id.desc()).paginate(page=page, per_page=per_page, error_out=False)
+
+
+def list_payment_records_input(input_search, page, per_page):
+    return Member.query.filter(Member.last_name.ilike(f'%{input_search}%')).paginate(page=page, per_page=per_page,
+                                                                                     error_out=False)
 
 
 # CLUB
