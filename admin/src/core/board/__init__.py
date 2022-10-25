@@ -6,14 +6,6 @@ from src.core.board.member import Member
 from src.core.board.disciplines import Discipline
 
 
-# def assign_user(issue, user):
-#     issue.user = user
-#     db.session.add(issue)
-#     db.session.commit()
-#
-#     return issue
-
-
 # Rol methods
 def get_rol_by_id(rol_id):
     return Rol.query.get(rol_id)
@@ -158,7 +150,6 @@ def get_list_members_with_status(status):
 
 
 # Discipline methods
-
 def create_discipline(**kwargs):
     discipline = Discipline(**kwargs)
     db.session.add(discipline)
@@ -220,6 +211,15 @@ def does_discipline_includes_member(discipline, member):
     return member in discipline.members
 
 
+# CLUB
+def get_all_disciplines():
+    return Discipline.query.all()
+
+
+def get_club_data():
+    return Config.query.with_entities(Config.email, Config.phone).first()
+
+
 # APIs
 def rol_json(rol):
     return {
@@ -251,4 +251,19 @@ def discipline_json(discipline):
         'days_hours': discipline.days_hours,
         'monthly_fee': discipline.monthly_fee,
         'is_active': discipline.is_active
+    }
+
+
+def club_data_json(email, phone):
+    return {
+        'email': email,
+        'phone': phone
+    }
+
+
+def club_discipline_json(discipline):
+    return {
+        'name': discipline.name,
+        'days_hours': discipline.days_hours,
+        'teachers': discipline.instructors
     }
