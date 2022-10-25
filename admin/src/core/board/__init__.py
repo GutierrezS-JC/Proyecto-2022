@@ -220,6 +220,11 @@ def get_club_data():
     return Config.query.with_entities(Config.email, Config.phone).first()
 
 
+# ME (Member API)
+def get_members_disciplines(searched_member):
+    return searched_member.disciplines
+
+
 # APIs
 def rol_json(rol):
     return {
