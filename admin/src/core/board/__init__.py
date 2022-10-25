@@ -198,7 +198,7 @@ def get_discipline_by_id(discipline_id):
 
 
 def get_members_for_discipline(name):
-    return Member.query.filter(Member.first_name.like(f'%{name}%')).limit(10).all()
+    return Member.query.filter(Member.first_name.ilike(f'%{name}%')).limit(10).all()
 
 
 def discipline_add_member(discipline, member):
