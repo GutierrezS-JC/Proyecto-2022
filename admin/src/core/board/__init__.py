@@ -6,14 +6,6 @@ from src.core.board.member import Member
 from src.core.board.disciplines import Discipline
 
 
-# def assign_user(issue, user):
-#     issue.user = user
-#     db.session.add(issue)
-#     db.session.commit()
-#
-#     return issue
-
-
 # Rol methods
 def get_rol_by_id(rol_id):
     return Rol.query.get(rol_id)
@@ -85,12 +77,12 @@ def all_paginated(page=1, per_page=10):
 
 
 def list_members_with_last_name(last_name, page, per_page):
-    return Member.query.filter(Member.last_name.like(f'%{last_name}%')).paginate(page=page, per_page=per_page,
-                                                                                 error_out=False)
+    return Member.query.filter(Member.last_name.ilike(f'%{last_name}%')).paginate(page=page, per_page=per_page,
+                                                                                  error_out=False)
 
 
 def list_members_with_last_name_status(last_name, status, page, per_page):
-    return Member.query.filter(Member.last_name.like(f'%{last_name}%'), Member.is_active == status) \
+    return Member.query.filter(Member.last_name.ilike(f'%{last_name}%'), Member.is_active == status) \
         .paginate(page=page, per_page=per_page, error_out=False)
 
 
@@ -142,11 +134,11 @@ def member_edit(member_id, first_name, last_name, genre, address, is_active, pho
 
 # Member Files
 def get_list_members_with_last_name(last_name):
-    return Member.query.filter(Member.last_name.like(f'%{last_name}%'))
+    return Member.query.filter(Member.last_name.ilike(f'%{last_name}%'))
 
 
 def get_list_members_with_last_name_status(last_name, status):
-    return Member.query.filter(Member.last_name.like(f'%{last_name}%'), Member.is_active == status)
+    return Member.query.filter(Member.last_name.ilike(f'%{last_name}%'), Member.is_active == status)
 
 
 def get_all_members():
@@ -158,7 +150,6 @@ def get_list_members_with_status(status):
 
 
 # Discipline methods
-
 def create_discipline(**kwargs):
     discipline = Discipline(**kwargs)
     db.session.add(discipline)
@@ -184,12 +175,12 @@ def discipline_edit(discipline_id, name, category, instructors, days_hours, mont
 
 
 def list_disciplines_with_name(discipline, page, per_page):
-    return Discipline.query.filter(Discipline.name.like(f'%{discipline}%')).paginate(page=page, per_page=per_page,
-                                                                                     error_out=False)
+    return Discipline.query.filter(Discipline.name.ilike(f'%{discipline}%')).paginate(page=page, per_page=per_page,
+                                                                                      error_out=False)
 
 
 def list_disciplines_with_name_status(discipline, status, page, per_page):
-    return Discipline.query.filter(Discipline.name.like(f'%{discipline}%'), Discipline.is_active == status) \
+    return Discipline.query.filter(Discipline.name.ilike(f'%{discipline}%'), Discipline.is_active == status) \
         .paginate(page=page, per_page=per_page, error_out=False)
 
 
@@ -207,7 +198,7 @@ def get_discipline_by_id(discipline_id):
 
 
 def get_members_for_discipline(name):
-    return Member.query.filter(Member.first_name.like(f'%{name}%')).limit(10).all()
+    return Member.query.filter(Member.first_name.ilike(f'%{name}%')).limit(10).all()
 
 
 def discipline_add_member(discipline, member):
@@ -218,6 +209,21 @@ def discipline_add_member(discipline, member):
 
 def does_discipline_includes_member(discipline, member):
     return member in discipline.members
+
+
+# CLUB
+def get_all_disciplines():
+    return Discipline.query.all()
+
+
+def get_club_data():
+    return Config.query.with_entities(Config.email, Config.phone).first()
+
+
+# ME (Member API)
+def get_members_disciplines(searched_member):
+    return searched_member.disciplines
+
 
 # APIs
 def rol_json(rol):
@@ -250,4 +256,19 @@ def discipline_json(discipline):
         'days_hours': discipline.days_hours,
         'monthly_fee': discipline.monthly_fee,
         'is_active': discipline.is_active
+    }
+
+
+def club_data_json(email, phone):
+    return {
+        'email': email,
+        'phone': phone
+    }
+
+
+def club_discipline_json(discipline):
+    return {
+        'name': discipline.name,
+        'days_hours': discipline.days_hours,
+        'teachers': discipline.instructors
     }

@@ -17,11 +17,11 @@ def list_users_paginated(page, per_page):
 
 
 def list_users_with_email(email, page, per_page):
-    return User.query.filter(User.email.like(f'%{email}%')).paginate(page=page, per_page=per_page, error_out=False)
+    return User.query.filter(User.email.ilike(f'%{email}%')).paginate(page=page, per_page=per_page, error_out=False)
 
 
 def list_users_with_email_status(email, status, page, per_page):
-    return User.query.filter(User.email.like(f'%{email}%'), User.is_active == status)\
+    return User.query.filter(User.email.ilike(f'%{email}%'), User.is_active == status)\
         .paginate(page=page, per_page=per_page, error_out=False)
 
 
