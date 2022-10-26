@@ -215,13 +215,22 @@ def does_discipline_includes_member(discipline, member):
 
 
 # Payment (Fee) methods
+def create_payment(**kwargs):
+    payment = Fee(**kwargs)
+    db.session.add(payment)
+    db.session.commit()
+
+    return payment
+
+
 def list_payment_records(page, per_page):
     # return Fee.query.order_by(Fee.id.desc()).paginate(page=page, per_page=per_page, error_out=False)
-    payment_list = Fee.query\
-        .join(Member, Member.id == Fee.member_id).add_columns(Fee.was_paid, Fee.year, Fee.month, Fee.total, Fee.date_paid,
-                                                              Member.doc_num, Member.first_name, Member.last_name
-                                                              ).paginate(page=page, per_page=per_page,
-                                                                         error_out=False)
+    payment_list = Fee.query \
+        .join(Member, Member.id == Fee.member_id). \
+        add_columns(Fee.id, Fee.was_paid, Fee.year, Fee.month, Fee.total, Fee.date_paid,
+                    Member.doc_num, Member.first_name, Member.last_name
+                    ).order_by(Fee.year.desc(), Fee.month.desc()). \
+        paginate(page=page, per_page=per_page, error_out=False)
     return payment_list
 
 
@@ -241,7 +250,8 @@ def get_total_fee_payment(member):
 
 
 def get_fees_after_next_month(next_month, current_year, member_id):
-    fees = Fee.query.filter(Fee.member_id == member_id, Fee.month >= str(next_month), Fee.year == str(current_year)).all()
+    fees = Fee.query.filter(Fee.member_id == member_id, Fee.month >= str(next_month),
+                            Fee.year == str(current_year)).all()
     return fees
 
 
@@ -275,12 +285,17 @@ def generate_payments(member, discipline):
     return True
 
 
-def create_payment(**kwargs):
-    payment = Fee(**kwargs)
-    db.session.add(payment)
-    db.session.commit()
+def register_fee_as_paid(fee):
+    if not fee.was_paid:
+        fee.was_paid = True
+        fee.date_paid = datetime.today()
+        db.session.add(fee)
+        db.session.commit()
+    return True
 
-    return payment
+
+def get_fee_by_id(fee_id):
+    return Fee.query.filter_by(id=fee_id).first()
 
 
 # CLUB

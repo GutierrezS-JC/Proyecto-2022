@@ -34,7 +34,7 @@
     <div id="cardsContainer" class="row mb-5">
       {% for fee in pagination.items %}
         <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 cardFlex mt-3">
-          <div class="card" style="width: 19rem; height: 24rem">
+          <div class="card" style="width: 19rem;">
             <div class="card-header d-flex justify-content-between">
               <div class="fw-semibold fs-5">{{fee.year}}</div>
               <div>
@@ -46,16 +46,30 @@
               </div>
             </div>
             <div class="card-body">
-              <h1 class="card-title fw-bold fs-3">{{fee.first_name}} {{fee.last_name}}</h1>
-              <h2 class="card-title fw-normal fs-5">{{fee.doc_num}}</h2>
+              <h1 class="card-title display-6">{{fee.first_name}} {{fee.last_name}}</h1>
+              <p class="card-title fw-normal fs-5">{{fee.doc_num}}</p>
 
               <div><b>Cuota:</b> #{{ fee.month }}</div>
               <div><b>Disciplinas:</b> - </div>
 
-              <h5 class="card-title fw-bold fs-1 d-flex justify-content-end mt-4 mb-4">${{fee.total}}</h5>
-              <a href="#" class="btn btn-sm btn-success">Registrar pago</a>
+              <h5 class="card-title fs-1 d-flex justify-content-end mt-4 mb-4">${{fee.total}}</h5>
+              {% if not fee.was_paid %}
+                <a href="{{url_for('payment.payment_register_paid', fee_id=fee.id, page=pagination.page, input_search='') }}"
+                   class="btn btn-sm btn-primary">Registrar pago</a>
+              {% else %}
+               <a href="#" class="btn btn-sm btn-secondary disabled invisible">Registrar pago</a>
+              {% endif %}
               <a href="#" class="btn btn-sm btn-outline-dark mt-2">Descargar comprobante</a>
             </div>
+            {% if fee.was_paid %}
+              <div class="card-footer text-center" style="background-color: rgb(25, 135, 84)">
+                <small style="color: white">Pagado el {{fee.date_paid.strftime('%d/%m/%Y')}}</small>
+              </div>
+            {% else %}
+             <div class="card-footer text-center">
+                <small> Aun no pagado</small>
+              </div>
+            {% endif %}
           </div>
         </div>
       {% endfor %}

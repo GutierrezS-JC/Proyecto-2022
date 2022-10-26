@@ -71,7 +71,7 @@
 
         <div class="col">
             <div class="card" id="gestionPagos" onmouseover="imHovered(this)" onmouseout="imNotHovered(this)" style="width: 18rem; height: 15em">
-                <a href="{{url_for('payment.payment_index', input='') }}" class="linkNone">
+                <a href="{{url_for('payment.payment_index', page=1, input_search='') }}" class="linkNone">
                     <div class="card-body">
                         <h5 class="card-title">Gestion de pagos</h5>
                         <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
