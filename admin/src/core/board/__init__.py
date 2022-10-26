@@ -216,12 +216,19 @@ def does_discipline_includes_member(discipline, member):
 
 # Payment (Fee) methods
 def list_payment_records(page, per_page):
-    return Fee.query.order_by(Fee.id.desc()).paginate(page=page, per_page=per_page, error_out=False)
+    # return Fee.query.order_by(Fee.id.desc()).paginate(page=page, per_page=per_page, error_out=False)
+    payment_list = Fee.query\
+        .join(Member, Member.id == Fee.member_id).add_columns(Fee.was_paid, Fee.year, Fee.month, Fee.total, Fee.date_paid,
+                                                              Member.doc_num, Member.first_name, Member.last_name
+                                                              ).paginate(page=page, per_page=per_page,
+                                                                         error_out=False)
+    return payment_list
 
 
 def list_payment_records_input(input_search, page, per_page):
-    return Member.query.filter(Member.last_name.ilike(f'%{input_search}%')).paginate(page=page, per_page=per_page,
-                                                                                     error_out=False)
+    # Esto rompe
+    return Fee.query.filter(Fee.member_id.last_name.ilike(f'%{input_search}%')).paginate(page=page, per_page=per_page,
+                                                                                         error_out=False)
 
 
 def get_total_fee_payment(member):

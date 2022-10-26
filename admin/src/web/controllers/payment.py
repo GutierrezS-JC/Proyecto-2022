@@ -24,11 +24,11 @@ def payment_index():
 
     input_search = request.args.get('input_search', '', type=str)
 
-    if input_search.isspace():
+    if input_search == '' or input_search.isspace():
         pagination = board.list_payment_records(page=page, per_page=per_page.elements_quantity)
     else:
+        # Por ahora last_name falta el otro
         pagination = board.list_payment_records_input(input_search, page=page, per_page=per_page.elements_quantity)
-
     search_form = PaymentSearchForm()
     search_form.input_search.data = input_search
 

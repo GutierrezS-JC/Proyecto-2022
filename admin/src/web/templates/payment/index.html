@@ -8,11 +8,6 @@
 {% block content %}
 <div class="container mt-4 userContainer">
   <h1 class="display-3">Gestion de pagos</h1>
-  <div class="row">
-    <div class="col">
-      <button class="btn btn-dark btn-padding mt-2" data-bs-toggle="modal" data-bs-target="#cargarSocioModal" type="button">Cargar un nuevo socio</button>
-    </div>
-  </div>
 
   <hr>
 
@@ -37,54 +32,33 @@
       </div>
     </div>
     <div id="cardsContainer" class="row mb-5">
-      <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 cardFlex mt-3">
-          <div class="card" style="width: 18rem; height: 22rem">
-            <div class="card-header">
-                <span class="badge rounded-pill text-bg-success text-end">Pagado</span>
+      {% for fee in pagination.items %}
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 cardFlex mt-3">
+          <div class="card" style="width: 19rem; height: 24rem">
+            <div class="card-header d-flex justify-content-between">
+              <div class="fw-semibold fs-5">{{fee.year}}</div>
+              <div>
+                {% if fee.was_paid == True %}
+                  <span class="badge rounded-pill text-bg-success text-end">Pagado</span>
+                {% else %}
+                  <span class="badge rounded-pill text-bg-danger text-end">No pagado</span>
+                {% endif %}
+              </div>
             </div>
             <div class="card-body">
-              <h1 class="card-title fw-bold fs-1">#01</h1>
-              <div><b>Disciplina:</b> Futbol</div>
-              <div><b>Categoria:</b> Viejistos 2022</div>
-              <div><b>Socio:</b> Manaos Light</div>
+              <h1 class="card-title fw-bold fs-3">{{fee.first_name}} {{fee.last_name}}</h1>
+              <h2 class="card-title fw-normal fs-5">{{fee.doc_num}}</h2>
 
-              <h5 class="card-title fw-bold fs-1 d-flex justify-content-end mt-4 mb-4">$2500</h5>
-              <a href="#" class="btn btn-outline-dark">Registrar pago</a>
+              <div><b>Cuota:</b> #{{ fee.month }}</div>
+              <div><b>Disciplinas:</b> - </div>
+
+              <h5 class="card-title fw-bold fs-1 d-flex justify-content-end mt-4 mb-4">${{fee.total}}</h5>
+              <a href="#" class="btn btn-sm btn-success">Registrar pago</a>
+              <a href="#" class="btn btn-sm btn-outline-dark mt-2">Descargar comprobante</a>
             </div>
           </div>
         </div>
-      <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 cardFlex mt-3">
-          <div class="card" style="width: 18rem; height: 22rem">
-            <div class="card-header">
-                <span class="badge rounded-pill text-bg-success text-end">Pagado</span>
-            </div>
-            <div class="card-body">
-              <h1 class="card-title fw-bold fs-1">#01</h1>
-              <div><b>Disciplina:</b> Futbol</div>
-              <div><b>Categoria:</b> Viejistos 2022</div>
-              <div><b>Socio:</b> Manaos Light</div>
-
-              <h5 class="card-title fw-bold fs-1 d-flex justify-content-end mt-4 mb-4">$2500</h5>
-              <a href="#" class="btn btn-outline-dark">Registrar pago</a>
-            </div>
-          </div>
-        </div>
-      <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 cardFlex mt-3">
-          <div class="card" style="width: 18rem; height: 22rem">
-            <div class="card-header">
-                <span class="badge rounded-pill text-bg-success text-end">Pagado</span>
-            </div>
-            <div class="card-body">
-              <h1 class="card-title fw-bold fs-1">#01</h1>
-              <div><b>Disciplina:</b> Futbol</div>
-              <div><b>Categoria:</b> Viejistos 2022</div>
-              <div><b>Socio:</b> Manaos Light</div>
-
-              <h5 class="card-title fw-bold fs-1 d-flex justify-content-end mt-4 mb-4">$2500</h5>
-              <a href="#" class="btn btn-outline-dark">Registrar pago</a>
-            </div>
-          </div>
-        </div>
+      {% endfor %}
     </div>
   </div>
 
