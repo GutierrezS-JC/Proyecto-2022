@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Blueprint, request, url_for, redirect, flash
 from flask import render_template
 
@@ -31,8 +33,9 @@ def payment_index():
         pagination = board.list_payment_records_input(input_search, page=page, per_page=per_page.elements_quantity)
     search_form = PaymentSearchForm()
     search_form.input_search.data = input_search
-
-    return render_template("payment/index.html", search_form=search_form, pagination=pagination)
+    current_date = datetime.date.today()
+    return render_template("payment/index.html", search_form=search_form, pagination=pagination,
+                           current_date=current_date)
 
 
 @payment_blueprint.route("/registrar_pago_efectivo/<fee_id>")

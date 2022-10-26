@@ -47,6 +47,9 @@
             </div>
             <div class="card-body">
               <h1 class="card-title display-6">{{fee.first_name}} {{fee.last_name}}</h1>
+              {% if (((current_date.month | int > fee.month | int) and (current_date.day > 10)) and (not fee.was_paid)) %}
+                <div style="position: absolute; top: 120px; right: 30px;">VENCIDA</div>
+              {% endif %}
               <p class="card-title fw-normal fs-5">{{fee.doc_num}}</p>
 
               <div><b>Cuota:</b> #{{ fee.month }}</div>
