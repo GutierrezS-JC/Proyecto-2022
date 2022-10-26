@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from src.core.database import db
 from src.core.board.permission import Permission
 from src.core.board.rol import Rol
@@ -220,6 +222,37 @@ def list_payment_records(page, per_page):
 def list_payment_records_input(input_search, page, per_page):
     return Member.query.filter(Member.last_name.ilike(f'%{input_search}%')).paginate(page=page, per_page=per_page,
                                                                                      error_out=False)
+
+
+def get_total_fee_payment(member):
+    base = get_configuration().monthly_fee
+    total = 0
+    for origin_discipline in member.disciplines:
+        total += origin_discipline.monthly_fee
+    result = total + base
+    return result
+
+
+def generate_payments(member):
+    current_month = datetime.now().month + 1
+    current_year = datetime.now().year
+    total = get_total_fee_payment(member)
+
+    for month in range(current_month, 13):
+        # Check por cuotas ya creadas ok?
+        new_payment = create_payment(month=month, year=current_year, total=total, was_paid=False, date_paid=None,
+                                     member_id=member.id)
+        db.session.add(new_payment)
+    db.session.commit()
+    return True
+
+
+def create_payment(**kwargs):
+    payment = Fee(**kwargs)
+    db.session.add(payment)
+    db.session.commit()
+
+    return payment
 
 
 # CLUB

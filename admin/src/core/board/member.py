@@ -22,4 +22,4 @@ class Member(db.Model):
     fees = db.relationship('Fee', backref='members')
 
     updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now)
-    inserted_at = db.Column(db.DateTime, default=datetime.now())  # fecha_alta
+    inserted_at = db.Column(db.DateTime, default=datetime.now())
