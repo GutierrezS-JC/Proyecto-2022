@@ -233,24 +233,37 @@ def get_total_fee_payment(member):
     return result
 
 
-def get_fees_after_next_month(next_month, current_year):
-    fees = Fee.query.filter(Fee.month >= str(next_month), Fee.year == str(current_year))
-    print(fees)
+def get_fees_after_next_month(next_month, current_year, member_id):
+    fees = Fee.query.filter(Fee.member_id == member_id, Fee.month >= str(next_month), Fee.year == str(current_year)).all()
     return fees
+
+
+def already_has_payments_created_for_current_year(current_year, member_id):
+    current_year_fees = Fee.query.filter(member_id == member_id, Fee.year == str(current_year)).all()
+    list = []
+    for obj in current_year_fees:
+        list.append(obj.member_id)
+    res = Fee.query.filter(member_id in list).all()
+    return res
 
 
 def generate_payments(member, discipline):
     next_month = datetime.now().month + 1
     current_year = datetime.now().year
     total = get_total_fee_payment(member)
-    if not member.fees:
+
+    if not already_has_payments_created_for_current_year(current_year, member.id):
+        # No existen cuotas para este año
         for month in range(next_month, 13):
             new_payment = create_payment(month=month, year=current_year, total=total, was_paid=False, date_paid=None,
                                          member_id=member.id)
             db.session.add(new_payment)
     else:
-        for fee in get_fees_after_next_month(next_month, current_year):
+        # Ya existen cuotas para este año por lo que solo se actualiza el precio con la nueva disciplina a partir del
+        # proximo mes
+        for fee in get_fees_after_next_month(next_month, current_year, member.id):
             fee.total += discipline.monthly_fee
+            db.session.add(fee)
     db.session.commit()
     return True
 
