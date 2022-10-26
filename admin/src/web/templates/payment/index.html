@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='disciplinas.css') }}" >
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 userContainer">
+  <h1 class="display-3">Gestion de pagos</h1>
+
+  <hr>
+
+  <h2 class="h3">Busqueda</h2>
+  <form id="formBusqueda" name="formularioBusqueda" role="form" method="GET">
+    <div class="row mb-4">
+      <div class="col-lg-3 d-flex">
+        <input type="text" id="page" class="form-control rounded text-black" name="page" hidden value="1" />
+        {{ search_form.input_search(class="form-control rounded text-black", placeholder="Apellido/Nro de socio...") }}
+      </div>
+
+      <div class="col-lg-1">
+        <button type="submit" id="btnBusqueda" class="btn btn-outline-dark">Buscar</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="mt-5">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="h3">Listado de cuotas</h1>
+      </div>
+    </div>
+    <div id="cardsContainer" class="row mb-5">
+      {% for fee in pagination.items %}
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 cardFlex mt-3">
+          <div class="card" style="width: 19rem;">
+            <div class="card-header d-flex justify-content-between">
+              <div class="fw-semibold fs-5">{{fee.year}}</div>
+              <div>
+                {% if fee.was_paid == True %}
+                  <span class="badge rounded-pill text-bg-success text-end">Pagado</span>
+                {% else %}
+                  <span class="badge rounded-pill text-bg-danger text-end">No pagado</span>
+                {% endif %}
+              </div>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title display-6">{{fee.first_name}} {{fee.last_name}}</h1>
+              {% if (((current_date.month | int > fee.month | int) and (current_date.day > 10)) and (not fee.was_paid)) %}
+                <div style="position: absolute; top: 120px; right: 30px;">VENCIDA</div>
+              {% endif %}
+              <p class="card-title fw-normal fs-5">{{fee.doc_num}}</p>
+
+              <div><b>Cuota:</b> #{{ fee.month }}</div>
+              <div><b>Disciplinas:</b> - </div>
+
+              <h5 class="card-title fs-1 d-flex justify-content-end mt-4 mb-4">${{fee.total}}</h5>
+              {% if not fee.was_paid %}
+                <a href="{{url_for('payment.payment_register_paid', fee_id=fee.id, page=pagination.page, input_search='') }}"
+                   class="btn btn-sm btn-primary">Registrar pago</a>
+              {% else %}
+               <a href="#" class="btn btn-sm btn-secondary disabled invisible">Registrar pago</a>
+              {% endif %}
+              <a href="#" class="btn btn-sm btn-outline-dark mt-2">Descargar comprobante</a>
+            </div>
+            {% if fee.was_paid %}
+              <div class="card-footer text-center" style="background-color: rgb(25, 135, 84)">
+                <small style="color: white">Pagado el {{fee.date_paid.strftime('%d/%m/%Y')}}</small>
+              </div>
+            {% else %}
+             <div class="card-footer text-center">
+                <small> Aun no pagado</small>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

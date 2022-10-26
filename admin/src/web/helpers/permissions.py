@@ -19,3 +19,9 @@ def validate_permissions(permission):
 
 def has_permission(permission):
     return auth.does_user_has_permission(session.get("user"), permission)
+
+
+def is_admin():
+    if not auth.user_is_admin(session.get("user")):
+        abort(403)
+    return True

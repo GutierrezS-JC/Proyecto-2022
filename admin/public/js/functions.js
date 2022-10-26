@@ -1,6 +1,6 @@
 const errorAlert = (text) =>{
     Swal.fire({
-      title: 'Error!',
+      title: 'Error',
       text: text,
       icon: 'error',
       confirmButtonText: 'Ok'
@@ -9,7 +9,7 @@ const errorAlert = (text) =>{
 
 const successAlert = (text) =>{
     Swal.fire({
-      title: 'Todo bien!',
+      title: 'Todo bien',
       text: text,
       icon: 'success',
       confirmButtonText: 'Ok'

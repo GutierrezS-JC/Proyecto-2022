@@ -90,9 +90,9 @@ def get_user_by_email(email):
     return User.query.filter_by(email=email).first()
 
 
-def user_is_admin(username):
+def user_is_admin(email):
     response = False
-    user = get_user_by_username(username)
+    user = get_user_by_email(email)
     for rol in user.roles:
         if rol.name == "Admin":
             response = True

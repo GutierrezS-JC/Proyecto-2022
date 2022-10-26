@@ -1,9 +1,12 @@
+from datetime import datetime
+
 from src.core.database import db
 from src.core.board.permission import Permission
 from src.core.board.rol import Rol
 from src.core.board.config import Config
 from src.core.board.member import Member
 from src.core.board.disciplines import Discipline
+from src.core.board.fee import Fee
 
 
 # Rol methods
@@ -209,6 +212,98 @@ def discipline_add_member(discipline, member):
 
 def does_discipline_includes_member(discipline, member):
     return member in discipline.members
+
+
+# Payment (Fee) methods
+def create_payment(**kwargs):
+    payment = Fee(**kwargs)
+    db.session.add(payment)
+    db.session.commit()
+
+    return payment
+
+
+def list_payment_records(page, per_page):
+    # return Fee.query.order_by(Fee.id.desc()).paginate(page=page, per_page=per_page, error_out=False)
+    payment_list = Fee.query \
+        .join(Member, Member.id == Fee.member_id). \
+        add_columns(Fee.id, Fee.was_paid, Fee.year, Fee.month, Fee.total, Fee.date_paid,
+                    Member.doc_num, Member.first_name, Member.last_name
+                    ).order_by(Fee.year.desc(), Fee.month.desc()). \
+        paginate(page=page, per_page=per_page, error_out=False)
+    return payment_list
+
+
+def list_payment_records_input(input_search, page, per_page):
+    # Esto rompe
+    return Fee.query.filter(Fee.member_id.last_name.ilike(f'%{input_search}%')).paginate(page=page, per_page=per_page,
+                                                                                         error_out=False)
+
+
+def get_total_fee_payment(member):
+    base = get_configuration().monthly_fee
+    total = 0
+    for origin_discipline in member.disciplines:
+        total += origin_discipline.monthly_fee
+    result = total + base
+    return result
+
+
+def get_fees_after_next_month(next_month, current_year, member_id):
+    fees = Fee.query.filter(Fee.member_id == member_id, Fee.month >= str(next_month),
+                            Fee.year == str(current_year)).all()
+    return fees
+
+
+def already_has_payments_created_for_current_year(current_year, member_id):
+    current_year_fees = Fee.query.filter(member_id == member_id, Fee.year == str(current_year)).all()
+    list = []
+    for obj in current_year_fees:
+        list.append(obj.member_id)
+    res = Fee.query.filter(member_id in list).all()
+    return res
+
+
+def generate_payments(member, discipline):
+    next_month = datetime.now().month + 1
+    current_year = datetime.now().year
+    total = get_total_fee_payment(member)
+
+    if not already_has_payments_created_for_current_year(current_year, member.id):
+        # No existen cuotas para este año
+        for month in range(next_month, 13):
+            new_payment = create_payment(month=month, year=current_year, total=total, was_paid=False, date_paid=None,
+                                         member_id=member.id)
+            db.session.add(new_payment)
+    else:
+        # Ya existen cuotas para este año por lo que solo se actualiza el precio con la nueva disciplina a partir del
+        # proximo mes
+        for fee in get_fees_after_next_month(next_month, current_year, member.id):
+            fee.total += discipline.monthly_fee
+            db.session.add(fee)
+    db.session.commit()
+    return True
+
+
+def register_fee_as_paid(fee):
+    result = 0
+    if not fee.was_paid:
+        fee.was_paid = True
+        fee.date_paid = datetime.today()
+
+        if datetime.today().month > int(fee.month) and datetime.today().day > 10:
+            config_extra = get_configuration().extra_charge
+            extra = (fee.total * config_extra) / 100
+            result += fee.total + extra
+            fee.total = result
+
+    db.session.add(fee)
+    db.session.commit()
+    return result
+
+
+def get_fee_by_id(fee_id):
+    return Fee.query.filter_by(id=fee_id).first()
 
 
 # CLUB

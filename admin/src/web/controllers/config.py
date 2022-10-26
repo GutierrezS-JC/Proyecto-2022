@@ -5,6 +5,7 @@ from core import board
 
 from src.web.helpers.forms import ConfigForm
 from src.web.helpers.auth import login_required
+from src.web.helpers import permissions
 
 config_blueprint = Blueprint("config", __name__, url_prefix="/configuracion")
 
@@ -12,6 +13,8 @@ config_blueprint = Blueprint("config", __name__, url_prefix="/configuracion")
 @config_blueprint.get("/")
 @login_required
 def config_index():
+    permissions.is_admin()
+
     config = board.get_configuration()
     form = ConfigForm()
     form.payment_enabled.data = '1' if config.payment_enabled else '2'
@@ -21,6 +24,8 @@ def config_index():
 @config_blueprint.post("/editar_config")
 @login_required
 def config_edit():
+    permissions.is_admin()
+
     form = ConfigForm()
     if form.validate_on_submit():
         config = board.update_configuration(form.elements_quantity.data, True if form.payment_enabled.data == '1' else False,

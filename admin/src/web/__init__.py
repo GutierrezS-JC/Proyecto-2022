@@ -8,6 +8,8 @@ from src.web.controllers.users import user_blueprint
 from src.web.controllers.config import config_blueprint
 from src.web.controllers.members import member_blueprint
 from .controllers.disciplines import disciplines_blueprint
+from src.web.controllers.payment import payment_blueprint
+
 
 from src.web.controllers.api.club import club_api_blueprint
 from src.web.controllers.api.me import me_api_blueprint
@@ -42,6 +44,8 @@ def create_app(env="development", static_folder="static"):
 
     app.register_blueprint(member_blueprint)
     app.register_blueprint(disciplines_blueprint)
+
+    app.register_blueprint(payment_blueprint)
 
     app.register_error_handler(401, handlers.unauthorized_error)
     app.register_error_handler(403, handlers.forbidden_error)

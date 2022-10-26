@@ -133,7 +133,7 @@
             <td class="text-center">
 <!--              <button type="button" class="btn btn-primary btn-sm mt-2 mt-lg-0">Editar</button>-->
               <button class="btn btn-primary btn-sm mt-2 mt-lg-0" data-bs-toggle="modal" data-bs-target="#editarUsuarioModal" type="button" onclick="getUserToEdit({{user.id}})">Editar</button>
-              {% if not user_is_admin(user.username) %}
+              {% if not user_is_admin(user.email) %}
                 {% if user.is_active == True %}
                   <a class="btn btn-warning btn-sm mt-2 mt-lg-0" href="{{ url_for('users.user_change_status', username=user.username, page=pagination.page,  email=search_form.email.data, status=search_form.is_active_search.data ) }}" role="button">Bloquear</a>
                 {% else %}
