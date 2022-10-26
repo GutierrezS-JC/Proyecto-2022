@@ -131,7 +131,7 @@ def discipline_add_member(member_doc_num, discipline_id):
             flash('El socio ya se encuentra registrado en la disciplina', 'warning')
         else:
             board.discipline_add_member(discipline_searched, member_searched)
-            board.generate_payments(member_searched)
+            board.generate_payments(member_searched, discipline_searched)
             flash("El socio fue asignado en la disciplina correctamente", "success")
     else:
         flash('Por favor vuelva a intentarlo', 'danger')

@@ -233,16 +233,24 @@ def get_total_fee_payment(member):
     return result
 
 
-def generate_payments(member):
-    current_month = datetime.now().month + 1
+def get_fees_after_next_month(next_month, current_year):
+    fees = Fee.query.filter(Fee.month >= str(next_month), Fee.year == str(current_year))
+    print(fees)
+    return fees
+
+
+def generate_payments(member, discipline):
+    next_month = datetime.now().month + 1
     current_year = datetime.now().year
     total = get_total_fee_payment(member)
-
-    for month in range(current_month, 13):
-        # Check por cuotas ya creadas ok?
-        new_payment = create_payment(month=month, year=current_year, total=total, was_paid=False, date_paid=None,
-                                     member_id=member.id)
-        db.session.add(new_payment)
+    if not member.fees:
+        for month in range(next_month, 13):
+            new_payment = create_payment(month=month, year=current_year, total=total, was_paid=False, date_paid=None,
+                                         member_id=member.id)
+            db.session.add(new_payment)
+    else:
+        for fee in get_fees_after_next_month(next_month, current_year):
+            fee.total += discipline.monthly_fee
     db.session.commit()
     return True
 
