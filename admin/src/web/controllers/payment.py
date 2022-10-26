@@ -44,10 +44,10 @@ def payment_register_paid(fee_id):
     # Validar permisos
     permissions.validate_permissions('payment_update')
     fee = board.get_fee_by_id(fee_id)
-
+    config_extra = board.get_configuration().extra_charge
     if not fee.was_paid:
-        board.register_fee_as_paid(fee)
-        flash('Se registro el pago de la cuota correctamente', 'success')
+        result = board.register_fee_as_paid(fee)
+        flash(f'Se registro el pago de la cuota con un recargo del {config_extra}% (Total: {result})', 'success')
     else:
         flash('La cuota ya fue registrada como pagada', 'danger')
     page = request.args.get('page', 1, type=int)

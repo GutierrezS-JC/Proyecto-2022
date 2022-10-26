@@ -286,12 +286,20 @@ def generate_payments(member, discipline):
 
 
 def register_fee_as_paid(fee):
+    result = 0
     if not fee.was_paid:
         fee.was_paid = True
         fee.date_paid = datetime.today()
-        db.session.add(fee)
-        db.session.commit()
-    return True
+
+        if datetime.today().month > int(fee.month) and datetime.today().day > 10:
+            config_extra = get_configuration().extra_charge
+            extra = (fee.total * config_extra) / 100
+            result += fee.total + extra
+            fee.total = result
+
+    db.session.add(fee)
+    db.session.commit()
+    return result
 
 
 def get_fee_by_id(fee_id):
