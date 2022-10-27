@@ -10,6 +10,7 @@ from src.core.board.member import Member
 from src.core.board.disciplines import Discipline
 from src.core.board.fee import Fee
 from src.core.board.receipt import Receipt
+from src.core.board.receipt_disciplines import ReceiptDisciplines
 
 
 # Rol methods
@@ -217,6 +218,25 @@ def does_discipline_includes_member(discipline, member):
     return member in discipline.members
 
 
+def update_payments_after_current_month(discipline, old_discipline_value):
+    next_month = datetime.now().month + 1
+    current_year = datetime.now().year
+    for fee in get_fees_after_next_month_with_discipline(next_month, current_year):
+        fee.total -= old_discipline_value
+        fee.total += discipline.monthly_fee
+        db.session.add(fee)
+    db.session.commit()
+
+    return True
+
+
+def get_fees_after_next_month_with_discipline(next_month, current_year):
+    fees = Fee.query.filter(Fee.month >= str(next_month), Fee.year == str(current_year), Fee.was_paid == False)
+    fees.all()
+
+    return fees
+
+
 # Payment (Fee) methods
 def create_payment(**kwargs):
     payment = Fee(**kwargs)
@@ -238,9 +258,8 @@ def list_payment_records(page, per_page):
 
 
 def list_payment_records_input(input_search, page, per_page):
-
-    q = Fee.query.join(Member, Member.id == Fee.member_id).\
-        filter((Member.last_name.ilike(f'%{input_search}%') | (Member.member_num.ilike(f'%{input_search}%')))).\
+    q = Fee.query.join(Member, Member.id == Fee.member_id). \
+        filter((Member.last_name.ilike(f'%{input_search}%') | (Member.member_num.ilike(f'%{input_search}%')))). \
         add_columns(Fee.id, Fee.was_paid, Fee.year, Fee.month, Fee.total, Fee.date_paid,
                     Member.doc_num, Member.first_name, Member.last_name
                     ).order_by(Fee.year.desc(), Fee.month.desc())
@@ -259,7 +278,9 @@ def get_total_fee_payment(member):
 
 def get_fees_after_next_month(next_month, current_year, member_id):
     fees = Fee.query.filter(Fee.member_id == member_id, Fee.month >= str(next_month),
-                            Fee.year == str(current_year)).all()
+                            Fee.year == str(current_year), Fee.was_paid == False)
+    print(fees)
+    fees.all()
     return fees
 
 
@@ -320,6 +341,25 @@ def create_receipt(**kwargs):
     db.session.commit()
 
     return receipt
+
+
+def create_receipt_disciplines(disciplines, new_receipt_id):
+    result = []
+    for discipline in disciplines:
+        receipt_discipline = ReceiptDisciplines(name=discipline.name, category=discipline.category,
+                                                instructors=discipline.instructors, days_hours=discipline.days_hours,
+                                                monthly_fee=discipline.monthly_fee, receipt_id=new_receipt_id)
+        db.session.add(receipt_discipline)
+        result.append(receipt_discipline)
+    db.session.commit()
+    return result
+
+
+def add_archived_disciplines_to_receipt(new_receipt, arch_disciplines):
+    new_receipt.disciplines = arch_disciplines
+    db.session.commit()
+
+    return True
 
 
 def format_month_description(month_number, year_number):

@@ -146,7 +146,7 @@
 					<td>Precio</td>
 				</tr>
 
-				{% for discipline in member_disciplines %}
+				{% for discipline in receipt.disciplines %}
 					<tr class="item">
 						<td> {{ discipline.name }} - {{ discipline.category }} </td>
 						<td> ${{ discipline.monthly_fee }} </td>
@@ -164,15 +164,15 @@
 				{% endif %}
 				<tr class="total">
 					<td></td>
-					<td>Total: ${{ total }}</td>
+					<td>Total: ${{ receipt.total_amount }}</td>
 				</tr>
 			</table>
 		</div>
 
 	<div>
 		<p>
-			Recibimos de {{ receipt.member_full_name }} el importe en pesos {{ receipt.total_amount }} por el concepto
-			de cuota societaria mes {{ receipt.month_description }}
+			Recibimos de <b> {{ receipt.member_full_name }} </b> el importe en pesos <b> {{ receipt.total_amount }} </b>
+			por el concepto de cuota societaria mes <b> {{ receipt.month_description }} </b>
 		</p>
 	</div>
 	</body>
