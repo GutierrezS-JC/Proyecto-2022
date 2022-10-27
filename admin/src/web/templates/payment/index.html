@@ -34,7 +34,7 @@
     <div id="cardsContainer" class="row mb-5">
       {% for fee in pagination.items %}
         <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 cardFlex mt-3">
-          <div class="card" style="width: 19rem;">
+          <div class="card" style="width: 19rem; height: 28rem">
             <div class="card-header d-flex justify-content-between">
               <div class="fw-semibold fs-5">{{fee.year}}</div>
               <div>
@@ -48,7 +48,7 @@
             <div class="card-body">
               <h1 class="card-title display-6">{{fee.first_name}} {{fee.last_name}}</h1>
               {% if (((current_date.month | int > fee.month | int) and (current_date.day > 10)) and (not fee.was_paid)) %}
-                <div style="position: absolute; top: 120px; right: 30px;">VENCIDA</div>
+                <div style="position: absolute; top: 120px; right: 30px; color: red; font-weight: bold">VENCIDA</div>
               {% endif %}
               <p class="card-title fw-normal fs-5">{{fee.doc_num}}</p>
 
@@ -58,11 +58,11 @@
               <h5 class="card-title fs-1 d-flex justify-content-end mt-4 mb-4">${{fee.total}}</h5>
               {% if not fee.was_paid %}
                 <a href="{{url_for('payment.payment_register_paid', fee_id=fee.id, page=pagination.page, input_search='') }}"
-                   class="btn btn-sm btn-primary">Registrar pago</a>
+                   class="btn btn-sm btn-outline-primary">Registrar pago</a>
               {% else %}
-               <a href="#" class="btn btn-sm btn-secondary disabled invisible">Registrar pago</a>
+                <a href="{{url_for('payment.download_receipt_pdf', fee_id=fee.id)}}"
+                   class="btn btn-sm btn-outline-dark mt-2">Descargar comprobante</a>
               {% endif %}
-              <a href="#" class="btn btn-sm btn-outline-dark mt-2">Descargar comprobante</a>
             </div>
             {% if fee.was_paid %}
               <div class="card-footer text-center" style="background-color: rgb(25, 135, 84)">
