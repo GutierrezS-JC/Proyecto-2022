@@ -279,7 +279,6 @@ def get_total_fee_payment(member):
 def get_fees_after_next_month(next_month, current_year, member_id):
     fees = Fee.query.filter(Fee.member_id == member_id, Fee.month >= str(next_month),
                             Fee.year == str(current_year), Fee.was_paid == False)
-    print(fees)
     fees.all()
     return fees
 
@@ -415,7 +414,14 @@ def get_members_disciplines(searched_member):
     return searched_member.disciplines
 
 
-# APIs
+def get_fees_not_paid_with_month_year(member_id, month, year):
+    fees = Fee.query.filter(Fee.member_id == member_id, Fee.month == str(month),
+                            Fee.year == str(year), Fee.was_paid == False)
+    fees.all()
+    return fees
+
+
+# APIs JSON
 def rol_json(rol):
     return {
         'id': rol.id,
@@ -461,4 +467,11 @@ def club_discipline_json(discipline):
         'name': discipline.name,
         'days_hours': discipline.days_hours,
         'teachers': discipline.instructors
+    }
+
+
+def me_payment_json(month, total):
+    return {
+        'month': month,
+        'amount': total
     }
