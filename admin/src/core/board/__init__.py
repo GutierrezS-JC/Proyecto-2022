@@ -1,4 +1,6 @@
 from datetime import datetime
+from num2words import num2words
+from sqlalchemy import or_
 
 from src.core.database import db
 from src.core.board.permission import Permission
@@ -7,6 +9,7 @@ from src.core.board.config import Config
 from src.core.board.member import Member
 from src.core.board.disciplines import Discipline
 from src.core.board.fee import Fee
+from src.core.board.receipt import Receipt
 
 
 # Rol methods
@@ -235,9 +238,14 @@ def list_payment_records(page, per_page):
 
 
 def list_payment_records_input(input_search, page, per_page):
-    # Esto rompe
-    return Fee.query.filter(Fee.member_id.last_name.ilike(f'%{input_search}%')).paginate(page=page, per_page=per_page,
-                                                                                         error_out=False)
+
+    q = Fee.query.join(Member, Member.id == Fee.member_id).\
+        filter((Member.last_name.ilike(f'%{input_search}%') | (Member.member_num.ilike(f'%{input_search}%')))).\
+        add_columns(Fee.id, Fee.was_paid, Fee.year, Fee.month, Fee.total, Fee.date_paid,
+                    Member.doc_num, Member.first_name, Member.last_name
+                    ).order_by(Fee.year.desc(), Fee.month.desc())
+    print(q)
+    return q.paginate(page=page, per_page=per_page, error_out=False)
 
 
 def get_total_fee_payment(member):
@@ -296,10 +304,57 @@ def register_fee_as_paid(fee):
             extra = (fee.total * config_extra) / 100
             result += fee.total + extra
             fee.total = result
-
+            fee.was_expired = True
+        else:
+            result = fee.total
+            fee.was_expired = False
     db.session.add(fee)
     db.session.commit()
     return result
+
+
+# Receipt
+def create_receipt(**kwargs):
+    receipt = Receipt(**kwargs)
+    db.session.add(receipt)
+    db.session.commit()
+
+    return receipt
+
+
+def format_month_description(month_number, year_number):
+    month = ''
+    if month_number == 1:
+        month = "Enero"
+    elif month_number == 2:
+        month = "Febrero"
+    elif month_number == 3:
+        month = "Marzo"
+    elif month_number == 4:
+        month = "Abril"
+    elif month_number == 5:
+        month = "Mayo"
+    elif month_number == 6:
+        month = "Junio"
+    elif month_number == 7:
+        month = "Julio"
+    elif month_number == 8:
+        month = "Agosto"
+    elif month_number == 9:
+        month = "Septiembre"
+    elif month_number == 10:
+        month = "Octubre"
+    elif month_number == 11:
+        month = "Noviembre"
+    else:
+        month = "Diciembre"
+
+    return f"{str(month)} {str(year_number)}"
+
+
+def format_amount_description(total_amount):
+    num_word = num2words(total_amount, lang='es')
+    return f"({int(total_amount)}) {num_word}"
 
 
 def get_fee_by_id(fee_id):
