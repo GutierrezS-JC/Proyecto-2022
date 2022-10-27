@@ -56,8 +56,13 @@ def payment_register_paid(fee_id):
         month_description = board.format_month_description(int(fee.month), fee.year)
         total_amount_description = board.format_amount_description(result)
         # Sino result ok?
-        board.create_receipt(member_full_name=member_full_name, total_amount=total_amount_description,
-                             month_description=month_description, fee_id=fee.id)
+
+        new_receipt = board.create_receipt(member_full_name=member_full_name,
+                                           total_amount_description=total_amount_description,
+                                           total_amount=result, month_description=month_description, fee_id=fee.id)
+
+        archived_disciplines = board.create_receipt_disciplines(member_searched.disciplines, new_receipt.id)
+        board.add_archived_disciplines_to_receipt(new_receipt, archived_disciplines)
 
         flash(f'Se registro el pago de la cuota con un recargo del {config_extra}% (Total: {result})', 'success')
     else:
@@ -72,7 +77,6 @@ def payment_register_paid(fee_id):
 @payment_blueprint.route('download/comprobante/pdf/<fee_id>')
 @login_required
 def download_receipt_pdf(fee_id):
-
     # Validar permisos
     permissions.validate_permissions('payment_show')
 
@@ -80,7 +84,6 @@ def download_receipt_pdf(fee_id):
     file_name = f"Comprobante_cuota_{fecha}.pdf"
 
     fee_searched = board.get_fee_by_id(fee_id)
-    member_disciplines = fee_searched.member.disciplines
 
     receipt = fee_searched.receipt
 
@@ -88,7 +91,6 @@ def download_receipt_pdf(fee_id):
     due_date = f"{fee_searched.year}-{fee_searched.month}"
 
     rendered = render_template('pdf/receipt.html', receipt=receipt, config=config, due_date=due_date,
-                               member_disciplines=member_disciplines, total=fee_searched.total,
                                was_expired=fee_searched.was_expired)
     pdf = pdfkit.from_string(rendered, False)
 

@@ -85,7 +85,7 @@ def discipline_create():
     return redirect(url_for("disciplines.discipline_index", page=page, discipline=discipline, status=status))
 
 
-@disciplines_blueprint.route("/editar_socio")
+@disciplines_blueprint.post("/editar_socio")
 @login_required
 def discipline_edit():
     # Validar permisos
@@ -93,10 +93,14 @@ def discipline_edit():
 
     form = EditDisciplineForm()
     if form.validate_on_submit():
-        member = board.discipline_edit(discipline_id=form.discipline_id_edit.data, name=form.name_edit.data,
-                                       category=form.category_edit.data, instructors=form.instructors_edit.data,
-                                       days_hours=form.days_hours_edit.data, monthly_fee=form.monthly_fee_edit.data,
-                                       is_active=True if form["is_active_edit"].data == "1" else False)
+        old_discipline_value = int(board.get_discipline_by_id(form.discipline_id_edit.data).monthly_fee)
+        discipline = board.discipline_edit(discipline_id=form.discipline_id_edit.data, name=form.name_edit.data,
+                                           category=form.category_edit.data, instructors=form.instructors_edit.data,
+                                           days_hours=form.days_hours_edit.data, monthly_fee=form.monthly_fee_edit.data,
+                                           is_active=True if form["is_active_edit"].data == "1" else False)
+        if old_discipline_value != int(discipline.monthly_fee):
+            board.update_payments_after_current_month(discipline, old_discipline_value)
+
         flash("Disciplina editada exitosamente", "success")
     else:
         print("WTF happened")
