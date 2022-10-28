@@ -20,7 +20,6 @@ def authenticate():
     if request.method == "POST":
         params = request.form
         user = auth.verify_login(params["email"], params["password"])
-
         if not user:
             flash("Usuario o clave incorrecto", "danger")
             return redirect(url_for("login.login_index"))

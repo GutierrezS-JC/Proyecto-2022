@@ -109,7 +109,11 @@
         </thead>
         <tbody>
         {% for user in pagination.items %}
-          <tr>
+          {% if user.is_deleted == True %}
+            <tr class="table-danger">
+          {% else %}
+            <tr>
+          {% endif %}
             <th scope="row"> {{ user.id }} </th>
             <td>{{ user.first_name }}</td>
             <td>{{ user.last_name }}</td>
@@ -142,7 +146,13 @@
               {% else %}
                 <button type="button" class="btn btn-outline-secondary btn-sm mt-2 mt-lg-0" disabled>Bloquear</button>
               {% endif %}
-              <button type="button" class="btn btn-danger btn-sm mt-2 mt-lg-0">Eliminar</button>
+              {% if user.is_deleted == False %}
+                <button type="button" class="btn btn-sm btn-danger" onclick="triggerDeleteAlert{{ user.id, user.username}}">
+                    Eliminar
+                </button>
+              {% else %}
+                <button type="button" class="btn btn-sm btn-danger" disabled> Eliminar </button>
+              {% endif %}
             </td>
           </tr>
         {% endfor %}
@@ -207,6 +217,10 @@
     for (let item of items){
       item.checked = false
     }
+  }
+
+  function triggerDeleteAlert(id, username){
+      questionDeleteUser(`Esta por eliminar al usuario ${username}`, id)
   }
 
 </script>

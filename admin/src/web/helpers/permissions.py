@@ -1,6 +1,6 @@
 from flask import session, abort
 
-from core import auth
+from src.core import auth
 
 
 def user_is_active(user_email):

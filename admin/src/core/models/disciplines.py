@@ -18,7 +18,7 @@ class Discipline(db.Model):
     days_hours = db.Column(db.String(100))
     monthly_fee = db.Column(db.Integer())
     is_active = db.Column(db.Boolean)
-    is_deleted = db.Column(db.Boolean)
+    is_deleted = db.Column(db.Boolean, default=False)
 
     members = db.relationship("Member", secondary=discipline_members, backref="disciplines")
     updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now)

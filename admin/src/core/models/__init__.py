@@ -3,14 +3,14 @@ from num2words import num2words
 from sqlalchemy import or_
 
 from src.core.database import db
-from src.core.board.permission import Permission
-from src.core.board.rol import Rol
-from src.core.board.config import Config
-from src.core.board.member import Member
-from src.core.board.disciplines import Discipline
-from src.core.board.fee import Fee
-from src.core.board.receipt import Receipt
-from src.core.board.receipt_disciplines import ReceiptDisciplines
+from src.core.models.permission import Permission
+from src.core.models.rol import Rol
+from src.core.models.config import Config
+from src.core.models.member import Member
+from src.core.models.disciplines import Discipline
+from src.core.models.fee import Fee
+from src.core.models.receipt import Receipt
+from src.core.models.receipt_disciplines import ReceiptDisciplines
 
 
 # Rol methods
@@ -216,6 +216,25 @@ def discipline_add_member(discipline, member):
 
 def does_discipline_includes_member(discipline, member):
     return member in discipline.members
+
+
+def member_is_currently_defaulted(member):
+    configuration = get_configuration()
+
+    member_fees = member.fees
+    current_date = datetime.today()
+
+    if int(current_date.day) > int(configuration.due_date):
+        for fee in member_fees:
+            if int(current_date.day) > int(configuration.due_date)\
+                    and int(current_date.month) > int(fee.month) and (fee.was_paid is None or fee.was_paid == False):
+                return True
+    else:
+        for fee in member_fees:
+            if int(current_date.month) > int(fee.month) and (fee.was_paid is None or fee.was_paid == False):
+                return True
+
+    return False
 
 
 def update_payments_after_current_month(discipline, old_discipline_value):

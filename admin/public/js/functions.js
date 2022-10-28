@@ -41,3 +41,20 @@ const questionAlert = (text, doc_num, disciplineId, title='¿Seguro?') =>{
         }
     })
 }
+
+const questionDeleteUser = (text, user_id, title='¿Seguro?') =>{
+    Swal.fire({
+      title: title,
+      text: text,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirmar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed){
+            window.location.href = `/users/eliminar_usuario/${user_id}`
+        }
+    })
+}

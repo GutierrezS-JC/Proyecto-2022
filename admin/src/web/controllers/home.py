@@ -1,8 +1,6 @@
-from flask import Blueprint, redirect, url_for
+from flask import Blueprint
 from flask import render_template
-from flask import session
 
-from src.web.helpers import auth
 from src.web.helpers.auth import login_required
 
 

@@ -2,8 +2,8 @@ from passlib.hash import sha256_crypt
 from flask import Blueprint, redirect, url_for, request, flash, jsonify
 from flask import render_template
 
-from core import auth
-from core import board
+from src.core import auth
+from src.core import models
 
 from src.web.helpers import permissions
 
@@ -32,16 +32,11 @@ def user_list_all():
     # Validar permisos
     permissions.validate_permissions('user_index')
 
-    print(request.args)
-
     page = request.args.get('page', 1, type=int)
-    per_page = board.get_configuration()
+    per_page = models.get_configuration()
 
     email = request.args.get('email', '')
-    status = request.args.get('status', '', type=str)
-
-    # Otra opcion para busqueda --> consultar por query param seteado y hacer una consulta sql apropiada
-    # pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
+    status = request.args.get('status', '2', type=str)
 
     if email:
         if status == '2':
@@ -52,7 +47,6 @@ def user_list_all():
         if status == '2':
             pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
         else:
-            print(status)
             pagination = auth.list_users_with_status(status, page, per_page=per_page.elements_quantity)
 
     form = EditUserForm()
@@ -66,7 +60,7 @@ def user_list_all():
 @user_blueprint.route("/cambiar_rol/<username>")
 @login_required
 def user_change_status(username):
-    # Validar permisos
+
     permissions.validate_permissions('user_update')
 
     auth.user_set_status(username)
@@ -76,14 +70,27 @@ def user_change_status(username):
     return redirect(url_for('users.user_list_all', page=page, email=email, status=status))
 
 
+@user_blueprint.route("/eliminar_usuario/<user_id>")
+@login_required
+def user_delete(user_id):
+
+    permissions.validate_permissions('user_destroy')
+
+    auth.delete_user(user_id)
+    page = request.args.get('page', 1, type=int)
+    email = request.args.get('email', '')
+    status = request.args.get('status', '2', type=str)
+
+    return redirect(url_for('users.user_list_all', page=page, email=email, status=status))
+
+
 @user_blueprint.post("/cargar")
 @login_required
 def user_create():
-    # Validar permisos
+
     permissions.validate_permissions('user_new')
 
     form = RegisterUserForm()
-
     if form.validate_on_submit():
         roles = []
 
@@ -93,7 +100,7 @@ def user_create():
             flash("Error. El nombre de usuario ya se encuentra registrado", "danger")
         else:
             for rol in form["roles"].data:
-                rol_buscado = board.get_rol_by_id(rol)
+                rol_buscado = models.get_rol_by_id(rol)
                 roles.append(rol_buscado)
 
             password = sha256_crypt.encrypt(form["password"].data)
@@ -123,19 +130,18 @@ def user_edit():
     permissions.validate_permissions('user_update')
 
     form = EditUserForm()
-    form.roles.choices = [(rol.id, rol.name) for rol in board.get_roles()]
+    form.roles.choices = [(rol.id, rol.name) for rol in models.get_roles()]
 
     page = request.args.get('page', 1, type=int)
     email = request.args.get('email', '')
     status = request.args.get('status', '0', type=str)
 
     if form.validate_on_submit():
-        r_records = board.get_roles()
+        r_records = models.get_roles()
         accepted = []
         for rol in r_records:
             if rol.id in form.roles.data:
                 accepted.append(rol)
-        print(f"Soy accepted {accepted}")
 
         if not accepted:
             flash("Error. El usuario debe tener al menos un rol asignado", "danger")
@@ -159,12 +165,10 @@ def user_search():
     # Validar permisos
     permissions.validate_permissions('user_index')
 
-    # Logica consulta BD para traer usuarios
     page = request.args.get('page', 1, type=int)
     email = request.args.get('email', '')
     status = request.args.get('status', '')
 
-    # Render_template es una opcion
     return redirect(url_for("users.user_list_all", page=page, email=email, status=status))
 
 
@@ -177,7 +181,7 @@ def get_user(user_id):
     if user is None:
         return jsonify({'message': 'El usuario no existe'}), 404
     for rol in user.roles:
-        user_roles.append(board.rol_json(rol))
+        user_roles.append(models.rol_json(rol))
 
     user_json = auth.user_json(user, user_roles)
     return jsonify({'user': user_json})

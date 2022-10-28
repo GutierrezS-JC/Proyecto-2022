@@ -4,7 +4,7 @@ from src.core.database import db
 from src.core.auth.user import User
 
 
-def all_paginated(page=1, per_page=10):
+def all_paginated(page, per_page):
     return User.query.order_by(User.id.asc()).paginate(page=page, per_page=per_page, error_out=False)
 
 
@@ -119,6 +119,14 @@ def does_user_has_permission(user, in_permission):
 
 def is_active(user):
     return get_user_by_email(user).is_active
+
+
+def delete_user(user_id):
+    user_searched = get_user_by_id(user_id)
+    user_searched.is_deleted = True
+    db.session.commit()
+
+    return user_searched
 
 
 # APIs

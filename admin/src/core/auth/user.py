@@ -18,6 +18,8 @@ class User(db.Model):
     last_name = db.Column(db.String(255))
     password = db.Column(db.String(100))
     is_active = db.Column(db.Boolean)
+    is_deleted = db.Column(db.Boolean, default=False)
+
     roles = db.relationship("Rol", secondary=user_roles)
     updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now)
     inserted_at = db.Column(db.DateTime, default=datetime.now())
