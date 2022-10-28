@@ -79,5 +79,41 @@
     </div>
   </div>
 
+  <div class="pagination mt-4 d-flex justify-content-center mb-5">
+    {% if pagination.has_prev %}
+        <span>
+            <a class='page-number text-decoration-none me-2' href="{{ url_for('payment.payment_index', page=pagination.prev_num, input_search=search_form.input_search.data ) }}"
+            style="color: inherit;">
+                {{ '<<' }}
+            </a>
+        </span>
+    {% endif %}
+
+    <div>
+      <div class="btn-toolbar" role="toolbar">
+        <div class="btn-group" role="group" aria-label="First group">
+          {% for number in pagination.iter_pages() %}
+            {% if pagination.page != number %}
+              <a class="btn btn-outline-dark btn-sm"
+                 href="{{ url_for('payment.payment_index', page=number, input_search=search_form.input_search.data) }}" role="button">
+                {{ number }}
+              </a>
+            {% else %}
+              <button type="button" class="btn btn-dark btn-sm">{{ number }}</button>
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% if pagination.has_next %}
+          <span>
+            <a class='page-number text-decoration-none ms-2'  style="color: inherit"
+                href="{{ url_for('payment.payment_index', page=pagination.next_num,input_search=search_form.input_search.data) }}">
+                {{ '>>' }}
+            </a>
+          </span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
 </div>
 {% endblock %}
