@@ -24,25 +24,35 @@
             <a class="nav-link active" aria-current="page" href="{{ url_for('home.home_index') }}">Inicio</a>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('users.user_index') }}">Usuarios</a>
-          </li>
+          {% if has_permission("user_new") %}}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('users.user_index') }}">Usuarios</a>
+            </li>
+          {% endif %}
 
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('members.member_index', page=1, email='',status='2') }}">Asociados</a>
-          </li>
+          {% if has_permission("member_index") %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('members.member_index', page=1, email='',status='2') }}">Asociados</a>
+            </li>
+          {% endif %}
 
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('disciplines.discipline_index', page=1, disciplina='', status='2') }}">Disciplinas</a>
-          </li>
+          {% if has_permission("discipline_index") %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('disciplines.discipline_index', page=1, disciplina='', status='2') }}">Disciplinas</a>
+            </li>
+          {% endif %}
 
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('payment.payment_index', page=1, input_search='') }}">Gestion de pagos</a>
-          </li>
+          {% if has_permission("payment_index") %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('payment.payment_index', page=1, input_search='') }}">Gestion de pagos</a>
+            </li>
+          {% endif %}
 
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('config.config_index') }}">Configuracion</a>
-          </li>
+          {% if has_permission("config_index") %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('config.config_index') }}">Configuracion</a>
+            </li>
+          {% endif %}
 
           <div class="section-mobile d-block d-lg-none">
             <hr style="color: gray">
