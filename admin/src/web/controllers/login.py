@@ -15,7 +15,11 @@ def login_index():
 
 @login_blueprint.post("/auth/authenticate")
 def authenticate():
-    # print(request)
+    """Metodo encargado de verificar si los datos recibidos corresponden a un usuario
+    registrado en el sistema. En caso de existir se inicia una sesion y se redirige
+    al template de inicio (principal - HOME)
+    """
+
     if request.method == "POST":
         params = request.form
         user = auth.verify_login(params["email"], params["password"])
@@ -43,6 +47,8 @@ def authenticate():
 
 @login_blueprint.get("/auth/logout")
 def logout():
+    """Metodo encargado de cerrar la sesion para un usuario logueado"""
+
     del session["user"]
     del session["username"]
     session.clear()

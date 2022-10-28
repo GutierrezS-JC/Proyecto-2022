@@ -23,6 +23,8 @@ member_blueprint = Blueprint("members", __name__, url_prefix="/members")
 @member_blueprint.get("/listado")
 @login_required
 def member_index():
+    """Metodo encargado de devolver el template de la vista principal del modulo de socios (members)"""
+
     permissions.validate_permissions('member_index')
 
     page = request.args.get('page', 1, type=int)
@@ -56,6 +58,8 @@ def member_index():
 @member_blueprint.post("/cargar")
 @login_required
 def member_create():
+    """Metodo encargado de la creacion de un socio"""
+
     permissions.validate_permissions('member_new')
 
     form = MemberForm()
@@ -110,6 +114,8 @@ def member_create():
 @member_blueprint.post("/editar_socio")
 @login_required
 def member_edit():
+    """Metodo encargado de la edicion de un socio"""
+
     permissions.validate_permissions('member_update')
 
     form = EditMemberForm()
@@ -138,6 +144,10 @@ def member_edit():
 @member_blueprint.route('download/report/csv')
 @login_required
 def download_report_csv():
+    """Metodo encargado de generar un archivo CSV con la informacion de los socios
+    de acuerdo a un criterio de busqueda dado por si incluye o no el apellido
+    y un estado (todos - actvio - inactivo)"""
+
     permissions.validate_permissions('member_index')
 
     last_name = request.args.get('apellido', '')
@@ -179,6 +189,10 @@ def download_report_csv():
 @member_blueprint.route('download/report/pdf')
 @login_required
 def download_report_pdf():
+    """Metodo encargado de generar un archivo PDF con la informacion de los socios
+    de acuerdo a un criterio de busqueda dado por si incluye o no el apellido
+    y un estado (todos - actvio - inactivo)"""
+
     permissions.validate_permissions('member_index')
 
     last_name = request.args.get('apellido', '')
@@ -208,12 +222,14 @@ def download_report_pdf():
     return response
 
 
-# APIs de user
+# APIs de members (socios)
 @member_blueprint.route("/api/member/<member_id>")
 @login_required
 def get_user(member_id):
-    member = models.get_member_by_id(member_id)
+    """Retorna json con informacion de socios que sera de utilidad
+    para la consulta desde la vista, en particular fue pensado para la edicion"""
 
+    member = models.get_member_by_id(member_id)
     if member is None:
         return jsonify({'message': 'El socio no existe'}), 404
 

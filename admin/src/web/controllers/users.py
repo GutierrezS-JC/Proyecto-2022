@@ -18,6 +18,9 @@ user_blueprint = Blueprint("users", __name__, url_prefix="/users")
 @user_blueprint.get("/")
 @login_required
 def user_index():
+    """Metodo encargado de devolver el template de la vista de creacion de usuario
+    con su respectivo formulario"""
+
     permissions.validate_permissions('user_new')
 
     form = RegisterUserForm()
@@ -27,6 +30,8 @@ def user_index():
 @user_blueprint.route("/listado")
 @login_required
 def user_list_all():
+    """Metodo encargado de devolver el template de la vista principal del modulo de usuario"""
+
     permissions.validate_permissions('user_index')
 
     page = request.args.get('page', 1, type=int)
@@ -57,6 +62,9 @@ def user_list_all():
 @user_blueprint.route("/cambiar_rol/<username>")
 @login_required
 def user_change_status(username):
+    """Metodo encargado del cambio de estado (activo/inactivo) de un usuario
+    dado un nombre de usuario recibido como parametro de ruta"""
+
     permissions.validate_permissions('user_update')
 
     auth.user_set_status(username)
@@ -69,6 +77,9 @@ def user_change_status(username):
 @user_blueprint.route("/eliminar_usuario/<user_id>")
 @login_required
 def user_delete(user_id):
+    """Metodo encargado de la eliminacion de un usuario dado un ID de usuario recibido
+    como parametro de ruta"""
+
     permissions.validate_permissions('user_destroy')
 
     auth.delete_user(user_id)
@@ -82,6 +93,8 @@ def user_delete(user_id):
 @user_blueprint.post("/cargar")
 @login_required
 def user_create():
+    """Metodo encargado de devolver el template de la vista principal del modulo de configuracion"""
+
     permissions.validate_permissions('user_new')
 
     form = RegisterUserForm()
@@ -120,6 +133,8 @@ def user_create():
 @user_blueprint.post("/editar_usuario")
 @login_required
 def user_edit():
+    """Metodo encargado de la edicion de un usuario"""
+
     permissions.validate_permissions('user_update')
 
     form = EditUserForm()
@@ -155,6 +170,8 @@ def user_edit():
 @user_blueprint.route("/buscar_usuario", methods=["GET"])
 @login_required
 def user_search():
+    """Metodo encargado de la busqueda de un usuario"""
+
     permissions.validate_permissions('user_index')
 
     page = request.args.get('page', 1, type=int)
@@ -168,6 +185,9 @@ def user_search():
 @user_blueprint.route("/api/users/<user_id>")
 @login_required
 def get_user(user_id):
+    """Retorna json con informacion de usuarios que sera de utilidad
+    para la consulta desde la vista, en particular fue pensado para la edicion"""
+
     user = auth.get_user_by_id(user_id)
     user_roles = []
     if user is None:

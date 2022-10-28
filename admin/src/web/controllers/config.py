@@ -13,8 +13,9 @@ config_blueprint = Blueprint("config", __name__, url_prefix="/configuracion")
 @config_blueprint.get("/")
 @login_required
 def config_index():
-    permissions.is_admin()
+    """Metodo encargado de devolver el template de la vista principal del modulo de configuracion"""
 
+    permissions.is_admin()
     config = models.get_configuration()
     form = ConfigForm()
     form.payment_enabled.data = '1' if config.payment_enabled else '2'
@@ -24,6 +25,8 @@ def config_index():
 @config_blueprint.post("/editar_config")
 @login_required
 def config_edit():
+    """Metodo encargado de la edicion de los parametros del modulo de configuracion"""
+
     permissions.is_admin()
 
     form = ConfigForm()
