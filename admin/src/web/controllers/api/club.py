@@ -8,6 +8,8 @@ club_api_blueprint = Blueprint("club_api", __name__, url_prefix="/api/club")
 
 @club_api_blueprint.get('/disciplines')
 def get_disciplines_data():
+    """ Obtiene todas las disciplinas que se realizan en el club"""
+
     disciplines_data = models.get_all_disciplines()
     result = []
     for discipline in disciplines_data:
@@ -20,6 +22,8 @@ def get_disciplines_data():
 
 @club_api_blueprint.get('/info')
 def get_club_data():
+    """ Obtiene la informacion relacionada al club con respecto al telefono y email """
+
     club_data = models.get_club_data()
     res_json = models.club_data_json(club_data[0], club_data[1])
 

@@ -9,6 +9,9 @@ me_api_blueprint = Blueprint("me_api", __name__, url_prefix="/api/me")
 
 @me_api_blueprint.get('/disciplines')
 def get_disciplines_data():
+    """Obtiene la lista de las disciplinas a las que está inscripto el usuario autentificado
+     (Recibido por Authorization)"""
+
     member_req = request.headers.get('Authorization')
     searched_member = models.get_member_by_id(member_req)
     if searched_member:
@@ -29,6 +32,8 @@ def get_disciplines_data():
 
 @me_api_blueprint.get('/payments')
 def get_member_payments():
+    """Obtiene la lista de pagos registrados (pagados) del usuario autentificado (Recibido por Authorization)"""
+
     member_req = request.headers.get('Authorization')
     searched_member = models.get_member_by_id(member_req)
     if searched_member:
@@ -49,6 +54,8 @@ def get_member_payments():
 
 @me_api_blueprint.post('/payments')
 def post_member_payments():
+    """Registra un nuevo pago para el usuario autentificado (recibido por Authorization)"""
+
     member_req = request.headers.get('Authorization')
     member_searched = models.get_member_by_id(member_req)
 

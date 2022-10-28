@@ -16,6 +16,8 @@ disciplines_blueprint = Blueprint("disciplines", __name__, url_prefix="/discipli
 @disciplines_blueprint.get("/listado")
 @login_required
 def discipline_index():
+    """Metodo encargado de devolver el template de la vista principal del modulo de disciplinas"""
+
     permissions.validate_permissions('discipline_index')
 
     page = request.args.get('page', 1, type=int)
@@ -50,6 +52,8 @@ def discipline_index():
 @disciplines_blueprint.post("/cargar")
 @login_required
 def discipline_create():
+    """Metodo encargado de la creacion de una disciplina"""
+
     permissions.validate_permissions('discipline_new')
 
     form = DisciplineForm()
@@ -79,9 +83,11 @@ def discipline_create():
     return redirect(url_for("disciplines.discipline_index", page=page, discipline=discipline, status=status))
 
 
-@disciplines_blueprint.post("/editar_socio")
+@disciplines_blueprint.post("/editar_disciplina")
 @login_required
 def discipline_edit():
+    """Metodo encargado de la edicion de una disciplina"""
+
     permissions.validate_permissions('discipline_update')
 
     form = EditDisciplineForm()
@@ -112,6 +118,11 @@ def discipline_edit():
 @disciplines_blueprint.route("/agregar_socio_disciplina/<member_doc_num>/<discipline_id>")
 @login_required
 def discipline_add_member(member_doc_num, discipline_id):
+    """Metodo encargado de agregar un socio no moroso en una disciplina.
+    Ademas, en caso de realizar exitosamente la asignacion anterior, se generan
+    las cuotas a partir del mes siguiente al actual.
+    """
+
     permissions.validate_permissions('discipline_update')
 
     page = request.args.get('page', 1, type=int)
@@ -142,6 +153,9 @@ def discipline_add_member(member_doc_num, discipline_id):
 @disciplines_blueprint.route("/api/discipline/<discipline_id>")
 @login_required
 def get_discipline(discipline_id):
+    """Retorna json con informacion de disciplinas que sera de utilidad
+    para la consulta desde la vista, en particular fue pensado para la edicion"""
+
     discipline = models.get_discipline_by_id(discipline_id)
     if discipline is None:
         return jsonify({'message': 'La disciplina no existe'}), 404
@@ -153,6 +167,10 @@ def get_discipline(discipline_id):
 @disciplines_blueprint.route("/api/members_discipline/<name>")
 @login_required
 def get_members_for_discipline(name):
+    """Retorna json con informacion de los socios (members) que coinciden con
+    el parametro <name> correspondiente a un string a buscar en el sistema.
+    Esta pensado para utilizarse desde la vista mostrando el resultado
+    de una busqueda de socios para agregarlos en una disciplina"""
     members = models.get_members_for_discipline(name)
     if members is None:
         return jsonify({'members_discipline': []})

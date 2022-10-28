@@ -18,6 +18,9 @@ payment_blueprint = Blueprint("payment", __name__, url_prefix="/payment")
 @payment_blueprint.get("/listado")
 @login_required
 def payment_index():
+    """Metodo encargado de devolver el template de la vista principal del modulo de gestion de pagos
+    (cuotas de usuario)"""
+
     permissions.validate_permissions('payment_index')
 
     page = request.args.get('page', 1, type=int)
@@ -39,6 +42,10 @@ def payment_index():
 @payment_blueprint.route("/registrar_pago_efectivo/<fee_id>")
 @login_required
 def payment_register_paid(fee_id):
+    """Metodo encargado de registrar una cuota como PAGADA
+    Una vez registrado se crea un comprobante con los datos correspondientes
+    al usuario, disciplinas y cuota para la cual fue generada"""
+
     permissions.validate_permissions('payment_update')
 
     fee = models.get_fee_by_id(fee_id)
@@ -74,6 +81,9 @@ def payment_register_paid(fee_id):
 @payment_blueprint.route('download/comprobante/pdf/<fee_id>')
 @login_required
 def download_receipt_pdf(fee_id):
+    """Metodo encargado de generar un archivo PDF del comprobante generado
+    para el pago de una cuota"""
+
     permissions.validate_permissions('payment_show')
 
     fecha = datetime.date.today().strftime('%d-%m-%Y')
