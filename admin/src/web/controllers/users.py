@@ -32,16 +32,11 @@ def user_list_all():
     # Validar permisos
     permissions.validate_permissions('user_index')
 
-    print(request.args)
-
     page = request.args.get('page', 1, type=int)
     per_page = board.get_configuration()
 
     email = request.args.get('email', '')
-    status = request.args.get('status', '', type=str)
-
-    # Otra opcion para busqueda --> consultar por query param seteado y hacer una consulta sql apropiada
-    # pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
+    status = request.args.get('status', '2', type=str)
 
     if email:
         if status == '2':
@@ -52,7 +47,6 @@ def user_list_all():
         if status == '2':
             pagination = auth.list_users_paginated(page, per_page=per_page.elements_quantity)
         else:
-            print(status)
             pagination = auth.list_users_with_status(status, page, per_page=per_page.elements_quantity)
 
     form = EditUserForm()
@@ -66,7 +60,7 @@ def user_list_all():
 @user_blueprint.route("/cambiar_rol/<username>")
 @login_required
 def user_change_status(username):
-    # Validar permisos
+
     permissions.validate_permissions('user_update')
 
     auth.user_set_status(username)
@@ -76,14 +70,29 @@ def user_change_status(username):
     return redirect(url_for('users.user_list_all', page=page, email=email, status=status))
 
 
+@user_blueprint.route("/eliminar_usuario/<user_id>")
+@login_required
+def user_delete(user_id):
+
+    permissions.validate_permissions('user_destroy')
+
+    auth.delete_user(user_id)
+    page = request.args.get('page', 1, type=int)
+    email = request.args.get('email', '')
+    status = request.args.get('status', '2', type=str)
+
+    return redirect(url_for('users.user_list_all', page=page, email=email, status=status))
+
+
+
+
 @user_blueprint.post("/cargar")
 @login_required
 def user_create():
-    # Validar permisos
+
     permissions.validate_permissions('user_new')
 
     form = RegisterUserForm()
-
     if form.validate_on_submit():
         roles = []
 
@@ -135,7 +144,6 @@ def user_edit():
         for rol in r_records:
             if rol.id in form.roles.data:
                 accepted.append(rol)
-        print(f"Soy accepted {accepted}")
 
         if not accepted:
             flash("Error. El usuario debe tener al menos un rol asignado", "danger")
@@ -159,12 +167,10 @@ def user_search():
     # Validar permisos
     permissions.validate_permissions('user_index')
 
-    # Logica consulta BD para traer usuarios
     page = request.args.get('page', 1, type=int)
     email = request.args.get('email', '')
     status = request.args.get('status', '')
 
-    # Render_template es una opcion
     return redirect(url_for("users.user_list_all", page=page, email=email, status=status))
 
 
