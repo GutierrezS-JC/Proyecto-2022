@@ -16,6 +16,7 @@ from src.web.controllers.api.me import me_api_blueprint
 
 from src.web.helpers import handlers
 from src.web.helpers import auth
+from web.helpers.permissions import has_permission
 
 from src.core import database
 from src.core import seeds
@@ -58,6 +59,7 @@ def create_app(env="development", static_folder="static"):
 
     # Global Jinja
     app.jinja_env.globals.update(is_authenticated=auth.is_authenticated)
+    app.jinja_env.globals.update(has_permission=has_permission)
 
     @app.cli.command(name="resetdb")
     def resetdb():
