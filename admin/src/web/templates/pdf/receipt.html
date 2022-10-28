@@ -4,10 +4,6 @@
 	  <meta charset="utf-8" />
 	  <meta name="viewport" content="width=device-width, initial-scale=1" />
 	  <title>Comprobante de pago</title>
-	  <!-- Favicon -->
-<!--		<link rel="stylesheet" href="{{ url_for('static', filename='disciplinas.css') }}" >-->
-
-	  <!-- Invoice styling -->
 	  <style>
 	    body {
 		  font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
@@ -112,7 +108,6 @@
 					<td colspan="2">
 						<table>
 							<tr>
-								<!-- EVENTUALY THERE WILL BE AN IMG HERE -->
 								<td class="title">
 									CLUB DEPORTIVO <br/> VILLA ELISA
 								</td>
@@ -169,11 +164,11 @@
 			</table>
 		</div>
 
-	<div>
-		<p>
-			Recibimos de <b> {{ receipt.member_full_name }} </b> el importe en pesos <b> {{ receipt.total_amount }} </b>
-			por el concepto de cuota societaria mes <b> {{ receipt.month_description }} </b>
-		</p>
-	</div>
+		<div>
+			<p>
+				Recibimos de <b> {{ receipt.member_full_name }} </b> el importe en pesos <b> {{ receipt.total_amount }} </b>
+				por el concepto de cuota societaria mes <b> {{ receipt.month_description }} </b>
+			</p>
+		</div>
 	</body>
 </html>
