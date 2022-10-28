@@ -1,6 +1,5 @@
 from datetime import datetime
 from num2words import num2words
-from sqlalchemy import or_
 
 from src.core.database import db
 from src.core.models.permission import Permission
@@ -266,7 +265,6 @@ def create_payment(**kwargs):
 
 
 def list_payment_records(page, per_page):
-    # return Fee.query.order_by(Fee.id.desc()).paginate(page=page, per_page=per_page, error_out=False)
     payment_list = Fee.query \
         .join(Member, Member.id == Fee.member_id). \
         add_columns(Fee.id, Fee.was_paid, Fee.year, Fee.month, Fee.total, Fee.date_paid,
@@ -282,7 +280,6 @@ def list_payment_records_input(input_search, page, per_page):
         add_columns(Fee.id, Fee.was_paid, Fee.year, Fee.month, Fee.total, Fee.date_paid,
                     Member.doc_num, Member.first_name, Member.last_name
                     ).order_by(Fee.year.desc(), Fee.month.desc())
-    print(q)
     return q.paginate(page=page, per_page=per_page, error_out=False)
 
 

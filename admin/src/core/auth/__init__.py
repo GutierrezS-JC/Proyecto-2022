@@ -31,7 +31,6 @@ def list_users_with_status(status, page, per_page):
 
 def create_user(**kwargs):
     user = User(**kwargs)
-    print(user.roles)
     db.session.add(user)
     db.session.commit()
 

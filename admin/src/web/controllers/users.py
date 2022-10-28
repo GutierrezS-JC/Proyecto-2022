@@ -18,7 +18,6 @@ user_blueprint = Blueprint("users", __name__, url_prefix="/users")
 @user_blueprint.get("/")
 @login_required
 def user_index():
-    # Validar permisos
     permissions.validate_permissions('user_new')
 
     form = RegisterUserForm()
@@ -28,8 +27,6 @@ def user_index():
 @user_blueprint.route("/listado")
 @login_required
 def user_list_all():
-
-    # Validar permisos
     permissions.validate_permissions('user_index')
 
     page = request.args.get('page', 1, type=int)
@@ -60,7 +57,6 @@ def user_list_all():
 @user_blueprint.route("/cambiar_rol/<username>")
 @login_required
 def user_change_status(username):
-
     permissions.validate_permissions('user_update')
 
     auth.user_set_status(username)
@@ -73,7 +69,6 @@ def user_change_status(username):
 @user_blueprint.route("/eliminar_usuario/<user_id>")
 @login_required
 def user_delete(user_id):
-
     permissions.validate_permissions('user_destroy')
 
     auth.delete_user(user_id)
@@ -87,7 +82,6 @@ def user_delete(user_id):
 @user_blueprint.post("/cargar")
 @login_required
 def user_create():
-
     permissions.validate_permissions('user_new')
 
     form = RegisterUserForm()
@@ -126,7 +120,6 @@ def user_create():
 @user_blueprint.post("/editar_usuario")
 @login_required
 def user_edit():
-    # Validar permisos
     permissions.validate_permissions('user_update')
 
     form = EditUserForm()
@@ -162,7 +155,6 @@ def user_edit():
 @user_blueprint.route("/buscar_usuario", methods=["GET"])
 @login_required
 def user_search():
-    # Validar permisos
     permissions.validate_permissions('user_index')
 
     page = request.args.get('page', 1, type=int)
