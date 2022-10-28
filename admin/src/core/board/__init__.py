@@ -218,6 +218,25 @@ def does_discipline_includes_member(discipline, member):
     return member in discipline.members
 
 
+def member_is_currently_defaulted(member):
+    configuration = get_configuration()
+
+    member_fees = member.fees
+    current_date = datetime.today()
+
+    if int(current_date.day) > int(configuration.due_date):
+        for fee in member_fees:
+            if int(current_date.day) > int(configuration.due_date)\
+                    and int(current_date.month) > int(fee.month) and (fee.was_paid is None or fee.was_paid == False):
+                return True
+    else:
+        for fee in member_fees:
+            if int(current_date.month) > int(fee.month) and (fee.was_paid is None or fee.was_paid == False):
+                return True
+
+    return False
+
+
 def update_payments_after_current_month(discipline, old_discipline_value):
     next_month = datetime.now().month + 1
     current_year = datetime.now().year

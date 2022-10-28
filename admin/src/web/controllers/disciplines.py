@@ -133,6 +133,8 @@ def discipline_add_member(member_doc_num, discipline_id):
             flash("La disciplina no se encuentra habilitada", 'danger')
         elif board.does_discipline_includes_member(discipline_searched, member_searched):
             flash('El socio ya se encuentra registrado en la disciplina', 'warning')
+        elif board.member_is_currently_defaulted(member_searched):
+            flash("El socio es moroso. Debe regularizar la situacion", 'danger')
         else:
             board.discipline_add_member(discipline_searched, member_searched)
             board.generate_payments(member_searched, discipline_searched)

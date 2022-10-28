@@ -15,6 +15,7 @@ class Config(db.Model):
 
     email = db.Column(db.String(100))
     phone = db.Column(db.String(50))
+    due_date = db.Column(db.String(50))
 
     updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now)
     inserted_at = db.Column(db.DateTime, default=datetime.now())
