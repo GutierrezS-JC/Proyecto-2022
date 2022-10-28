@@ -9,7 +9,7 @@ import csv
 import pdfkit
 from passlib.handlers.sha2_crypt import sha256_crypt
 
-from core import board
+from src.core import models
 
 from src.web.helpers import permissions
 from src.web.helpers.forms import MemberForm
@@ -28,22 +28,22 @@ def member_index():
 
     # Paginacion
     page = request.args.get('page', 1, type=int)
-    per_page = board.get_configuration()
+    per_page = models.get_configuration()
 
     last_name = request.args.get('apellido', '')
     status = request.args.get('status', '', type=str)
 
     if last_name:
         if status == '2':
-            pagination = board.list_members_with_last_name(last_name, page, per_page=per_page.elements_quantity)
+            pagination = models.list_members_with_last_name(last_name, page, per_page=per_page.elements_quantity)
         else:
-            pagination = board.list_members_with_last_name_status(last_name, status, page,
-                                                                  per_page=per_page.elements_quantity)
+            pagination = models.list_members_with_last_name_status(last_name, status, page,
+                                                                   per_page=per_page.elements_quantity)
     else:
         if status == '2':
-            pagination = board.all_paginated(page, per_page=per_page.elements_quantity)
+            pagination = models.all_paginated(page, per_page=per_page.elements_quantity)
         else:
-            pagination = board.list_members_with_status(status, page, per_page=per_page.elements_quantity)
+            pagination = models.list_members_with_status(status, page, per_page=per_page.elements_quantity)
 
     form = MemberForm()
     edit_form = EditMemberForm()
@@ -68,7 +68,7 @@ def member_create():
             if form.email.data.isspace():
                 flash("Por favor, ingresa una direccion de email valida")
                 return redirect(url_for("members.member_index"))
-            if board.get_member_by_email(form["email"].data):
+            if models.get_member_by_email(form["email"].data):
                 flash("Error. El email ingresado ya se encuentra registrado", "danger")
                 return redirect(url_for("members.member_index"))
         if form.phone_num.data:
@@ -76,14 +76,14 @@ def member_create():
                 flash("Por favor, ingresa un numero de telefono valido", "danger")
                 return redirect(url_for("members.member_index"))
 
-        if board.get_member_by_doc_num(form["doc_num"].data):
+        if models.get_member_by_doc_num(form["doc_num"].data):
             flash("Error. El numero de documento ya se encuentra registrado", "danger")
         else:
-            member_num_db = board.get_last_member_num()
+            member_num_db = models.get_last_member_num()
 
             password = sha256_crypt.encrypt("123socio321")
             member_reg = 1 if member_num_db is None else (int(member_num_db.member_num) + 1)
-            board.create_member(
+            models.create_member(
                 first_name=form["first_name"].data,
                 last_name=form["last_name"].data,
                 doc_type=form["doc_type"].data,
@@ -119,12 +119,12 @@ def member_edit():
     form = EditMemberForm()
     print(form.is_active_edit.data)
     if form.validate_on_submit():
-        member = board.member_edit(member_id=form.member_id_edit.data, first_name=form.first_name_edit.data,
-                                   last_name=form.last_name_edit.data, genre=form.genre_edit.data,
-                                   address=form.address_edit.data,
-                                   is_active=True if form["is_active_edit"].data == "1" else False,
-                                   phone_num=form["phone_num_edit"].data if form["phone_num_edit"].data else None,
-                                   email=form["email_edit"].data if form["email_edit"].data else None)
+        member = models.member_edit(member_id=form.member_id_edit.data, first_name=form.first_name_edit.data,
+                                    last_name=form.last_name_edit.data, genre=form.genre_edit.data,
+                                    address=form.address_edit.data,
+                                    is_active=True if form["is_active_edit"].data == "1" else False,
+                                    phone_num=form["phone_num_edit"].data if form["phone_num_edit"].data else None,
+                                    email=form["email_edit"].data if form["email_edit"].data else None)
         flash("Socio editado exitosamente", "success")
     else:
         print("WTF happened")
@@ -158,14 +158,14 @@ def download_report_csv():
 
     if last_name:
         if status == '2':
-            result = board.get_list_members_with_last_name(last_name)
+            result = models.get_list_members_with_last_name(last_name)
         else:
-            result = board.get_list_members_with_last_name_status(last_name, status)
+            result = models.get_list_members_with_last_name_status(last_name, status)
     else:
         if status == '2':
-            result = board.get_all_members()
+            result = models.get_all_members()
         else:
-            result = board.get_list_members_with_status(status)
+            result = models.get_list_members_with_status(status)
 
     for row in result:
         if row.genre == 1:
@@ -191,14 +191,14 @@ def download_report_pdf():
 
     if last_name:
         if status == '2':
-            result = board.get_list_members_with_last_name(last_name)
+            result = models.get_list_members_with_last_name(last_name)
         else:
-            result = board.get_list_members_with_last_name_status(last_name, status)
+            result = models.get_list_members_with_last_name_status(last_name, status)
     else:
         if status == '2':
-            result = board.get_all_members()
+            result = models.get_all_members()
         else:
-            result = board.get_list_members_with_status(status)
+            result = models.get_list_members_with_status(status)
 
     fecha = datetime.today().strftime('%d-%m-%Y')
     file_name = f"Listado_Socios_{fecha}.pdf"
@@ -217,10 +217,10 @@ def download_report_pdf():
 @member_blueprint.route("/api/member/<member_id>")
 @login_required
 def get_user(member_id):
-    member = board.get_member_by_id(member_id)
+    member = models.get_member_by_id(member_id)
 
     if member is None:
         return jsonify({'message': 'El socio no existe'}), 404
 
-    member_json = board.member_json(member)
+    member_json = models.member_json(member)
     return jsonify({'member': member_json})

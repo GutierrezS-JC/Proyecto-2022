@@ -5,7 +5,7 @@ import pdfkit
 from flask import Blueprint, request, url_for, redirect, flash, make_response
 from flask import render_template
 
-from core import board
+from src.core import models
 
 from src.web.helpers.auth import login_required
 
@@ -24,14 +24,14 @@ def payment_index():
 
     # Paginacion
     page = request.args.get('page', 1, type=int)
-    per_page = board.get_configuration()
+    per_page = models.get_configuration()
 
     input_search = request.args.get('input_search', '', type=str)
 
     if input_search == '' or input_search.isspace():
-        pagination = board.list_payment_records(page=page, per_page=per_page.elements_quantity)
+        pagination = models.list_payment_records(page=page, per_page=per_page.elements_quantity)
     else:
-        pagination = board.list_payment_records_input(input_search, page=page, per_page=per_page.elements_quantity)
+        pagination = models.list_payment_records_input(input_search, page=page, per_page=per_page.elements_quantity)
     search_form = PaymentSearchForm()
     search_form.input_search.data = input_search
     current_date = datetime.date.today()
@@ -44,25 +44,25 @@ def payment_index():
 def payment_register_paid(fee_id):
     # Validar permisos
     permissions.validate_permissions('payment_update')
-    fee = board.get_fee_by_id(fee_id)
-    config_extra = board.get_configuration().extra_charge
+    fee = models.get_fee_by_id(fee_id)
+    config_extra = models.get_configuration().extra_charge
     if not fee.was_paid:
-        result = board.register_fee_as_paid(fee)
+        result = models.register_fee_as_paid(fee)
 
         # Creamos el comprobante para su posterior descarga
-        member_searched = board.get_member_by_id(fee.member_id)
+        member_searched = models.get_member_by_id(fee.member_id)
 
         member_full_name = f"{member_searched.first_name} {member_searched.last_name}"
-        month_description = board.format_month_description(int(fee.month), fee.year)
-        total_amount_description = board.format_amount_description(result)
+        month_description = models.format_month_description(int(fee.month), fee.year)
+        total_amount_description = models.format_amount_description(result)
         # Sino result ok?
 
-        new_receipt = board.create_receipt(member_full_name=member_full_name,
-                                           total_amount_description=total_amount_description,
-                                           total_amount=result, month_description=month_description, fee_id=fee.id)
+        new_receipt = models.create_receipt(member_full_name=member_full_name,
+                                            total_amount_description=total_amount_description,
+                                            total_amount=result, month_description=month_description, fee_id=fee.id)
 
-        archived_disciplines = board.create_receipt_disciplines(member_searched.disciplines, new_receipt.id)
-        board.add_archived_disciplines_to_receipt(new_receipt, archived_disciplines)
+        archived_disciplines = models.create_receipt_disciplines(member_searched.disciplines, new_receipt.id)
+        models.add_archived_disciplines_to_receipt(new_receipt, archived_disciplines)
 
         flash(f'Se registro el pago de la cuota con un recargo del {config_extra}% (Total: {result})', 'success')
     else:
@@ -83,11 +83,11 @@ def download_receipt_pdf(fee_id):
     fecha = datetime.date.today().strftime('%d-%m-%Y')
     file_name = f"Comprobante_cuota_{fecha}.pdf"
 
-    fee_searched = board.get_fee_by_id(fee_id)
+    fee_searched = models.get_fee_by_id(fee_id)
 
     receipt = fee_searched.receipt
 
-    config = board.get_configuration()
+    config = models.get_configuration()
     due_date = f"{fee_searched.year}-{fee_searched.month}"
 
     rendered = render_template('pdf/receipt.html', receipt=receipt, config=config, due_date=due_date,

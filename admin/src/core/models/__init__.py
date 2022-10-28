@@ -3,14 +3,14 @@ from num2words import num2words
 from sqlalchemy import or_
 
 from src.core.database import db
-from src.core.board.permission import Permission
-from src.core.board.rol import Rol
-from src.core.board.config import Config
-from src.core.board.member import Member
-from src.core.board.disciplines import Discipline
-from src.core.board.fee import Fee
-from src.core.board.receipt import Receipt
-from src.core.board.receipt_disciplines import ReceiptDisciplines
+from src.core.models.permission import Permission
+from src.core.models.rol import Rol
+from src.core.models.config import Config
+from src.core.models.member import Member
+from src.core.models.disciplines import Discipline
+from src.core.models.fee import Fee
+from src.core.models.receipt import Receipt
+from src.core.models.receipt_disciplines import ReceiptDisciplines
 
 
 # Rol methods

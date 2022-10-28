@@ -5,7 +5,7 @@ from flask import session
 from src.web.helpers.auth import login_required
 from src.web.helpers import permissions
 
-from core import board
+from src.core import models
 from src.web.helpers.forms import DisciplineForm
 from src.web.helpers.forms import EditDisciplineForm
 from src.web.helpers.forms import SearchDisciplineForm
@@ -23,22 +23,22 @@ def discipline_index():
 
     # Paginacion
     page = request.args.get('page', 1, type=int)
-    per_page = board.get_configuration()
+    per_page = models.get_configuration()
 
     discipline = request.args.get('disciplina', '')
     status = request.args.get('status', '2', type=str)
 
     if discipline:
         if status == '2':
-            pagination = board.list_disciplines_with_name(discipline, page, per_page=per_page.elements_quantity)
+            pagination = models.list_disciplines_with_name(discipline, page, per_page=per_page.elements_quantity)
         else:
-            pagination = board.list_disciplines_with_name_status(discipline, status, page,
-                                                                 per_page=per_page.elements_quantity)
+            pagination = models.list_disciplines_with_name_status(discipline, status, page,
+                                                                  per_page=per_page.elements_quantity)
     else:
         if status == '2':
-            pagination = board.list_disciplines_paginated(page, per_page=per_page.elements_quantity)
+            pagination = models.list_disciplines_paginated(page, per_page=per_page.elements_quantity)
         else:
-            pagination = board.list_disciplines_with_status(status, page, per_page=per_page.elements_quantity)
+            pagination = models.list_disciplines_with_status(status, page, per_page=per_page.elements_quantity)
 
     search_member_form = SearchMemberForDisciplineForm()
 
@@ -62,7 +62,7 @@ def discipline_create():
 
     if form.validate_on_submit():
 
-        board.create_discipline(
+        models.create_discipline(
             name=form["name"].data,
             category=form["category"].data,
             instructors=form["instructors"].data,
@@ -93,13 +93,13 @@ def discipline_edit():
 
     form = EditDisciplineForm()
     if form.validate_on_submit():
-        old_discipline_value = int(board.get_discipline_by_id(form.discipline_id_edit.data).monthly_fee)
-        discipline = board.discipline_edit(discipline_id=form.discipline_id_edit.data, name=form.name_edit.data,
-                                           category=form.category_edit.data, instructors=form.instructors_edit.data,
-                                           days_hours=form.days_hours_edit.data, monthly_fee=form.monthly_fee_edit.data,
-                                           is_active=True if form["is_active_edit"].data == "1" else False)
+        old_discipline_value = int(models.get_discipline_by_id(form.discipline_id_edit.data).monthly_fee)
+        discipline = models.discipline_edit(discipline_id=form.discipline_id_edit.data, name=form.name_edit.data,
+                                            category=form.category_edit.data, instructors=form.instructors_edit.data,
+                                            days_hours=form.days_hours_edit.data, monthly_fee=form.monthly_fee_edit.data,
+                                            is_active=True if form["is_active_edit"].data == "1" else False)
         if old_discipline_value != int(discipline.monthly_fee):
-            board.update_payments_after_current_month(discipline, old_discipline_value)
+            models.update_payments_after_current_month(discipline, old_discipline_value)
 
         flash("Disciplina editada exitosamente", "success")
     else:
@@ -125,19 +125,19 @@ def discipline_add_member(member_doc_num, discipline_id):
     disciplina = request.args.get('apellido', '')
     status = request.args.get('status', '2', type=str)
 
-    member_searched = board.get_member_by_doc_num(member_doc_num)
-    discipline_searched = board.get_discipline_by_id(discipline_id)
+    member_searched = models.get_member_by_doc_num(member_doc_num)
+    discipline_searched = models.get_discipline_by_id(discipline_id)
 
     if member_searched and discipline_searched:
         if not discipline_searched.is_active:
             flash("La disciplina no se encuentra habilitada", 'danger')
-        elif board.does_discipline_includes_member(discipline_searched, member_searched):
+        elif models.does_discipline_includes_member(discipline_searched, member_searched):
             flash('El socio ya se encuentra registrado en la disciplina', 'warning')
-        elif board.member_is_currently_defaulted(member_searched):
+        elif models.member_is_currently_defaulted(member_searched):
             flash("El socio es moroso. Debe regularizar la situacion", 'danger')
         else:
-            board.discipline_add_member(discipline_searched, member_searched)
-            board.generate_payments(member_searched, discipline_searched)
+            models.discipline_add_member(discipline_searched, member_searched)
+            models.generate_payments(member_searched, discipline_searched)
             flash("El socio fue asignado en la disciplina correctamente", "success")
     else:
         flash('Por favor vuelva a intentarlo', 'danger')
@@ -149,23 +149,23 @@ def discipline_add_member(member_doc_num, discipline_id):
 @disciplines_blueprint.route("/api/discipline/<discipline_id>")
 @login_required
 def get_discipline(discipline_id):
-    discipline = board.get_discipline_by_id(discipline_id)
+    discipline = models.get_discipline_by_id(discipline_id)
     if discipline is None:
         return jsonify({'message': 'La disciplina no existe'}), 404
 
-    discipline_json = board.discipline_json(discipline)
+    discipline_json = models.discipline_json(discipline)
     return jsonify({'discipline': discipline_json})
 
 
 @disciplines_blueprint.route("/api/members_discipline/<name>")
 @login_required
 def get_members_for_discipline(name):
-    members = board.get_members_for_discipline(name)
+    members = models.get_members_for_discipline(name)
     if members is None:
         return jsonify({'members_discipline': []})
 
     result = []
     for member in members:
-        result.append(board.member_json(member))
+        result.append(models.member_json(member))
 
     return jsonify({'members_discipline': result})
