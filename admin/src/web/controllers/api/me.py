@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, url_for, flash, jsonify, request, abort
+from flask import Blueprint, jsonify, request, abort
 from flask import make_response
 
 from src.core import models
@@ -21,8 +21,10 @@ def get_disciplines_data():
         response.headers['Content-Type'] = 'application/json'
         return response
     else:
-        # Should be JSON
-        abort(404)
+        res_abort = error_json("404 Not Found Error", "Usuario no encontrado")
+        response = make_response(jsonify(res_abort), 404)
+        response.headers['Content-Type'] = 'application/json'
+        return response
 
 
 @me_api_blueprint.get('/payments')
@@ -54,7 +56,6 @@ def post_member_payments():
         req_data = request.get_json()
         result_json = []
         for item in req_data:
-            # Buscar cuotas (fees) sin pagar que correspondan al dia y mes ingresado
             result_fees = models.get_fees_not_paid_with_month_year(member_searched.id, item["month"], item["year"])
             if result_fees:
                 for fee in result_fees:
@@ -72,7 +73,6 @@ def post_member_payments():
                     archived_disciplines = models.create_receipt_disciplines(member_searched.disciplines, new_receipt.id)
                     models.add_archived_disciplines_to_receipt(new_receipt, archived_disciplines)
 
-                    # should be total_amount de fee.receipt --> Generar receipt
                     result_json.append(models.me_payment_json(fee.month, new_receipt.total_amount))
 
         response = make_response(jsonify(result_json), 200)

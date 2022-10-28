@@ -1,6 +1,5 @@
 from flask import Blueprint, redirect, url_for, request, flash, jsonify
 from flask import render_template
-from flask import session
 
 from src.web.helpers.auth import login_required
 from src.web.helpers import permissions
@@ -17,14 +16,10 @@ disciplines_blueprint = Blueprint("disciplines", __name__, url_prefix="/discipli
 @disciplines_blueprint.get("/listado")
 @login_required
 def discipline_index():
-
-    # Validar permisos
     permissions.validate_permissions('discipline_index')
 
-    # Paginacion
     page = request.args.get('page', 1, type=int)
     per_page = models.get_configuration()
-
     discipline = request.args.get('disciplina', '')
     status = request.args.get('status', '2', type=str)
 
@@ -55,7 +50,6 @@ def discipline_index():
 @disciplines_blueprint.post("/cargar")
 @login_required
 def discipline_create():
-    # Validar permisos
     permissions.validate_permissions('discipline_new')
 
     form = DisciplineForm()
@@ -88,7 +82,6 @@ def discipline_create():
 @disciplines_blueprint.post("/editar_socio")
 @login_required
 def discipline_edit():
-    # Validar permisos
     permissions.validate_permissions('discipline_update')
 
     form = EditDisciplineForm()
@@ -96,7 +89,8 @@ def discipline_edit():
         old_discipline_value = int(models.get_discipline_by_id(form.discipline_id_edit.data).monthly_fee)
         discipline = models.discipline_edit(discipline_id=form.discipline_id_edit.data, name=form.name_edit.data,
                                             category=form.category_edit.data, instructors=form.instructors_edit.data,
-                                            days_hours=form.days_hours_edit.data, monthly_fee=form.monthly_fee_edit.data,
+                                            days_hours=form.days_hours_edit.data,
+                                            monthly_fee=form.monthly_fee_edit.data,
                                             is_active=True if form["is_active_edit"].data == "1" else False)
         if old_discipline_value != int(discipline.monthly_fee):
             models.update_payments_after_current_month(discipline, old_discipline_value)
@@ -118,7 +112,6 @@ def discipline_edit():
 @disciplines_blueprint.route("/agregar_socio_disciplina/<member_doc_num>/<discipline_id>")
 @login_required
 def discipline_add_member(member_doc_num, discipline_id):
-    # Validar permisos
     permissions.validate_permissions('discipline_update')
 
     page = request.args.get('page', 1, type=int)

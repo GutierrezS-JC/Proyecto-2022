@@ -1,4 +1,3 @@
-import os
 from datetime import datetime
 
 from flask import Blueprint, flash, redirect, url_for, jsonify, request, Response, make_response
@@ -26,7 +25,6 @@ member_blueprint = Blueprint("members", __name__, url_prefix="/members")
 def member_index():
     permissions.validate_permissions('member_index')
 
-    # Paginacion
     page = request.args.get('page', 1, type=int)
     per_page = models.get_configuration()
 
@@ -63,7 +61,6 @@ def member_create():
     form = MemberForm()
     if form.validate_on_submit():
 
-        # Verificammos data opcional
         if form["email"].data:
             if form.email.data.isspace():
                 flash("Por favor, ingresa una direccion de email valida")
@@ -115,9 +112,7 @@ def member_create():
 def member_edit():
     permissions.validate_permissions('member_update')
 
-    print(request.args)
     form = EditMemberForm()
-    print(form.is_active_edit.data)
     if form.validate_on_submit():
         member = models.member_edit(member_id=form.member_id_edit.data, first_name=form.first_name_edit.data,
                                     last_name=form.last_name_edit.data, genre=form.genre_edit.data,

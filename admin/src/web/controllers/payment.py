@@ -1,5 +1,4 @@
 import datetime
-import time
 
 import pdfkit
 from flask import Blueprint, request, url_for, redirect, flash, make_response
@@ -19,10 +18,8 @@ payment_blueprint = Blueprint("payment", __name__, url_prefix="/payment")
 @payment_blueprint.get("/listado")
 @login_required
 def payment_index():
-    # Validar permisos
     permissions.validate_permissions('payment_index')
 
-    # Paginacion
     page = request.args.get('page', 1, type=int)
     per_page = models.get_configuration()
 
@@ -42,10 +39,11 @@ def payment_index():
 @payment_blueprint.route("/registrar_pago_efectivo/<fee_id>")
 @login_required
 def payment_register_paid(fee_id):
-    # Validar permisos
     permissions.validate_permissions('payment_update')
+
     fee = models.get_fee_by_id(fee_id)
     config_extra = models.get_configuration().extra_charge
+
     if not fee.was_paid:
         result = models.register_fee_as_paid(fee)
 
@@ -55,7 +53,6 @@ def payment_register_paid(fee_id):
         member_full_name = f"{member_searched.first_name} {member_searched.last_name}"
         month_description = models.format_month_description(int(fee.month), fee.year)
         total_amount_description = models.format_amount_description(result)
-        # Sino result ok?
 
         new_receipt = models.create_receipt(member_full_name=member_full_name,
                                             total_amount_description=total_amount_description,
@@ -77,7 +74,6 @@ def payment_register_paid(fee_id):
 @payment_blueprint.route('download/comprobante/pdf/<fee_id>')
 @login_required
 def download_receipt_pdf(fee_id):
-    # Validar permisos
     permissions.validate_permissions('payment_show')
 
     fecha = datetime.date.today().strftime('%d-%m-%Y')

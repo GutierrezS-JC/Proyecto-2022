@@ -1,6 +1,5 @@
-from flask import Blueprint, redirect, url_for, request, flash, session, flash, render_template
+from flask import Blueprint, redirect, url_for, request, session, flash, render_template
 from src.core import auth
-from src.core.auth.user import User
 
 
 login_blueprint = Blueprint("login", __name__, url_prefix="/")

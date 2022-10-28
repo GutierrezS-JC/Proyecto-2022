@@ -177,7 +177,6 @@
       </div>
 
       <div class="col-12">
-<!--        <button type="submit" id="btnCsv" class="btn btn-sm btn-outline-secondary">Exportar CSV</button>-->
         <a class='btn btn-sm btn-outline-secondary' id="btnCsv"
                 href="{{ url_for('members.download_report_csv', apellido=search_form.last_name.data, status=search_form.is_active_search.data ) }}">
                 Exportar CSV
@@ -186,7 +185,6 @@
                 href="{{ url_for('members.download_report_pdf', apellido=search_form.last_name.data, status=search_form.is_active_search.data ) }}">
                 Exportar PDF
         </a>
-<!--        <button type="submit" id="btnPdf" class="btn btn-sm btn-outline-secondary ms-2">Exportar PDF</button>-->
       </div>
     </div>
 
@@ -266,8 +264,6 @@
         {% endif %}
       </div>
     </div>
-</div>
-
 </div>
 
 <script>

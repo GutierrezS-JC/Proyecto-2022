@@ -28,7 +28,8 @@ def config_edit():
 
     form = ConfigForm()
     if form.validate_on_submit():
-        config = models.update_configuration(form.elements_quantity.data, True if form.payment_enabled.data == '1' else False,
+        config = models.update_configuration(form.elements_quantity.data,
+                                             True if form.payment_enabled.data == '1' else False,
                                              form.contact_information.data, form.payment_header.data,
                                              form.monthly_fee.data, form.extra_charge.data)
         flash("Configuracion editada con exito", "success")
