@@ -32,3 +32,10 @@ def internal_server_error(e):
         "error_description": "Error interno del servidor",
     }
     return render_template("error.html", **kwargs), 500
+
+
+def error_json(error_name, error_description):
+    return {
+        'error_name': error_name,
+        'error_description': error_description,
+    }
