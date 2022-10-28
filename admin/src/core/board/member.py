@@ -18,6 +18,7 @@ class Member(db.Model):
     is_active = db.Column(db.Boolean)
     phone_num = db.Column(db.String(30))
     email = db.Column(db.String(100))
+    is_deleted = db.Column(db.Boolean, default=False)
 
     fees = db.relationship('Fee', backref='members')
 
