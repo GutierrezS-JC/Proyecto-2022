@@ -13,7 +13,7 @@ class Member(db.Model):
     doc_num = db.Column(db.String(100), unique=True)
     genre = db.Column(db.Integer())  # Integer?
     member_num = db.Column(db.String(100), unique=True)
-
+    password = db.Column(db.String(100))
     address = db.Column(db.String(100))
     is_active = db.Column(db.Boolean)
     phone_num = db.Column(db.String(30))

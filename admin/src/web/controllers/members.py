@@ -7,6 +7,7 @@ from flask import render_template
 import io
 import csv
 import pdfkit
+from passlib.handlers.sha2_crypt import sha256_crypt
 
 from core import board
 
@@ -23,7 +24,6 @@ member_blueprint = Blueprint("members", __name__, url_prefix="/members")
 @member_blueprint.get("/listado")
 @login_required
 def member_index():
-    # Validar permisos
     permissions.validate_permissions('member_index')
 
     # Paginacion
@@ -45,8 +45,6 @@ def member_index():
         else:
             pagination = board.list_members_with_status(status, page, per_page=per_page.elements_quantity)
 
-    # print(pagination.page != 1 and len(pagination.items) == 0)
-    # print(pagination.last)
     form = MemberForm()
     edit_form = EditMemberForm()
     search_form = SearchMemberForm()
@@ -60,7 +58,6 @@ def member_index():
 @member_blueprint.post("/cargar")
 @login_required
 def member_create():
-    # Validar permisos
     permissions.validate_permissions('member_new')
 
     form = MemberForm()
@@ -84,6 +81,7 @@ def member_create():
         else:
             member_num_db = board.get_last_member_num()
 
+            password = sha256_crypt.encrypt("123socio321")
             member_reg = 1 if member_num_db is None else (int(member_num_db.member_num) + 1)
             board.create_member(
                 first_name=form["first_name"].data,
@@ -96,6 +94,7 @@ def member_create():
                 is_active=True if form["is_active"].data == "1" else False,
                 phone_num=form["phone_num"].data if form["phone_num"].data else None,
                 email=form["email"].data if form["email"].data else None,
+                password=password
             )
             flash("Socio creado exitosamente", "success")
     else:
@@ -114,7 +113,6 @@ def member_create():
 @member_blueprint.post("/editar_socio")
 @login_required
 def member_edit():
-    # Validar permisos
     permissions.validate_permissions('member_update')
 
     print(request.args)
@@ -145,7 +143,6 @@ def member_edit():
 @member_blueprint.route('download/report/csv')
 @login_required
 def download_report_csv():
-    # Validar permisos
     permissions.validate_permissions('member_index')
 
     last_name = request.args.get('apellido', '')
@@ -187,7 +184,6 @@ def download_report_csv():
 @member_blueprint.route('download/report/pdf')
 @login_required
 def download_report_pdf():
-    # Validar permisos
     permissions.validate_permissions('member_index')
 
     last_name = request.args.get('apellido', '')

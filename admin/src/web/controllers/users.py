@@ -84,8 +84,6 @@ def user_delete(user_id):
     return redirect(url_for('users.user_list_all', page=page, email=email, status=status))
 
 
-
-
 @user_blueprint.post("/cargar")
 @login_required
 def user_create():
