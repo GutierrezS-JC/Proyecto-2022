@@ -2,7 +2,7 @@ from flask import Blueprint, redirect, url_for, flash, jsonify, request, abort
 from flask import make_response
 
 from src.core import models
-
+from src.web.helpers.handlers import error_json
 
 me_api_blueprint = Blueprint("me_api", __name__, url_prefix="/api/me")
 
@@ -39,8 +39,10 @@ def get_member_payments():
         response.headers['Content-Type'] = 'application/json'
         return response
     else:
-        # Should be json
-        abort(404)
+        res_abort = error_json("404 Not Found Error", "Usuario no encontrado")
+        response = make_response(jsonify(res_abort), 404)
+        response.headers['Content-Type'] = 'application/json'
+        return response
 
 
 @me_api_blueprint.post('/payments')
@@ -77,5 +79,7 @@ def post_member_payments():
         response.headers['Content-Type'] = 'application/json'
         return response
     else:
-        # Should be json
-        abort(404)
+        res_abort = error_json("404 Not Found Error", "Usuario no encontrado")
+        response = make_response(jsonify(res_abort), 404)
+        response.headers['Content-Type'] = 'application/json'
+        return response
