@@ -1,4 +1,4 @@
-<div id="navbar">
+<div id="navbar-content">
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
       {% if is_authenticated(session) %}
@@ -24,7 +24,7 @@
             <a class="nav-link active" aria-current="page" href="{{ url_for('home.home_index') }}">Inicio</a>
           </li>
 
-          {% if has_permission("user_new") %}}
+          {% if has_permission("user_new") %}
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('users.user_index') }}">Usuarios</a>
             </li>
