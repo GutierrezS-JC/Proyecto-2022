@@ -29,7 +29,7 @@ def create_app(env="development", static_folder="static"):
     app = Flask(__name__, static_folder=static_folder)
 
     # CORS
-    cors = CORS(app, resources={r"/api/*": {"origins": "*"} })
+    # cors = CORS(app, resources={r"/api/*": {"origins": "*"} })
 
     # Load config
     app.config.from_object(config[env])
