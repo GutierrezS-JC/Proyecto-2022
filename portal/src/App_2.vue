@@ -4,27 +4,25 @@ import HelloWorld from "./components/HelloWorld.vue";
 </script>
 
 <template>
-  <header>
-    <img
-        alt="Vue logo"
-        class="logo"
-        src="@/assets/logo.svg"
-        width="125"
-        height="125"
-    />
+  <div class="text-center mt-5">
+    <a href="https://youtu.be/c1GxjzHm5us">Tell me how do I feel</a>
+  </div>
 
-    <div class="wrapper">
-      <HelloWorld msg="To Dare Is To Do" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+<!--  <RouterView />-->
 </template>
+
+<script>
+import axios from "axios";
+
+export default {
+
+  async created() {
+    axios.get(`https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/club/disciplines`)
+        .then((response) =>
+            console.log(response.data))
+  },
+}
+</script>
 
 <style scoped>
 header {

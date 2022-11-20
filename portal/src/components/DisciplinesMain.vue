@@ -47,7 +47,8 @@ export default {
   name: "DisciplinesMain",
 
   async created() {
-    axios.get(`https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/club/disciplines`)
+    // axios.get(`https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/club/disciplines`)
+    axios.get(`http://127.0.0.1:5000/api/club/disciplines`)
         .then((response) =>
           console.log(response.data))
   },
