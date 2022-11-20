@@ -1,7 +1,8 @@
 <template>
   <nav class="navbar navbar-dark navbar-expand-lg bg-dark">
     <div class="container">
-      <a class="navbar-brand" href="#">Club Deportivo Villa Elisa</a>
+      <router-link to="/" class="navbar-brand">Club Deportivo Villa Elisa</router-link>
+<!--      <a class="navbar-brand" href="#">Club Deportivo Villa Elisa</a>-->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -17,9 +18,12 @@
             <a class="nav-link" href="#">Sumate</a>
           </li>
         </ul>
-        <span class="navbar-text">
-        Insta Face Twitter
-      </span>
+<!--        <span class="navbar-text">-->
+        <nav>
+          <router-link to="/login" class="btn btn-outline-light">Iniciar Sesion</router-link>
+<!--          <RouterLink to="/login">Iniciar Sesion</RouterLink>-->
+        </nav>
+<!--        </span>-->
       </div>
     </div>
   </nav>

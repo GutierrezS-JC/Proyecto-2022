@@ -5,13 +5,14 @@ import InformationMain from "@/components/InformationMain.vue";
 </script>
 
 <template>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <AppHeader />
-  <InformationMain />
+<!--  <AppHeader />-->
+<!--  <InformationMain />-->
+  <RouterView />
+
 </template>
 
 <style scoped>
-  *{
-    background-color: #fff5e5
-  }
+  /**{*/
+  /*  background-color: #fff5e5*/
+  /*}*/
 </style>

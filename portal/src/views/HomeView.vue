@@ -1,9 +1,11 @@
 <script setup>
-import TheWelcome from "../components/TheWelcome.vue";
+  import InformationMain from "@/components/InformationMain.vue";
+  import AppHeader from "@/components/AppHeader.vue";
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <AppHeader/>
+    <InformationMain />
   </main>
 </template>
