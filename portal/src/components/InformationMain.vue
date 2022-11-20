@@ -49,7 +49,7 @@
   </div>
 
   <div class="container-fluid pt-2 pt-md-5 ps-0" style="background-color: #fff5e5">
-      <div class="row">
+      <div class="row" id="nuestroClub">
         <div class="col-12 col-lg-6 pe-0">
           <img
               alt="Vue logo"
@@ -169,7 +169,7 @@
   <div class="container-fluid" style="background-color: #fff5e5">
     <div class="container pt-4">
       <h1 class="solidHeading">Actividades / Disciplinas</h1>
-      <div class="row">
+      <div class="row" id="actividades">
         <div class="col-12 col-lg-6">
           <h1>Hola</h1>
         </div>
