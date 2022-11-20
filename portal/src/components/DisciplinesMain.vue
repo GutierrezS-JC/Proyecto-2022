@@ -34,6 +34,10 @@
             <li>Categoria 2025</li>
           </ul>
         </div>
+
+        <div v-for="discipline in disciplines" >
+          <p>{{ discipline.teachers }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -46,11 +50,24 @@ import axios from "axios";
 export default {
   name: "DisciplinesMain",
 
+  data() {
+    return {
+      disciplines: []
+    }
+  },
+
   async created() {
-    // axios.get(`https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/club/disciplines`)
-    axios.get(`http://127.0.0.1:5000/api/club/disciplines`)
-        .then((response) =>
-          console.log(response.data))
+    try{
+      const response = await axios.get("http://127.0.0.1:5000/api/club/disciplines");
+      // const response = await axios.get('https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/club/disciplines')
+      console.log(response.data)
+      if(response.data){
+        this.disciplines = response.data
+      }
+    }
+    catch(err){
+      console.log(err.stack)
+    }
   },
 }
 </script>
