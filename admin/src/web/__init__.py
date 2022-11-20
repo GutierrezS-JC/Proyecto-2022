@@ -22,10 +22,14 @@ from src.core import database
 from src.core import seeds
 
 from flask_session import Session
+from flask_cors import CORS
 
 
 def create_app(env="development", static_folder="static"):
     app = Flask(__name__, static_folder=static_folder)
+
+    # CORS
+    cors = CORS(app, resources={r"/api/*": {"origins": "*"} })
 
     # Load config
     app.config.from_object(config[env])
