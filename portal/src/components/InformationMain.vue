@@ -165,17 +165,6 @@
         </div>
       </div>
     </div>
-
-  <div class="container-fluid" style="background-color: #fff5e5">
-    <div class="container pt-4">
-      <h1 class="solidHeading">Actividades / Disciplinas</h1>
-      <div class="row" id="actividades">
-        <div class="col-12 col-lg-6">
-          <h1>Hola</h1>
-        </div>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -184,15 +173,15 @@ import axios from "axios";
 export default {
   name: "InformationMain",
 
-  async created() {
-      try{
-        const response = await axios.get("https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/club/disciplines")
-        console.log(response.data)
-      }
-      catch(err){
-        console.log(err)
-      }
-  }
+  // async created() {
+  //     try{
+  //       const response = await axios.get("https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/club/disciplines")
+  //       console.log(response.data)
+  //     }
+  //     catch(err){
+  //       console.log(err)
+  //     }
+  // }
 }
 </script>
 
