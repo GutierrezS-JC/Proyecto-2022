@@ -225,7 +225,7 @@ def member_is_currently_defaulted(member):
 
     if int(current_date.day) > int(configuration.due_date):
         for fee in member_fees:
-            if int(current_date.day) > int(configuration.due_date)\
+            if int(current_date.day) > int(configuration.due_date) \
                     and int(current_date.month) > int(fee.month) and (fee.was_paid is None or fee.was_paid == False):
                 return True
     else:
@@ -432,6 +432,59 @@ def get_club_data():
 # ME (Member API)
 def get_members_disciplines(searched_member):
     return searched_member.disciplines
+
+
+# Charts
+def get_members_with_disciplines_by_genre(discipline_name):
+    return db.engine.execute(
+        "SELECT"
+        "(SELECT COUNT(distinct m.id) FROM members m "
+        "INNER JOIN discipline_members dm ON m.id = dm.member_id "
+        "INNER JOIN disciplines d ON d.id = dm.discipline_id "
+        f"WHERE d.name = '{discipline_name}' and m.genre = 1) as cantidad_inscritos_hombres, "
+        "(SELECT COUNT(distinct m.id) as cantidad_inscritos_hombres FROM members m "
+        "INNER JOIN discipline_members dm ON m.id = dm.member_id "
+        "INNER JOIN disciplines d ON d.id = dm.discipline_id "
+        f"WHERE d.name = '{discipline_name}' and m.genre = 2) as cantidad_inscritos_mujeres, "
+        "(SELECT COUNT(distinct m.id) as cantidad_inscritos_otros FROM members m "
+        "INNER JOIN discipline_members dm ON m.id = dm.member_id "
+        "INNER JOIN disciplines d ON d.id = dm.discipline_id "
+        f"WHERE d.name = '{discipline_name}' and m.genre = 3) as cantidad_inscritos_otros;"
+    ).first()
+
+
+def get_members_already_in_disciplines(current_year, next_year_limit):
+    return db.engine.execute(
+        "SELECT"
+        "(SELECT COUNT(distinct m.id) as cant_male FROM members m "
+        "INNER JOIN discipline_members dm on m.id = dm.member_id "
+        "INNER JOIN disciplines d on d.id = dm.discipline_id "
+        f"WHERE date(d.inserted_at) >= '{current_year}' and date(d.inserted_at) < '{next_year_limit}' and m.genre = 1) "
+        "AS cant_male,"
+        "(SELECT COUNT(distinct m.id) as cant_female FROM members m "
+        "INNER JOIN discipline_members dm on m.id = dm.member_id "
+        "INNER JOIN disciplines d on d.id = dm.discipline_id "
+        f"WHERE date(d.inserted_at) >= '{current_year}' and date(d.inserted_at) < '{next_year_limit}' and m.genre = 2) "
+        "AS cant_female,"
+        "(SELECT COUNT(distinct m.id) as cant_female FROM members m "
+        "INNER JOIN discipline_members dm on m.id = dm.member_id "
+        "INNER JOIN disciplines d on d.id = dm.discipline_id "
+        f"WHERE date(d.inserted_at) >= '{current_year}' and date(d.inserted_at) < '{next_year_limit}' and m.genre = 3) "
+        "AS cant_others;"
+    ).first()
+
+
+def get_members_by_year_total_and_genre(fecha_inicio, fecha_fin):
+    return db.engine.execute(
+        "SELECT "
+        f"(SELECT COUNT(m.id) FROM members m WHERE date(m.inserted_at) >= '{fecha_inicio}' and "
+        f"date(m.inserted_at) < '{fecha_fin}' ) as cant_total, "
+        f"(SELECT COUNT(m.id) FROM members m WHERE date(m.inserted_at) > '{fecha_inicio}' and "
+        f"date(m.inserted_at) < '{fecha_fin}' AND m.genre = 1) as cant_hombres,"
+        f"(SELECT COUNT(m.id) FROM members m WHERE date(m.inserted_at) > '{fecha_inicio}' and "
+        f"date(m.inserted_at) < '{fecha_fin}' AND m.genre = 2) as cant_mujeres, "
+        f"(SELECT COUNT(m.id) FROM members m WHERE date(m.inserted_at) > '{fecha_inicio}' and "
+        f"date(m.inserted_at) < '{fecha_fin}' AND m.genre = 3) as cant_otros").first()
 
 
 def get_fees_not_paid_with_month_year(member_id, month, year):
