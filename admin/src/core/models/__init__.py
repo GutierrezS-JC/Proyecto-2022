@@ -421,6 +421,10 @@ def get_all_disciplines():
     return Discipline.query.all()
 
 
+def get_all_disciplines_group():
+    return Discipline.query.order_by(Discipline.name).all()
+
+
 def get_club_data():
     return Config.query.with_entities(Config.email, Config.phone).first()
 
@@ -480,9 +484,19 @@ def club_data_json(email, phone):
 
 def club_discipline_json(discipline):
     return {
+        'id': discipline.id,
         'name': discipline.name,
+        'category': discipline.category,
         'days_hours': discipline.days_hours,
-        'teachers': discipline.instructors
+        'teachers': discipline.instructors,
+        'monthly_fee': discipline.monthly_fee
+    }
+
+
+def club_discipline_group_json(discipline_name, details):
+    return {
+        'name': discipline_name,
+        'details': details
     }
 
 

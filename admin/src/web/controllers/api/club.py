@@ -6,15 +6,51 @@ from src.core import models
 club_api_blueprint = Blueprint("club_api", __name__, url_prefix="/api/club")
 
 
+# Aux sort
+def sort_func(e):
+    return len(e['details'])
+
+
 @club_api_blueprint.get('/disciplines')
 def get_disciplines_data():
     """ Obtiene todas las disciplinas que se realizan en el club"""
 
-    disciplines_data = models.get_all_disciplines()
+    disciplines_data = models.get_all_disciplines_group()
     result = []
-    for discipline in disciplines_data:
-        result.append(models.club_discipline_json(discipline))
+    details = []
+    index = 0
+    actual = None
+    ant = None
 
+    if len(disciplines_data) > 1:
+        actual = disciplines_data[0].name
+        ant = disciplines_data[0].name
+
+    while index < len(disciplines_data):
+        actual = disciplines_data[index].name
+
+        if actual != ant:
+            result.append(models.club_discipline_group_json(ant, details))
+            details = []
+
+        obj = {
+            'category': disciplines_data[index].category,
+            'days_hours': disciplines_data[index].days_hours,
+            'id': disciplines_data[index].id,
+            'monthly_fee': disciplines_data[index].monthly_fee,
+            'teachers': disciplines_data[index].instructors
+        }
+
+        details.append(obj)
+        ant = actual
+        index += 1
+
+    result.append(models.club_discipline_group_json(ant, details))
+    # for discipline in disciplines_data:
+    #     print(discipline.name)
+    #     result.append(models.club_discipline_json(discipline))
+
+    result.sort(reverse=True, key=sort_func)
     response = make_response(jsonify(result), 200)
     response.headers['Content-Type'] = 'application/json'
     return response
