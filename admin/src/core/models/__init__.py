@@ -474,6 +474,12 @@ def get_members_already_in_disciplines(current_year, next_year_limit):
     ).first()
 
 
+def get_members_by_year_total_and_genre_alternative(fecha_inicio, fecha_fin, genre):
+    return db.engine.execute(
+        f"(SELECT COUNT(m.id) FROM members m WHERE date(m.inserted_at) >= '{fecha_inicio}' and "
+        f"date(m.inserted_at) < '{fecha_fin}' AND m.genre = {genre})").first()
+
+
 def get_members_by_year_total_and_genre(fecha_inicio, fecha_fin):
     return db.engine.execute(
         "SELECT "

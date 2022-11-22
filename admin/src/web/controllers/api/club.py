@@ -125,6 +125,53 @@ def get_members_already_in_disciplines():
     return response
 
 
+@club_api_blueprint.get('/charts/members/year/genre_alternative')
+def get_members_by_year_total_and_genre_alternative():
+    """ Obtiene la informacion relacionada al club con respecto a la
+        cantidad de asociados registrados por cada año (en un rango 5 años hastaa fecha actual).
+        Total y separado por genero """
+
+    result = []
+    for x in range(3):
+        fecha_inicio = datetime.date((datetime.date.today().year - 5), 1, 1)
+        fecha_sig = fecha_inicio.replace(fecha_inicio.year + 1, 1, 1)
+        fecha_fin = datetime.date.today()
+        arreglo_obj = []
+        genre = x + 1
+
+        while fecha_inicio < fecha_fin:
+            members_years_genre = models.get_members_by_year_total_and_genre_alternative(fecha_inicio, fecha_sig, genre)
+            arreglo_obj.append(members_years_genre[0])
+            fecha_inicio = fecha_inicio.replace(fecha_inicio.year + 1, 1, 1)
+            fecha_sig = fecha_sig.replace(fecha_inicio.year + 1, 1, 1)
+
+        result.append(arreglo_obj)
+
+    response = make_response(jsonify(result), 200)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+
+# Metodo aux para las fechas usadas en las metricas
+@club_api_blueprint.get('/charts/members/years_in_range')
+def get_years_in_range():
+    """ Obtiene los años contenidos dentro de un rango a partir de una fecha de inicio dada """
+
+    fecha_inicio = datetime.date((datetime.date.today().year - 5), 1, 1)
+    fecha_sig = fecha_inicio.replace(fecha_inicio.year + 1, 1, 1)
+    fecha_fin = datetime.date.today()
+    result = []
+
+    while fecha_inicio < fecha_fin:
+        result.append(fecha_inicio.year)
+        fecha_inicio = fecha_inicio.replace(fecha_inicio.year + 1, 1, 1)
+        fecha_sig = fecha_sig.replace(fecha_inicio.year + 1, 1, 1)
+
+    response = make_response(jsonify(result), 200)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+
 @club_api_blueprint.get('/charts/members/year/genre')
 def get_members_by_year_total_and_genre():
     """ Obtiene la informacion relacionada al club con respecto a la
