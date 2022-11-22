@@ -19,7 +19,6 @@
     },
 
     async mounted() {
-      console.log('Component Mounted')
       try{
         const response = await axios.get("http://127.0.0.1:5000/api/club/charts/members/year/genre_alternative");
         const res_years = await axios.get("http://127.0.0.1:5000/api/club/charts/members/years_in_range");
