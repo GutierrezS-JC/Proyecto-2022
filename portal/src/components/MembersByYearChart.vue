@@ -118,7 +118,8 @@
               stacked:true,
             },
             y: {
-              stacked: true
+              stacked: true,
+              beginAtZero: true,
             }
           }
         }

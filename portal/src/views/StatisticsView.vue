@@ -2,6 +2,7 @@
   import AppHeader from "@/components/AppHeader.vue";
   import MembersByYearChart from "@/components/MembersByYearChart.vue";
   import MembersAndDisciplinesChart from "@/components/MembersAndDisciplinesChart.vue";
+  import MembersWithDisciplinesChart from "@/components/MembersWithDisciplinesChart.vue";
 </script>
 
 <template>
@@ -11,16 +12,16 @@
       <h1 class="solidHeading text-center">Estadisticas</h1>
       <div class="row mt-4 pb-5">
         <div class="col-12 col-lg-6 text-center">
-          <h1 class="outlineHeading">Cantidad de asociados del club ( Por genero )</h1>
+          <h1 class="outlineHeading mb-3">Cantidad de asociados del club ( Total - Por genero )</h1>
           <div class="ms-3">
             <MembersAndDisciplinesChart  />
           </div>
         </div>
 
-        <div class="col-12 col-lg-6">
-          <h1 class="outlineHeading text-center">Participacion en disciplinas ( Por genero )</h1>
+        <div class="col-12 col-lg-6 text-center">
+          <h1 class="outlineHeading mb-3">Cantidad de asociados con disciplinas registradas</h1>
           <div class="ms-3">
-            <h2 class="fw-bold h3"> Chau </h2>
+            <MembersWithDisciplinesChart />
           </div>
         </div>
       </div>
