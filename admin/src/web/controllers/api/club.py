@@ -49,6 +49,26 @@ def parse_disciplines_group_by_name():
     return result
 
 
+# Metodo aux para las fechas usadas en las metricas
+@club_api_blueprint.get('/charts/members/years_in_range')
+def get_years_in_range():
+    """ Obtiene los años contenidos dentro de un rango a partir de una fecha de inicio dada """
+
+    fecha_inicio = datetime.date((datetime.date.today().year - 5), 1, 1)
+    fecha_sig = fecha_inicio.replace(fecha_inicio.year + 1, 1, 1)
+    fecha_fin = datetime.date.today()
+    result = []
+
+    while fecha_inicio < fecha_fin:
+        result.append(fecha_inicio.year)
+        fecha_inicio = fecha_inicio.replace(fecha_inicio.year + 1, 1, 1)
+        fecha_sig = fecha_sig.replace(fecha_inicio.year + 1, 1, 1)
+
+    response = make_response(jsonify(result), 200)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+
 @club_api_blueprint.get('/disciplines')
 def get_disciplines_data():
     """ Obtiene todas las disciplinas que se realizan en el club"""
@@ -128,8 +148,8 @@ def get_members_already_in_disciplines():
 @club_api_blueprint.get('/charts/members/year/genre_alternative')
 def get_members_by_year_total_and_genre_alternative():
     """ Obtiene la informacion relacionada al club con respecto a la
-        cantidad de asociados registrados por cada año (en un rango 5 años hastaa fecha actual).
-        Total y separado por genero """
+        cantidad de asociados registrados por cada año (en un rango 5 años hasta la fecha actual).
+        Total y separado por genero (ESTE ES EL USADO ACTUALMENTE)"""
 
     result = []
     for x in range(3):
@@ -152,30 +172,10 @@ def get_members_by_year_total_and_genre_alternative():
     return response
 
 
-# Metodo aux para las fechas usadas en las metricas
-@club_api_blueprint.get('/charts/members/years_in_range')
-def get_years_in_range():
-    """ Obtiene los años contenidos dentro de un rango a partir de una fecha de inicio dada """
-
-    fecha_inicio = datetime.date((datetime.date.today().year - 5), 1, 1)
-    fecha_sig = fecha_inicio.replace(fecha_inicio.year + 1, 1, 1)
-    fecha_fin = datetime.date.today()
-    result = []
-
-    while fecha_inicio < fecha_fin:
-        result.append(fecha_inicio.year)
-        fecha_inicio = fecha_inicio.replace(fecha_inicio.year + 1, 1, 1)
-        fecha_sig = fecha_sig.replace(fecha_inicio.year + 1, 1, 1)
-
-    response = make_response(jsonify(result), 200)
-    response.headers['Content-Type'] = 'application/json'
-    return response
-
-
 @club_api_blueprint.get('/charts/members/year/genre')
 def get_members_by_year_total_and_genre():
     """ Obtiene la informacion relacionada al club con respecto a la
-        cantidad de asociados registrados por cada año (en un rango 5 años hastaa fecha actual).
+        cantidad de asociados registrados por cada año (en un rango 5 años hasta la fecha actual).
         Total y separado por genero """
 
     fecha_inicio = datetime.date((datetime.date.today().year - 5), 1, 1)
@@ -194,6 +194,22 @@ def get_members_by_year_total_and_genre():
         result.append(obj)
         fecha_inicio = fecha_inicio.replace(fecha_inicio.year + 1, 1, 1)
         fecha_sig = fecha_sig.replace(fecha_inicio.year + 1, 1, 1)
+
+    response = make_response(jsonify(result), 200)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+
+@club_api_blueprint.get('/charts/members/disciplines_by_genre')
+def get_members_and_disciplines_by_genre():
+    """ Obtiene los socios clasificados por genero (HISTORICO) """
+
+    query_result = models.get_members_and_disciplines_by_genre()
+    result = {
+        'cant_hombres': query_result[0],
+        'cant_mujeres': query_result[1],
+        'cant_others': query_result[2]
+    }
 
     response = make_response(jsonify(result), 200)
     response.headers['Content-Type'] = 'application/json'

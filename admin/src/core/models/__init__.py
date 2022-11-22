@@ -493,6 +493,15 @@ def get_members_by_year_total_and_genre(fecha_inicio, fecha_fin):
         f"date(m.inserted_at) < '{fecha_fin}' AND m.genre = 3) as cant_otros").first()
 
 
+def get_members_and_disciplines_by_genre():
+    return db.engine.execute(
+        "SELECT "
+        "(SELECT COUNT(distinct m.id) FROM members m WHERE m.genre = 1) as cant_hombres, "
+        "(SELECT COUNT(distinct m.id) FROM members m WHERE m.genre = 2) as cant_mujeres, "
+        "(SELECT COUNT(distinct m.id) FROM members m WHERE m.genre = 3) as cant_others"
+    ).first()
+
+
 def get_fees_not_paid_with_month_year(member_id, month, year):
     fees = Fee.query.filter(Fee.member_id == member_id, Fee.month == str(month),
                             Fee.year == str(year), Fee.was_paid == False)
