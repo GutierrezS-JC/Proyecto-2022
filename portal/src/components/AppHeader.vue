@@ -1,3 +1,11 @@
+<script setup>
+  defineProps({
+    componentCalled: {
+      type: String
+    },
+  });
+</script>
+
 <template>
   <nav class="navbar navbar-dark navbar-expand-lg bg-dark">
     <div class="container">
@@ -16,17 +24,20 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
+          <li v-if="componentCalled !== 'statistics'" class="nav-item">
             <a class="nav-link" aria-current="page" href="#nuestroClub">Sobre nosotros</a>
           </li>
-          <li class="nav-item">
+          <li v-if="componentCalled !== 'statistics'" class="nav-item">
             <a class="nav-link" href="#actividades">Actividades</a>
+          </li>
+          <li v-if="componentCalled === 'statistics'" class="nav-item">
+            <router-link to="/" class="nav-link">Inicio</router-link>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Pagos</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Estadisticas</a>
+            <router-link to="/statistics" class="nav-link">Estadisticas</router-link>
           </li>
         </ul>
 <!--        <span class="navbar-text">-->
