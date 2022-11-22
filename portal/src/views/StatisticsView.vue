@@ -19,7 +19,7 @@
         </div>
 
         <div class="col-12 col-lg-6 text-center">
-          <h1 class="outlineHeading mb-3">Cantidad de asociados con disciplinas registradas</h1>
+          <h1 class="outlineHeading mb-3">Asociados con disciplinas registradas ( {{current_year}} )</h1>
           <div class="ms-3">
             <MembersWithDisciplinesChart />
           </div>
@@ -42,6 +42,12 @@
 
 export default {
   name: "StatisticsView",
+
+  data(){
+    return {
+      current_year : new Date().getFullYear()
+    }
+  }
 
 }
 </script>
