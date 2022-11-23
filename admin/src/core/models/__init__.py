@@ -509,6 +509,12 @@ def get_fees_not_paid_with_month_year(member_id, month, year):
     return fees
 
 
+def get_fees_not_paid():
+    fees = Fee.query.filter(Fee.was_paid == False).all()
+
+    return fees
+
+
 # APIs JSON
 def rol_json(rol):
     return {

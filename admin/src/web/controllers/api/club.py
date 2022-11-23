@@ -214,3 +214,42 @@ def get_members_and_disciplines_by_genre():
     response = make_response(jsonify(result), 200)
     response.headers['Content-Type'] = 'application/json'
     return response
+
+
+#
+# @club_api_blueprint.get('/charts/members/with-disciplines-by-genre')
+# def get_cant_members_in_disciplines_by_genre():
+#     """ Obtiene los socios que hay en las distintas disciplinas
+#         clasificados por genero """
+#
+#     result = []
+#
+#     response = make_response(jsonify(result), 200)
+#     response.headers['Content-Type'] = 'application/json'
+#     return response
+
+
+@club_api_blueprint.get('/charts/members/with_debt_cant')
+def get_cant_members_with_debt_cant():
+    """ Obtiene los socios que tienen cuotas SIN PAGAR vencidas
+        o al dia. Lo importante es destacar que se contabilizan
+        unicamente las cuotas aun no pagadas"""
+
+    res_query = models.get_fees_not_paid()
+    cant_vencidas = 0
+    cant_no_vencidas = 0
+
+    for fee in res_query:
+        if (datetime.date.today().month > int(fee.month)) and (datetime.date.today().day > 10):
+            cant_vencidas += 1
+        else:
+            cant_no_vencidas += 1
+
+    result_json = {
+        'cant_vencidas': cant_vencidas,
+        'cant_no_vencidas': cant_no_vencidas
+    }
+
+    response = make_response(jsonify(result_json), 200)
+    response.headers['Content-Type'] = 'application/json'
+    return response
