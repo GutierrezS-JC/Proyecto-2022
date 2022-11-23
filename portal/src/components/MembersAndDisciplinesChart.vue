@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="chart-container text-center">
     <canvas id="membersAndDisciplinesChart"></canvas>
   </div>
 </template>
@@ -46,6 +46,7 @@
         },
         options:{
           responsive: true,
+          maintainAspectRatio: false,
         }
       });
       myChart
@@ -54,5 +55,9 @@
 </script>
 
 <style scoped>
-
+@media (min-width: 767.98px){
+  .chart-container{
+    height:75vh !important;
+  }
+}
 </style>
