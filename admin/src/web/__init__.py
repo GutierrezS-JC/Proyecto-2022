@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_jwt_extended import JWTManager
 
 from .config import config
 
@@ -13,6 +14,7 @@ from src.web.controllers.payment import payment_blueprint
 
 from src.web.controllers.api.club import club_api_blueprint
 from src.web.controllers.api.me import me_api_blueprint
+from src.web.controllers.api.auth import auth_api_blueprint
 
 from src.web.helpers import handlers
 from src.web.helpers import auth
@@ -28,8 +30,11 @@ from flask_cors import CORS
 def create_app(env="development", static_folder="static"):
     app = Flask(__name__, static_folder=static_folder)
 
-    # CORS
-    # cors = CORS(app, resources={r"/api/*": {"origins": "*"} })
+    # JWT
+    jwt = JWTManager(app)
+
+    # CORS with jwt
+    cors = CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 
     # Load config
     app.config.from_object(config[env])
@@ -60,7 +65,7 @@ def create_app(env="development", static_folder="static"):
     # API
     app.register_blueprint(club_api_blueprint)
     app.register_blueprint(me_api_blueprint)
-
+    app.register_blueprint(auth_api_blueprint)
     # Global Jinja
     app.jinja_env.globals.update(is_authenticated=auth.is_authenticated)
     app.jinja_env.globals.update(has_permission=has_permission)
