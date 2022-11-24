@@ -13,3 +13,7 @@
     <AppFooter/>
   </main>
 </template>
+
+<script>
+
+</script>

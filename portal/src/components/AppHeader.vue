@@ -41,9 +41,12 @@
           </li>
         </ul>
 <!--        <span class="navbar-text">-->
-        <nav>
-          <router-link to="/login" class="btn btn-outline-light">Iniciar Sesion</router-link>
+        <nav v-if="isLoggedIn">
+          <router-link to="/login" class="btn btn-outline-light">Logout</router-link>
 <!--          <RouterLink to="/login">Iniciar Sesion</RouterLink>-->
+        </nav>
+        <nav v-else>
+          <router-link to="/login" class="btn btn-outline-light">Iniciar Sesion</router-link>
         </nav>
 <!--        </span>-->
       </div>
@@ -52,7 +55,15 @@
 </template>
 
 <script>
+  import { mapGetters } from "vuex";
+
   export default {
-    name: "AppHeader"
+    name: "AppHeader",
+    computed: {
+      ...mapGetters({
+        authUser: 'auth/user',
+        isLoggedIn: 'auth/isLoggedIn'
+      })
+    }
   }
 </script>
