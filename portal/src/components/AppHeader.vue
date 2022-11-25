@@ -18,7 +18,6 @@
           height="50"
       />
       </router-link>
-<!--      <a class="navbar-brand" href="#">Club Deportivo Villa Elisa</a>-->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -37,19 +36,16 @@
             <router-link to="/statistics" class="nav-link">Estadisticas</router-link>
           </li>
           <li v-if="isLoggedIn" class="nav-item">
-            <a class="nav-link" href="#">Pagos</a>
+            <router-link to="/payments" class="nav-link">Mis Pagos</router-link>
           </li>
         </ul>
-<!--        <span class="navbar-text">-->
         <nav v-if="isLoggedIn">
           <span class="text-white me-4">{{authUser.full_name}}</span>
-          <button @click="logoutUser" class="btn btn-outline-light">Cerrar Sesion</button>
-<!--          <RouterLink to="/login">Iniciar Sesion</RouterLink>-->
+          <button @click="logout" class="btn btn-outline-light">Cerrar Sesion</button>
         </nav>
         <nav v-else>
           <router-link to="/login" class="btn btn-outline-light">Iniciar Sesion</router-link>
         </nav>
-<!--        </span>-->
       </div>
     </div>
   </nav>
@@ -78,7 +74,6 @@ import { mapActions, mapGetters } from "vuex";
           email: null,
           password: null
         }
-        alert("Sesion cerrada")
         this.$router.push('/')
       }
     }
