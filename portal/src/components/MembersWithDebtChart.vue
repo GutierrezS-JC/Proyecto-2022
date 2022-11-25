@@ -20,7 +20,8 @@ export default {
 
   async mounted() {
     try {
-      const response = await axios.get("http://127.0.0.1:5000/api/club/charts/members/with_debt_cant");
+      // const response = await axios.get("http://127.0.0.1:5000/api/club/charts/members/with_debt_cant");
+      const response = await axios.get("https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/club/charts/members/with_debt_cant");
       if (response.data) {
         this.data.push(response.data.cant_no_vencidas, response.data.cant_vencidas)
       }

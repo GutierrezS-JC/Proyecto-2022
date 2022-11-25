@@ -20,7 +20,8 @@
 
     async mounted() {
       try {
-        const response = await axios.get("http://127.0.0.1:5000/api/club/charts/members/disciplines/current_year");
+        // const response = await axios.get("http://127.0.0.1:5000/api/club/charts/members/disciplines/current_year");
+        const response = await axios.get("https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/club/charts/members/disciplines/current_year");
         if (response.data) {
           this.data.push(response.data.cant_male, response.data.cant_female, response.data.cant_others)
         }

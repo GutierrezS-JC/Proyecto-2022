@@ -87,7 +87,8 @@ export default {
 
   async mounted() {
     try {
-      const response = await axios.get('http://localhost:5000/api/me/payments/complete' ,
+      // const response = await axios.get('http://localhost:5000/api/me/payments/complete' ,
+      const response = await axios.get('https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/me/payments/complete',
           {withCredentials: true, xsrfCookieName: 'csrf_access_token'})
       if(response.data){
         this.fees_paid = response.data.fees_paid
