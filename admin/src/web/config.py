@@ -41,7 +41,9 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:5432/{DB_NAME}"
     # Session values
     SESSION_TYPE = 'filesystem'
-    SECRET_KEY = '40c17c4ff739c52983ba31b49fb17c62'
+    SECRET_KEY = '40c17c4ff739c52983ba31b49fb17c62',
+    JWT_COOKIE_SECURE = True,
+    JWT_COOKIE_SAMESITE = "None"
 
 
 class TestingConfig(Config):

@@ -407,6 +407,33 @@ def format_month_description(month_number, year_number):
     return f"{str(month)} {str(year_number)}"
 
 
+def format_only_month_description(month_number):
+    if month_number == '1':
+        return "Enero"
+    elif month_number == '2':
+        return "Febrero"
+    elif month_number == '3':
+        return "Marzo"
+    elif month_number == '4':
+        return"Abril"
+    elif month_number == '5':
+        return "Mayo"
+    elif month_number == '6':
+        return "Junio"
+    elif month_number == '7':
+        return "Julio"
+    elif month_number == '8':
+        return "Agosto"
+    elif month_number == '9':
+        return "Septiembre"
+    elif month_number == '10':
+        return "Octubre"
+    elif month_number == '11':
+        return "Noviembre"
+    else:
+        return "Diciembre"
+
+
 def format_amount_description(total_amount):
     num_word = num2words(total_amount, lang='es')
     return f"({int(total_amount)}) {num_word}"
@@ -578,4 +605,15 @@ def me_payment_json(month, total):
     return {
         'month': month,
         'amount': total
+    }
+
+
+def me_payment_new_json(year, month_num, total, date_paid, first_name, last_name):
+    return {
+        'year': year,
+        'month_num': month_num,
+        'amount': total,
+        'date_paid': date_paid,
+        'month_str': format_only_month_description(str(month_num)),
+        'member_fullname': f"{first_name} {last_name}"
     }

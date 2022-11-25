@@ -1,8 +1,13 @@
+import datetime
+
 from flask import Blueprint, jsonify, request, abort
 from flask import make_response
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from src.core import models
 from src.web.helpers.handlers import error_json
+
+from core import auth
 
 me_api_blueprint = Blueprint("me_api", __name__, url_prefix="/api/me")
 
@@ -43,6 +48,33 @@ def get_member_payments():
                 result.append(models.me_payment_json(fee.month, fee.receipt.total_amount))
 
         response = make_response(jsonify(result), 200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    else:
+        res_abort = error_json("404 Not Found Error", "Usuario no encontrado")
+        response = make_response(jsonify(res_abort), 404)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+
+@me_api_blueprint.get('/payments/complete')
+@jwt_required()
+def get_member_payments_complete():
+    """Obtiene la lista de pagos (completo) del usuario autentificado"""
+    current_user = get_jwt_identity()
+    member = auth.get_member_by_id(current_user)
+    if member:
+        paid = []
+        not_paid = []
+        for fee in member.fees:
+            if fee.was_paid:
+                paid.append(models.me_payment_new_json(fee.year, fee.month, fee.receipt.total_amount, fee.date_paid,
+                                                       member.first_name, member.last_name))
+            else:
+                not_paid.append(models.me_payment_new_json(fee.year, fee.month, fee.total, fee.date_paid,
+                                                           member.first_name, member.last_name))
+
+        response = make_response(jsonify({'fees_paid': paid, 'fees_not_paid': not_paid}), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
     else:
