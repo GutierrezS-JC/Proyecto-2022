@@ -34,7 +34,7 @@ def create_app(env="development", static_folder="static"):
     jwt = JWTManager(app)
 
     # CORS with jwt
-    cors = CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
+    # cors = CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 
     # Load config
     app.config.from_object(config[env])
