@@ -2,41 +2,17 @@
   <div class="container-fluid" style="background-color: #fff5e5">
     <div class="container pt-4">
       <h1 class="solidHeading">Actividades / Disciplinas</h1>
-      <div class="row" id="actividades">
-        <div class="col-12 col-lg-6">
-          <h1>FUTBOL</h1>
-          <ul class="ms-3">
-            <li>Categoria 2022</li>
-            <li>Categoria 2023</li>
-            <li>Categoria 2025</li>
-          </ul>
-        </div>
-
-        <div class="col-12 col-lg-6">
-          <h1>Basquet</h1>
-          <ul class="ms-3">
-            <li>Categoria Adultos</li>
-          </ul>
-        </div>
-
-        <div class="col-12 col-lg-6">
-          <h1>Basquet</h1>
-          <ul class="ms-3">
-            <li>Categoria Adultos</li>
-          </ul>
-        </div>
-
-        <div class="col-12 col-lg-6">
-          <h1>FUTBOL</h1>
-          <ul class="ms-3">
-            <li>Categoria 2022</li>
-            <li>Categoria 2023</li>
-            <li>Categoria 2025</li>
-          </ul>
-        </div>
-
-        <div v-for="discipline in disciplines" >
-          <p>{{ discipline.teachers }}</p>
+      <div class="row pb-5" id="actividades">
+        <div class="col-12 col-lg-6" v-for="discipline in disciplines" >
+          <h1 class="outlineHeading">{{ discipline.name }}</h1>
+          <div class="ms-3" v-for="detail in discipline.details">
+            <h2 class="text-decoration-underline fw-bold h3"> {{ detail.category }} </h2>
+            <ul class="ms-2 fs-5">
+              <li> <span class="fw-bold"> Dias y horarios: </span> {{ detail.days_hours }} </li>
+              <li> <span class="fw-bold"> Precio: </span> ${{ detail.monthly_fee }} </li>
+              <li> <span class="fw-bold"> Profesores: </span> {{ detail.teachers }}</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -58,9 +34,8 @@ export default {
 
   async created() {
     try{
-      const response = await axios.get("http://127.0.0.1:5000/api/club/disciplines");
-      // const response = await axios.get('https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/club/disciplines')
-      console.log(response.data)
+      // const response = await axios.get("http://127.0.0.1:5000/api/club/disciplines");
+      const response = await axios.get('https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/club/disciplines')
       if(response.data){
         this.disciplines = response.data
       }
@@ -76,5 +51,10 @@ export default {
   .solidHeading{
     font-family: 'Londrina Solid', cursive;
     font-size:100px;
+  }
+
+  .outlineHeading{
+    font-size: 85px;
+    font-family: 'Londrina Shadow', cursive;
   }
 </style>

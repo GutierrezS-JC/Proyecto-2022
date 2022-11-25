@@ -225,7 +225,7 @@ def member_is_currently_defaulted(member):
 
     if int(current_date.day) > int(configuration.due_date):
         for fee in member_fees:
-            if int(current_date.day) > int(configuration.due_date)\
+            if int(current_date.day) > int(configuration.due_date) \
                     and int(current_date.month) > int(fee.month) and (fee.was_paid is None or fee.was_paid == False):
                 return True
     else:
@@ -407,6 +407,33 @@ def format_month_description(month_number, year_number):
     return f"{str(month)} {str(year_number)}"
 
 
+def format_only_month_description(month_number):
+    if month_number == '1':
+        return "Enero"
+    elif month_number == '2':
+        return "Febrero"
+    elif month_number == '3':
+        return "Marzo"
+    elif month_number == '4':
+        return"Abril"
+    elif month_number == '5':
+        return "Mayo"
+    elif month_number == '6':
+        return "Junio"
+    elif month_number == '7':
+        return "Julio"
+    elif month_number == '8':
+        return "Agosto"
+    elif month_number == '9':
+        return "Septiembre"
+    elif month_number == '10':
+        return "Octubre"
+    elif month_number == '11':
+        return "Noviembre"
+    else:
+        return "Diciembre"
+
+
 def format_amount_description(total_amount):
     num_word = num2words(total_amount, lang='es')
     return f"({int(total_amount)}) {num_word}"
@@ -421,6 +448,10 @@ def get_all_disciplines():
     return Discipline.query.all()
 
 
+def get_all_disciplines_group():
+    return Discipline.query.order_by(Discipline.name).all()
+
+
 def get_club_data():
     return Config.query.with_entities(Config.email, Config.phone).first()
 
@@ -430,10 +461,84 @@ def get_members_disciplines(searched_member):
     return searched_member.disciplines
 
 
+# Charts
+def get_members_with_disciplines_by_genre(discipline_name):
+    return db.engine.execute(
+        "SELECT"
+        "(SELECT COUNT(distinct m.id) FROM members m "
+        "INNER JOIN discipline_members dm ON m.id = dm.member_id "
+        "INNER JOIN disciplines d ON d.id = dm.discipline_id "
+        f"WHERE d.name = '{discipline_name}' and m.genre = 1) as cantidad_inscritos_hombres, "
+        "(SELECT COUNT(distinct m.id) as cantidad_inscritos_hombres FROM members m "
+        "INNER JOIN discipline_members dm ON m.id = dm.member_id "
+        "INNER JOIN disciplines d ON d.id = dm.discipline_id "
+        f"WHERE d.name = '{discipline_name}' and m.genre = 2) as cantidad_inscritos_mujeres, "
+        "(SELECT COUNT(distinct m.id) as cantidad_inscritos_otros FROM members m "
+        "INNER JOIN discipline_members dm ON m.id = dm.member_id "
+        "INNER JOIN disciplines d ON d.id = dm.discipline_id "
+        f"WHERE d.name = '{discipline_name}' and m.genre = 3) as cantidad_inscritos_otros;"
+    ).first()
+
+
+def get_members_already_in_disciplines(current_year, next_year_limit):
+    return db.engine.execute(
+        "SELECT"
+        "(SELECT COUNT(distinct m.id) as cant_male FROM members m "
+        "INNER JOIN discipline_members dm on m.id = dm.member_id "
+        "INNER JOIN disciplines d on d.id = dm.discipline_id "
+        f"WHERE date(d.inserted_at) >= '{current_year}' and date(d.inserted_at) < '{next_year_limit}' and m.genre = 1) "
+        "AS cant_male,"
+        "(SELECT COUNT(distinct m.id) as cant_female FROM members m "
+        "INNER JOIN discipline_members dm on m.id = dm.member_id "
+        "INNER JOIN disciplines d on d.id = dm.discipline_id "
+        f"WHERE date(d.inserted_at) >= '{current_year}' and date(d.inserted_at) < '{next_year_limit}' and m.genre = 2) "
+        "AS cant_female,"
+        "(SELECT COUNT(distinct m.id) as cant_female FROM members m "
+        "INNER JOIN discipline_members dm on m.id = dm.member_id "
+        "INNER JOIN disciplines d on d.id = dm.discipline_id "
+        f"WHERE date(d.inserted_at) >= '{current_year}' and date(d.inserted_at) < '{next_year_limit}' and m.genre = 3) "
+        "AS cant_others;"
+    ).first()
+
+
+def get_members_by_year_total_and_genre_alternative(fecha_inicio, fecha_fin, genre):
+    return db.engine.execute(
+        f"(SELECT COUNT(m.id) FROM members m WHERE date(m.inserted_at) >= '{fecha_inicio}' and "
+        f"date(m.inserted_at) < '{fecha_fin}' AND m.genre = {genre})").first()
+
+
+def get_members_by_year_total_and_genre(fecha_inicio, fecha_fin):
+    return db.engine.execute(
+        "SELECT "
+        f"(SELECT COUNT(m.id) FROM members m WHERE date(m.inserted_at) >= '{fecha_inicio}' and "
+        f"date(m.inserted_at) < '{fecha_fin}' ) as cant_total, "
+        f"(SELECT COUNT(m.id) FROM members m WHERE date(m.inserted_at) > '{fecha_inicio}' and "
+        f"date(m.inserted_at) < '{fecha_fin}' AND m.genre = 1) as cant_hombres,"
+        f"(SELECT COUNT(m.id) FROM members m WHERE date(m.inserted_at) > '{fecha_inicio}' and "
+        f"date(m.inserted_at) < '{fecha_fin}' AND m.genre = 2) as cant_mujeres, "
+        f"(SELECT COUNT(m.id) FROM members m WHERE date(m.inserted_at) > '{fecha_inicio}' and "
+        f"date(m.inserted_at) < '{fecha_fin}' AND m.genre = 3) as cant_otros").first()
+
+
+def get_members_and_disciplines_by_genre():
+    return db.engine.execute(
+        "SELECT "
+        "(SELECT COUNT(distinct m.id) FROM members m WHERE m.genre = 1) as cant_hombres, "
+        "(SELECT COUNT(distinct m.id) FROM members m WHERE m.genre = 2) as cant_mujeres, "
+        "(SELECT COUNT(distinct m.id) FROM members m WHERE m.genre = 3) as cant_others"
+    ).first()
+
+
 def get_fees_not_paid_with_month_year(member_id, month, year):
     fees = Fee.query.filter(Fee.member_id == member_id, Fee.month == str(month),
                             Fee.year == str(year), Fee.was_paid == False)
     fees.all()
+    return fees
+
+
+def get_fees_not_paid():
+    fees = Fee.query.filter(Fee.was_paid == False).all()
+
     return fees
 
 
@@ -480,9 +585,19 @@ def club_data_json(email, phone):
 
 def club_discipline_json(discipline):
     return {
+        'id': discipline.id,
         'name': discipline.name,
+        'category': discipline.category,
         'days_hours': discipline.days_hours,
-        'teachers': discipline.instructors
+        'teachers': discipline.instructors,
+        'monthly_fee': discipline.monthly_fee
+    }
+
+
+def club_discipline_group_json(discipline_name, details):
+    return {
+        'name': discipline_name,
+        'details': details
     }
 
 
@@ -490,4 +605,15 @@ def me_payment_json(month, total):
     return {
         'month': month,
         'amount': total
+    }
+
+
+def me_payment_new_json(year, month_num, total, date_paid, first_name, last_name):
+    return {
+        'year': year,
+        'month_num': month_num,
+        'amount': total,
+        'date_paid': date_paid,
+        'month_str': format_only_month_description(str(month_num)),
+        'member_fullname': f"{first_name} {last_name}"
     }

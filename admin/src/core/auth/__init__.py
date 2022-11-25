@@ -3,6 +3,8 @@ from passlib.hash import sha256_crypt
 from src.core.database import db
 from src.core.auth.user import User
 
+from src.core.models.member import Member
+
 
 def all_paginated(page, per_page):
     return User.query.order_by(User.id.asc()).paginate(page=page, per_page=per_page, error_out=False)
@@ -72,6 +74,15 @@ def verify_login(email, password):
     return None
 
 
+def verify_login_doc_num(doc_num, password):
+    response = Member.query.filter_by(doc_num=doc_num).first()
+    if response:
+        if sha256_crypt.verify(password, response.password):
+            return response
+
+    return None
+
+
 def get_initials(email):
     user = User.query.filter_by(email=email).all()
     return user.first_name[0] + user.last_name[0]
@@ -83,6 +94,10 @@ def get_user_by_username(username):
 
 def get_user_by_id(user_id):
     return User.query.filter_by(id=user_id).first()
+
+
+def get_member_by_id(member_id):
+    return Member.query.filter_by(id=member_id).first()
 
 
 def get_user_by_email(email):
