@@ -36,7 +36,6 @@ export default {
     try{
       const response = await axios.get("http://127.0.0.1:5000/api/club/disciplines");
       // const response = await axios.get('https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/club/disciplines')
-      console.log(response.data)
       if(response.data){
         this.disciplines = response.data
       }

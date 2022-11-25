@@ -90,11 +90,9 @@ export default {
       const response = await axios.get('http://localhost:5000/api/me/payments/complete' ,
           {withCredentials: true, xsrfCookieName: 'csrf_access_token'})
       if(response.data){
-        console.log(response.data)
         this.fees_paid = response.data.fees_paid
         this.fees_not_paid = response.data.fees_not_paid
       }
-      // console.log(new Date('Fri, 28 Oct 2022 00:00:00 GMT').toLocaleDateString('es-AR'))
     }
     catch (err){
       console.log(err)
