@@ -16,9 +16,7 @@ def login_jwt():
     email = data['email']
     password = data['password']
     member = auth.verify_login_doc_num(email, password)
-    print(email)
-    print(password)
-    print(member)
+
     if member:
         access_token = create_access_token(identity=member.id)
         response = jsonify()
