@@ -33,16 +33,17 @@
           <li v-if="componentCalled === 'statistics'" class="nav-item">
             <router-link to="/" class="nav-link">Inicio</router-link>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Pagos</a>
-          </li>
-          <li class="nav-item">
+          <li v-if="componentCalled !== 'statistics'" class="nav-item">
             <router-link to="/statistics" class="nav-link">Estadisticas</router-link>
+          </li>
+          <li v-if="isLoggedIn" class="nav-item">
+            <a class="nav-link" href="#">Pagos</a>
           </li>
         </ul>
 <!--        <span class="navbar-text">-->
         <nav v-if="isLoggedIn">
-          <router-link to="/login" class="btn btn-outline-light">Logout</router-link>
+          <span class="text-white me-4">{{authUser.full_name}}</span>
+          <button @click="logoutUser" class="btn btn-outline-light">Cerrar Sesion</button>
 <!--          <RouterLink to="/login">Iniciar Sesion</RouterLink>-->
         </nav>
         <nav v-else>
@@ -55,7 +56,7 @@
 </template>
 
 <script>
-  import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
   export default {
     name: "AppHeader",
@@ -64,6 +65,22 @@
         authUser: 'auth/user',
         isLoggedIn: 'auth/isLoggedIn'
       })
+    },
+
+    methods: {
+      ...mapActions('auth', ['loginUser', 'logoutUser']),
+      async logout() {
+        await this.logoutUser().catch((err) => {
+          console.log(err)
+        });
+        this.error = false;
+        this.user = {
+          email: null,
+          password: null
+        }
+        alert("Sesion cerrada")
+        this.$router.push('/')
+      }
     }
   }
 </script>
