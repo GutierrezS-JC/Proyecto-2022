@@ -23,6 +23,9 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:5432/{DB_NAME}"
     # Session values
     SESSION_TYPE = 'filesystem'
+    # JWT
+    JWT_COOKIE_SAMESITE = "None"
+    JWT_COOKIE_SECURE = True
 
 
 class DevelopmentConfig(Config):
