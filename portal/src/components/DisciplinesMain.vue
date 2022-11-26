@@ -1,8 +1,10 @@
 <template>
   <div class="container-fluid" style="background-color: #fff5e5">
     <div class="container pt-4">
-      <h1 class="solidHeading">Actividades / Disciplinas</h1>
       <div class="row pb-5" id="actividades">
+        <div class="col-12">
+          <h1 class="solidHeading">Disciplinas</h1>
+        </div>
         <div class="col-12 col-lg-6" v-for="discipline in disciplines" >
           <h1 class="outlineHeading">{{ discipline.name }}</h1>
           <div class="ms-3" v-for="detail in discipline.details">
@@ -48,13 +50,19 @@ export default {
 </script>
 
 <style scoped>
-  .solidHeading{
+ .solidHeading{
     font-family: 'Londrina Solid', cursive;
-    font-size:100px;
+    font-size:80px;
   }
 
   .outlineHeading{
     font-size: 85px;
     font-family: 'Londrina Shadow', cursive;
+  }
+  @media (min-width: 576px){
+    .solidHeading{
+      font-family: 'Londrina Solid', cursive;
+      font-size:120px;
+    }
   }
 </style>

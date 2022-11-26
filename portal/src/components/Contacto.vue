@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid" style="background-color: #fff5e5">
     <div class="container pt-2 pt-md-5">
-      <h1 class="solidHeading ">Contacto</h1>
+      <h1 class="solidHeading">Contacto</h1>
       <div class="row pb-5">
         <div class="col-12 col-lg-6 mt-2">
           <h2 class="fw-semibold mb-4">{{info.contact_info}}</h2>
@@ -58,7 +58,7 @@ export default {
 <style scoped>
   .solidHeading{
     font-family: 'Londrina Solid', cursive;
-    font-size:100px;
+    font-size:80px;
   }
 
   .solidSubheading{
@@ -78,5 +78,11 @@ export default {
   iframe {
     width: 100%;
     height: 400px;
+  }
+  @media (min-width: 576px){
+    .solidHeading{
+      font-family: 'Londrina Solid', cursive;
+      font-size:120px;
+    }
   }
 </style>
