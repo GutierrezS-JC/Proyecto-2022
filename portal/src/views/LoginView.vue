@@ -1,6 +1,3 @@
-<script setup>
-  import AppHeader from "@/components/AppHeader.vue";
-</script>
 <template>
   <section class="vh-100" style="background-color: #f6e0bc;">
     <div class="container py-5 h-100">

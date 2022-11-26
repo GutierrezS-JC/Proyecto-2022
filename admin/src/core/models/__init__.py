@@ -453,7 +453,7 @@ def get_all_disciplines_group():
 
 
 def get_club_data():
-    return Config.query.with_entities(Config.email, Config.phone).first()
+    return Config.query.with_entities(Config.email, Config.phone, Config.contact_information).first()
 
 
 # ME (Member API)
@@ -576,10 +576,11 @@ def discipline_json(discipline):
     }
 
 
-def club_data_json(email, phone):
+def club_data_json(email, phone, contact_info):
     return {
         'email': email,
-        'phone': phone
+        'phone': phone,
+        'contact_info': contact_info
     }
 
 

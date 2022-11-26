@@ -1,18 +1,11 @@
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
-import AppHeader from "@/components/AppHeader.vue";
-import InformationMain from "@/components/InformationMain.vue";
+import { RouterView } from "vue-router";
 </script>
 
 <template>
-<!--  <AppHeader />-->
-<!--  <InformationMain />-->
   <RouterView />
-
 </template>
 
 <style scoped>
-  /**{*/
-  /*  background-color: #fff5e5*/
-  /*}*/
+
 </style>

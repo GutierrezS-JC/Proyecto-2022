@@ -14,9 +14,9 @@
         <div class="col-12 col-lg-6">
           <h1 class="solidHeading">No es solo un club es una <span class="outlineHeading"> FAMILIA</span></h1>
           <h2 class="h1" style="font-weight: bold">Sumate al <span style="color: #f6c169; letter-spacing: 8px;">DEPO</span></h2>
-          <p>Tenemos 99 años de historia. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-            ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+          <p>Contamos con una amplia trayectoria y 99 años de historia.</p>
+          <p>En nuestro portal vas a tener disponible la información sobre nuestro club, nuestras disciplinas
+            y tu información como socio.  </p>
           <button type="button" class="btn btn-dark px-4">Sumate</button>
           <img
               alt="Vue logo"
@@ -25,15 +25,6 @@
               width="85"
               height="85"
           />
-          <figure>
-            <blockquote>
-              <p class="text-muted">Club Deportivo de Villa Elisa (CDVE), apodado como Depo, es una de las
-                instituciones más importantes de la localidad.</p>
-            </blockquote>
-            <figcaption class="blockquote-footer">
-              <cite title="Source Title">Diario Hoy</cite>
-            </figcaption>
-          </figure>
         </div>
         <div class="col-12 col-lg-6 text-center d-none d-lg-block">
           <img
@@ -155,7 +146,7 @@
           </div>
           <figure class="text-center p-3">
             <blockquote class="blockquote solidQuote">
-              <p>El club Deporitvo Villa Elisa, con 96 años de vida, es una de las mas tradicionales
+              <p>El club Deportivo Villa Elisa, con 96 años de vida, es una de las mas tradicionales
                 entidad del Norte [...] </p>
             </blockquote>
             <figcaption class="blockquote-footer mt-2">
@@ -168,21 +159,9 @@
 </template>
 
 <script>
-import axios from "axios";
-
-export default {
-  name: "InformationMain",
-
-  // async created() {
-  //     try{
-  //       const response = await axios.get("https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/club/disciplines")
-  //       console.log(response.data)
-  //     }
-  //     catch(err){
-  //       console.log(err)
-  //     }
-  // }
-}
+  export default {
+    name: "InformationMain",
+  }
 </script>
 
 <style scoped>
