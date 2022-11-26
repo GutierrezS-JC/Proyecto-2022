@@ -7,13 +7,13 @@
           <h2 class="fw-semibold mb-4">{{info.contact_info}}</h2>
           <h2 class="outlineHeading">Telefono: </h2>
           <ul>
-            <li class="defaultSub ms-4">
+            <li class="defaultSub ms-md-3">
               {{info.phone}}
             </li>
           </ul>
           <h2 class="outlineHeading">Email: </h2>
           <ul>
-            <li class="defaultSub ms-4">
+            <li class="defaultSub ms-md-3">
               {{info.email}}
             </li>
           </ul>
@@ -69,7 +69,7 @@ export default {
   .defaultSub{
     font-family: Roboto, Arial, sans-serif;
     font-weight: bold;
-    font-size: 2em;
+    font-size: 1.2em;
   }
   .outlineHeading{
     font-size: 60px;
@@ -79,10 +79,17 @@ export default {
     width: 100%;
     height: 400px;
   }
+
   @media (min-width: 576px){
     .solidHeading{
       font-family: 'Londrina Solid', cursive;
       font-size:120px;
+    }
+
+    .defaultSub{
+      font-family: Roboto, Arial, sans-serif;
+      font-weight: bold;
+      font-size: 1.8em;
     }
   }
 </style>
