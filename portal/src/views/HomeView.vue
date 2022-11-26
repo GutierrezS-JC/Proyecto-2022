@@ -4,6 +4,7 @@
   import AppFooter from "@/components/AppFooter.vue";
   import DisciplinesMain from "@/components/DisciplinesMain.vue";
   import Contacto from "@/components/Contacto.vue";
+  import PricesAlert from "@/components/PricesAlert.vue";
 </script>
 
 <template>
@@ -11,6 +12,7 @@
     <AppHeader/>
     <InformationMain />
     <DisciplinesMain />
+    <PricesAlert/>
     <Contacto/>
     <AppFooter/>
   </main>
