@@ -44,8 +44,8 @@ export default {
 
   async created() {
     try{
-      const response = await axios.get("http://127.0.0.1:5000/api/club/info")
-      // const response = await axios.get("https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/club/info")
+      // const response = await axios.get("http://127.0.0.1:5000/api/club/info")
+      const response = await axios.get("https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/club/info")
       this.info = response.data
     }
     catch(err){
