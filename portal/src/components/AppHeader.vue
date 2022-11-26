@@ -53,6 +53,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import Swal from "sweetalert2";
 
   export default {
     name: "AppHeader",
@@ -75,6 +76,13 @@ import { mapActions, mapGetters } from "vuex";
           password: null
         }
         this.$router.push('/')
+        await Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Sesion cerrada',
+          showConfirmButton: false,
+          timer: 1500
+        })
       }
     }
   }
