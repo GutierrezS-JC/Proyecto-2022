@@ -55,7 +55,9 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
 import { mapActions, mapGetters} from 'vuex'
+
 export default {
   name: "LoginView",
   data: () => ({
@@ -78,6 +80,11 @@ export default {
       await this.loginUser(this.user)
           .catch(() => {
             this.error = true
+            Swal.fire(
+                'Error',
+                'Usuario o clave incorrecto',
+                'error'
+            )
           });
       this.user = {
         email: null,
@@ -86,6 +93,13 @@ export default {
 
       if (this.isLoggedIn) {
         this.$router.push('/')
+        await Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Sesion iniciada',
+          showConfirmButton: false,
+          timer: 1500
+        })
       }
     },
 
