@@ -3,6 +3,7 @@
   import AppHeader from "@/components/AppHeader.vue";
   import AppFooter from "@/components/AppFooter.vue";
   import DisciplinesMain from "@/components/DisciplinesMain.vue";
+  import Contacto from "@/components/Contacto.vue";
 </script>
 
 <template>
@@ -10,6 +11,7 @@
     <AppHeader/>
     <InformationMain />
     <DisciplinesMain />
+    <Contacto/>
     <AppFooter/>
   </main>
 </template>
