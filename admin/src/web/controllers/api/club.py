@@ -89,7 +89,7 @@ def get_club_data():
     """ Obtiene la informacion relacionada al club con respecto al telefono y email """
 
     club_data = models.get_club_data()
-    res_json = models.club_data_json(club_data[0], club_data[1])
+    res_json = models.club_data_json(club_data[0], club_data[1], club_data[2])
 
     response = make_response(jsonify(res_json), 200)
     response.headers['Content-Type'] = 'application/json'
