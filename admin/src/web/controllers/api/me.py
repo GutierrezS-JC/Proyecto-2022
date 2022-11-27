@@ -1,12 +1,15 @@
 import datetime
+import os
 
-from flask import Blueprint, jsonify, request, abort
+from flask import Blueprint, jsonify, request, abort, url_for, current_app
 from flask import make_response
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from src.core import models
 from src.web.helpers.handlers import error_json
+from werkzeug.utils import secure_filename
 
+# from admin.app import app
 from core import auth
 
 me_api_blueprint = Blueprint("me_api", __name__, url_prefix="/api/me")
@@ -61,6 +64,7 @@ def get_member_payments():
 @jwt_required()
 def get_member_payments_complete():
     """Obtiene la lista de pagos (completo) del usuario autentificado"""
+
     current_user = get_jwt_identity()
     member = auth.get_member_by_id(current_user)
     if member:
@@ -85,38 +89,63 @@ def get_member_payments_complete():
 
 
 @me_api_blueprint.post('/payments')
+@jwt_required()
 def post_member_payments():
     """Registra un nuevo pago para el usuario autentificado (recibido por Authorization)"""
 
-    member_req = request.headers.get('Authorization')
-    member_searched = models.get_member_by_id(member_req)
-
+    current_user = get_jwt_identity()
+    member_searched = auth.get_member_by_id(current_user)
     if member_searched:
         req_data = request.get_json()
         result_json = []
-        for item in req_data:
-            result_fees = models.get_fees_not_paid_with_month_year(member_searched.id, item["month"], item["year"])
-            if result_fees:
-                for fee in result_fees:
-                    result = models.register_fee_as_paid(fee)
 
-                    member_full_name = f"{member_searched.first_name} {member_searched.last_name}"
-                    month_description = models.format_month_description(int(fee.month), fee.year)
-                    total_amount_description = models.format_amount_description(result)
+        result_fees = models.get_fees_not_paid_with_month_year(member_searched.id, req_data["month"],
+                                                               req_data["year"])
+        if result_fees:
+            for fee in result_fees:
+                result = models.register_fee_as_paid(fee)
 
-                    new_receipt = models.create_receipt(member_full_name=member_full_name,
-                                                        total_amount_description=total_amount_description,
-                                                        total_amount=result, month_description=month_description,
-                                                        fee_id=fee.id)
+                member_full_name = f"{member_searched.first_name} {member_searched.last_name}"
+                month_description = models.format_month_description(int(fee.month), fee.year)
+                total_amount_description = models.format_amount_description(result)
 
-                    archived_disciplines = models.create_receipt_disciplines(member_searched.disciplines, new_receipt.id)
-                    models.add_archived_disciplines_to_receipt(new_receipt, archived_disciplines)
+                new_receipt = models.create_receipt(member_full_name=member_full_name,
+                                                    total_amount_description=total_amount_description,
+                                                    total_amount=result, month_description=month_description,
+                                                    fee_id=fee.id)
 
-                    result_json.append(models.me_payment_json(fee.month, new_receipt.total_amount))
+                archived_disciplines = models.create_receipt_disciplines(member_searched.disciplines, new_receipt.id)
+                models.add_archived_disciplines_to_receipt(new_receipt, archived_disciplines)
 
+                result_json.append(models.me_payment_json(fee.month, new_receipt.total_amount))
         response = make_response(jsonify(result_json), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
+    else:
+        res_abort = error_json("404 Not Found Error", "Usuario no encontrado")
+        response = make_response(jsonify(res_abort), 404)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+
+@me_api_blueprint.post('/payments/file')
+@jwt_required()
+def post_member_payments_file():
+    """Registra un nuevo pago FILE INPUT para el usuario autentificado (recibido por Authorization)"""
+    file = request.files['file']
+    current_user = get_jwt_identity()
+    member_searched = auth.get_member_by_id(current_user)
+    if member_searched:
+        if request.files['file']:
+            fee_paid = models.get_last_updated_fee(current_user)
+            file.filename = f"Comprobante_{member_searched.doc_num}_{fee_paid.month}_{fee_paid.year}"
+            # path = os.path.join(current_app.root_path, 'files')
+            # print(os.path.join(current_app.root_path, 'files'))
+            file.save(secure_filename(file.filename))
+
+            response = make_response(jsonify({'status': 'Ok'}), 200)
+            response.headers['Content-Type'] = 'application/json'
+            return response
     else:
         res_abort = error_json("404 Not Found Error", "Usuario no encontrado")
         response = make_response(jsonify(res_abort), 404)

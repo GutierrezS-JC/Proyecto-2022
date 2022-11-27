@@ -415,7 +415,7 @@ def format_only_month_description(month_number):
     elif month_number == '3':
         return "Marzo"
     elif month_number == '4':
-        return"Abril"
+        return "Abril"
     elif month_number == '5':
         return "Mayo"
     elif month_number == '6':
@@ -540,6 +540,10 @@ def get_fees_not_paid():
     fees = Fee.query.filter(Fee.was_paid == False).all()
 
     return fees
+
+
+def get_last_updated_fee(current_user):
+    return Fee.query.filter(Fee.member_id == current_user).order_by(Fee.updated_at.desc()).first()
 
 
 # APIs JSON
