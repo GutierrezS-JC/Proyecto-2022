@@ -50,6 +50,8 @@
 
 <script>
 
+import {mapActions, mapGetters} from "vuex";
+
 export default {
   name: "StatisticsView",
 
@@ -57,6 +59,28 @@ export default {
     return {
       current_year : new Date().getFullYear()
     }
+  },
+
+  async mounted() {
+    try{
+      await this.fetchUser()
+    }
+    catch(err){
+      if(err.response.status === 401){
+        console.log("Unauthorized")
+      }
+    }
+  },
+
+  computed: {
+    ...mapGetters({
+      authUser: 'auth/user',
+      isLoggedIn: 'auth/isLoggedIn'
+    })
+  },
+
+  methods: {
+    ...mapActions('auth', ['fetchUser']),
   }
 
 }
