@@ -26,6 +26,7 @@ class ProductionConfig(Config):
     # JWT
     JWT_COOKIE_SAMESITE = "None"
     JWT_COOKIE_SECURE = True
+    JWT_COOKIE_DOMAIN = ".proyecto2022.linti.unlp.edu.ar"
 
 
 class DevelopmentConfig(Config):
