@@ -145,7 +145,7 @@ export default {
       try{
         const response = await apiService.post("/api/me/payments",
             {'month': this.month, 'year': this.year},
-            {withCredentials: true, xsrfCookieName: 'csrf_access_token'})
+            {withCredentials: true, xsrfCookieName: 'csrf_access_token', xsrfHeaderName: "X-CSRF-TOKEN"})
 
         const res_file = await apiService.post("/api/me/payments/file", formData, {
           withCredentials: true,
