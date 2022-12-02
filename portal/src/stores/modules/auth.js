@@ -14,7 +14,7 @@ const getters = {
 
 const actions = {
     async loginUser({dispatch}, user){
-        await apiService.post('api/auth/login_jwt', user, {xsrfHeaderName: "X-CSRF-TOKEN"})
+        await apiService.post('api/auth/login_jwt', user)
         await dispatch('fetchUser')
         // alert('logined')
     },
