@@ -8,6 +8,7 @@
   import Chart from 'chart.js/auto';
   import axios from "axios";
   import { toRaw } from 'vue';
+  import {apiService} from "@/api";
 
   export default {
     name: "MembersByYearChart",
@@ -20,11 +21,8 @@
 
     async mounted() {
       try{
-        // const response = await axios.get("http://127.0.0.1:5000/api/club/charts/members/year/genre_alternative");
-        // const res_years = await axios.get("http://127.0.0.1:5000/api/club/charts/members/years_in_range");
-        const res_years = await axios.get('https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/club/charts/members/years_in_range')
-        const response = await axios.get("https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/club/charts/members/year/genre_alternative");
-
+        const response = await apiService.get("/api/club/charts/members/year/genre_alternative");
+        const res_years = await apiService("/api/club/charts/members/years_in_range")
         if(response.data && res_years.data){
           response.data.map((item) =>{
             this.data.push(item)

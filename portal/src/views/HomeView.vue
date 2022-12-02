@@ -19,5 +19,27 @@
 </template>
 
 <script>
+import {mapActions, mapGetters} from "vuex";
 
+export default {
+  methods: {
+    ...mapActions('auth', ['fetchUser'])
+  },
+  computed: {
+    ...mapGetters({
+      authUser: 'auth/user',
+      isLoggedIn: 'auth/isLoggedIn'
+    })
+  },
+  async mounted() {
+    try{
+      await this.fetchUser()
+    }
+    catch(err){
+      if(err.response.status === 401){
+        console.log("Unauthorized")
+      }
+    }
+  },
+}
 </script>

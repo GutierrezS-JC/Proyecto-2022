@@ -10,7 +10,7 @@ class Config(object):
     JWT_SECRET_KEY = "secret_key"
     JWT_TOKEN_LOCATION = ['cookies']
     JWT_ACCESS_COOKIE_NAME = "access_token_cookie"
-    JWT_ACCESS_CSRF_HEADER_NAME = "X-Xsrf-Token"
+    JWT_ACCESS_CSRF_HEADER_NAME = "X-CSRF-TOKEN"
 
 
 class ProductionConfig(Config):

@@ -80,6 +80,8 @@
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
+import {apiService} from "@/api";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "PaymentsView",
@@ -95,14 +97,31 @@ export default {
   },
 
   async mounted() {
+    try{
+      await this.fetchUser()
+    }
+    catch(err){
+      if(err.response.status === 401){
+        console.log("Unauthorized")
+        this.$router.push('/')
+      }
+    }
     await this.fetchPayments();
   },
 
+  computed: {
+    ...mapGetters({
+      authUser: 'auth/user',
+      isLoggedIn: 'auth/isLoggedIn'
+    })
+  },
+
   methods:{
+    ...mapActions('auth', ['fetchUser']),
+
     async fetchPayments() {
       try {
-        // const response = await axios.get('http://localhost:5000/api/me/payments/complete' ,
-            const response = await axios.get('https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/me/payments/complete',
+        const response = await apiService.get("/api/me/payments/complete",
             {withCredentials: true, xsrfCookieName: 'csrf_access_token'})
         if(response.data){
           this.fees_paid = response.data.fees_paid
@@ -124,14 +143,14 @@ export default {
       let formData = new FormData();
       formData.append('file', this.file)
       try{
-        // const response = await axios.post('http://localhost:5000/api/me/payments',
-        const response = await axios.post('https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/me/payments',
+        const response = await apiService.post("/api/me/payments",
             {'month': this.month, 'year': this.year},
             {withCredentials: true, xsrfCookieName: 'csrf_access_token'})
-        // const res_file = await axios.post('http://localhost:5000/api/me/payments/file', formData, {
-        const res_file = await axios.post('https://admin-grupo26.proyecto2022.linti.unlp.edu.ar/api/me/payments/file', formData, {
+
+        const res_file = await apiService.post("/api/me/payments/file", formData, {
           withCredentials: true,
-              xsrfCookieName: 'csrf_access_token'
+              xsrfCookieName: 'csrf_access_token',
+              xsrfHeaderName: "X-CSRF-TOKEN"
             },
         )
         if(response.data && res_file){
