@@ -32,7 +32,7 @@
           <li v-if="componentCalled === 'statistics'" class="nav-item">
             <router-link to="/" class="nav-link">Inicio</router-link>
           </li>
-          <li v-if="componentCalled !== 'statistics'" class="nav-item">
+          <li class="nav-item">
             <router-link to="/statistics" class="nav-link">Estadisticas</router-link>
           </li>
           <li v-if="isLoggedIn" class="nav-item">
